@@ -202,7 +202,7 @@ const Home = () => {
                             aria-labelledby="day-tab-2"
                             tabindex="0"
                         >
-                            <h6 className='text-010A48 fw-semibold m-0'>Session 2024-2025</h6>
+                            <h6 className='text-010A48 fw-semibold m-0'>Session 2025-2026</h6>
                             <p className='text-5F5F5F mb-2'>Intimation -</p>
                             <div className='row'>
                                 <div className="col-12">
