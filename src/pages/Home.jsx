@@ -203,7 +203,7 @@ const Home = () => {
                             tabindex="0"
                         >
                             <h6 className='text-010A48 fw-semibold m-0'>Session 2025-2026</h6>
-                            <p className='text-5F5F5F mb-2'>Intimation -</p>
+                            <p className='text-5F5F5F mb-2'>Intimation -</p> 
                             <div className='row'>
                                 <div className="col-12">
                                     <Link to="/reply" className='text-decoration-none'>
