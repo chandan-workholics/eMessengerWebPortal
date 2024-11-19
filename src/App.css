@@ -1,0 +1,512 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: "Source Sans 3", sans-serif;
+}
+
+/*---------- Text-Color-Start ----------*/
+.text-010A48 {
+    color: #010A48;
+}
+
+.text-78828A {
+    color: #78828A;
+}
+
+.text-8E8E8E {
+    color: #8E8E8E;
+}
+
+.text-DA251C {
+    color: #DA251C;
+}
+
+.text-6B51E4 {
+    color: #6B51E4;
+}
+
+.text-5F5F5F {
+    color: #5F5F5F;
+}
+
+.text-FF79AE {
+    color: #FF79AE;
+}
+
+.text-FFC068 {
+    color: #FFC068;
+}
+
+.text-FF0000 {
+    color: #FF0000;
+}
+
+.text-666666 {
+    color: #666666;
+}
+
+.text-1F2C37 {
+    color: #1F2C37;
+}
+
+.text-4CD964 {
+    color: #4CD964;
+}
+
+.text-969599 {
+    color: #969599;
+}
+
+.text-0D082C {
+    color: #0D082C;
+}
+
+.text-C7DFFF {
+    color: #C7DFFF !important;
+}
+
+/*---------- Text-Color-End ----------*/
+
+/*---------- Background-Color-Start ----------*/
+.bg-2B3848 {
+    background: #2B3848;
+}
+
+.bg-E79C1D {
+    background: #E79C1D;
+}
+
+.bg-F4F4F4 {
+    background: #F4F4F4;
+}
+
+.bg-6B51E4 {
+    background: #6B51E4;
+}
+
+.bg-FF0000 {
+    background: #FF0000 !important;
+}
+
+.bg-FF79AE {
+    background: #FF79AE;
+}
+
+.bg-E9E9E9 {
+    background: #E9E9E9;
+}
+
+.bg-FAFAFA {
+    background: #FAFAFA;
+}
+
+.bg-EDEDED {
+    background: #EDEDED;
+}
+
+.bg-D9D9D9 {
+    background: #D9D9D9;
+}
+
+.bg-4CD964 {
+    background: #4CD964;
+}
+
+.bg-273341 {
+    background: #273341;
+}
+
+.bg-364659 {
+    background: #364659;
+}
+
+.bg-F1F1F1 {
+    background: #F1F1F1;
+}
+
+.bg-F3F0FF {
+    background: #F3F0FF;
+}
+
+.bg-F1F1F1 {
+    background: #F1F1F1;
+}
+
+.bg-EFEFEF {
+    background: #EFEFEF;
+}
+
+/*---------- Background-Color-End ----------*/
+
+
+/*---------- SignIn-Css-Start ----------*/
+.login-page {
+    .left {
+        background-image: url("/public/Images/login-right.png");
+        background-repeat: no-repeat;
+        background-position: left;
+        height: 100vh;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        background-size: cover;
+    }
+
+    .login-image img {
+        width: 50%;
+        object-fit: contain;
+    }
+
+    .login-bottom img {
+        width: 130px;
+        height: 40px;
+    }
+
+    .right img {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+    }
+
+    .log-btn {
+        border: 1px solid #E79C1D !important;
+    }
+
+    .log-btn:hover {
+        color: #E79C1D !important;
+        border: 1px solid #E79C1D !important;
+    }
+
+    .h-100vh {
+        height: 100vh;
+    }
+
+    @media only screen and (max-width:767px) {
+        .login-bottom img {
+            width: 110px;
+            height: 35px;
+        }
+
+        .right img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .right h2 {
+            font-size: 25px;
+        }
+
+        .right p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+    }
+
+    @media only screen and (min-width:768px) and (max-width:1023px) {
+        .left {
+            display: none;
+        }
+    }
+
+    @media only screen and (min-width:1024px) and (max-width:1200px) {
+        .login-image img {
+            width: 90%;
+            object-fit: contain;
+        }
+    }
+
+    @media only screen and (min-width:1440px) {
+        .login-image img {
+            width: 90%;
+            object-fit: contain;
+        }
+    }
+}
+
+/*---------- SignIn-Css-End ----------*/
+
+/*---------- Header-Css-Start ----------*/
+.navbar-brand img {
+    width: 45px;
+    height: 45px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.nav-item {
+    font-size: 14px !important;
+}
+
+.header-dropdown[data-bs-popper] {
+    top: 50% !important;
+    right: 10px !important;
+    left: auto !important;
+}
+
+@media only screen and (max-width:767px) {
+    ::marker {
+        color: transparent;
+    }
+}
+
+/*---------- Header-Css-End ----------*/
+
+/*---------- Home-Css-Start ----------*/
+.head-top p {
+    font-size: 13px;
+}
+
+.box {
+    font-size: 13px;
+}
+
+.show p {
+    font-size: 14px;
+}
+
+.date p {
+    font-size: 15px;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+    color: #ffffff;
+    background-color: #FF0000;
+    border-color: transparent;
+}
+
+.form-control:focus {
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    border-color: #fe8686;
+    outline: 0;
+    box-shadow: none;
+}
+
+.nav-link:hover {
+    color: #FF0000;
+}
+
+.home-tab-btn {
+    width: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+@media only screen and (min-width:768px) and (max-width:1023px) {
+    .head-top p {
+        font-size: 10px;
+    }
+}
+
+@media only screen and (min-width:1024px) and (max-width:1200px) {
+    .home-tab-btn {
+        width: 210px;
+    }
+}
+
+/*---------- Home-Css-End ----------*/
+
+/*---------- Profile-Css-Start ----------*/
+.profile-page {
+    .profile-head {
+        background-image: url("/public/Images/profile-head.png");
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 7px;
+    }
+
+    .Id {
+        font-size: 15px;
+    }
+
+    .name {
+        font-size: 14px;
+    }
+
+    th {
+        font-size: 14px;
+    }
+
+    td {
+        font-size: 14px;
+    }
+
+    .card-header p {
+        font-size: 14px;
+    }
+
+    .term p {
+        font-size: 14px;
+    }
+
+    @media only screen and (min-width:768px) and (max-width:1023px) {
+        .Id p {
+            font-size: 10px !important;
+        }
+
+        .name p {
+            font-size: 10px !important;
+        }
+
+        .card-header p {
+            font-size: 10px !important;
+        }
+
+        .pay-btn button {
+            font-size: 10px !important;
+        }
+    }
+}
+
+/*---------- Profile-Css-End ----------*/
+
+/*---------- Reply-Css-Start ----------*/
+.reply-page {
+    .card h6 {
+        font-size: 18px;
+    }
+
+    .time {
+        font-size: 12px;
+    }
+
+    .fs-14 {
+        font-size: 14px;
+    }
+
+    .check-name {
+        font-size: 15px;
+    }
+
+    @media only screen and (max-width:767px) {
+        .card h6 {
+            font-size: 14px;
+        }
+
+        .time {
+            font-size: 10px;
+        }
+
+        .fs-14 {
+            font-size: 10px;
+        }
+
+        .check-name {
+            font-size: 11px;
+        }
+    }
+}
+
+/*---------- Reply-Css-End ----------*/
+
+/*----------Chat-Css-Start-----------*/
+.chat-page {
+    .h-80vh {
+        height: 83vh;
+    }
+
+    .chatbox {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    /* Chat Messages Area */
+    .chatbox-messages {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Message Bubble Styles */
+    .message p {
+        border-radius: 10px;
+        border-top-right-radius: 0 !important;
+        line-height: 1.4;
+    }
+
+    .message.incoming p {
+        border-top-left-radius: 5px;
+        max-width: 260px;
+    }
+
+    .message.outgoing {
+        align-self: flex-end;
+        border-top-right-radius: 5px;
+        max-width: 281px;
+    }
+
+    /* Input Area */
+    .chatbox-input {
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        bottom: 0;
+        left: 0;
+    }
+
+    .chatbox-input input {
+        flex: 1;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .chatbox-input button {
+        margin-left: 8px;
+        padding: 8px 15px;
+        border: none;
+        color: #fff;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: background-color 0.3s;
+    }
+
+    .info {
+        font-size: 13px;
+    }
+
+    .teach {
+        font-size: 15px;
+    }
+
+    .chat-head {
+        font-size: 16px;
+    }
+
+    @media only screen and (max-width:767px) {
+        .chat-head {
+            font-size: 14px;
+        }
+
+        .teach {
+            font-size: 13px;
+        }
+    }
+
+    @media only screen and (min-width:768px) and (max-width:1023px) {
+        .teach {
+            font-size: 12px;
+        }
+
+        .info {
+            font-size: 12px;
+        }
+
+        .chat-head {
+            font-size: 14px;
+        }
+    }
+}
+
+/*----------Chat-Css-End-----------*/
