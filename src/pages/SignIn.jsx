@@ -23,14 +23,14 @@ const SignIn = () => {
                         </div>
                     </div>
                     <div className="col-lg-6 col-md-12 d-flex align-items-center justify-content-center pb-5">
-                        <div className="container">
+                        <div className="container px-xl-5">
                             <div className='right py-4 row justify-content-center align-items-center'>
                                 <img src="Images\e-logo.png" alt="" />
                                 <h2 className="text-010A48 fw-semibold text-center">Hi, Welcome 👋</h2>
                                 <p className='text-78828A text-center'>Lorem ipsum dolor sit amet, consectetur</p>
                             </div>
                             <form>
-                                <div className="row d-flex justify-content-center">
+                                <div className="row d-flex justify-content-center px-xl-5">
                                     <div className="mb-4 col-10 px-4">
                                         <label for="exampleInputEmail1" className="form-label">Enter registered mobile no</label>
                                         <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputEmail1"

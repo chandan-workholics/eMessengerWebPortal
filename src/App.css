@@ -131,8 +131,8 @@
     background: #F3F0FF;
 }
 
-.bg-F1F1F1 {
-    background: #F1F1F1;
+.bg-e1e1e1 {
+    background: #e1e1e1;
 }
 
 .bg-EFEFEF {
@@ -141,6 +141,10 @@
 
 /*---------- Background-Color-End ----------*/
 
+
+.border-e0e0e0 {
+    border: 1px solid #e0e0e0;
+}
 
 /*---------- SignIn-Css-Start ----------*/
 .login-page {
@@ -252,6 +256,11 @@
         color: transparent;
     }
 }
+@media only screen and (min-width:768px) {
+    ::marker {
+        color: transparent;
+    }
+}
 
 /*---------- Header-Css-End ----------*/
 
@@ -295,6 +304,7 @@
     width: 150px;
     display: flex;
     justify-content: center;
+    border: 1px solid red !important;
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {

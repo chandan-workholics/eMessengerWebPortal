@@ -77,10 +77,11 @@ const Home = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className='col-xl-4 col-lg-6 col-md-6'>
+                    <div className='col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0'>
                         <div className="input-group mb-3">
                             <input type="search" className="form-control bg-EFEFEF border-end-0" placeholder="Search" aria-label="Username" />
-                            <button className="input-group-text bg-EFEFEF"><i class="fa-solid fa-magnifying-glass"></i></button>                            </div>
+                            <button className="input-group-text bg-EFEFEF"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
                     </div>
                 </div>
                 <div className="pb-20">
@@ -99,7 +100,7 @@ const Home = () => {
                                     <Link to="/reply" className='text-decoration-none'>
                                         <div className="card mb-3">
                                             <div className="card-body">
-                                                <div className='d-flex justify-content-between'>
+                                                <div className='d-flex justify-content-between mb-2'>
                                                     <p className='mb-1'> <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                         <span className='text-6B51E4 fw-semibold'>Ram Yadav</span></p>
                                                     <div className='date'>
@@ -118,7 +119,7 @@ const Home = () => {
                                     </Link>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2'>58585558</span>
                                                     <span className='text-FF79AE fw-semibold'>Sourabh yadav</span></p>
                                                 <div className='date'>
@@ -137,7 +138,7 @@ const Home = () => {
                                     <Link to="/chat" className='text-decoration-none'>
                                         <div className="card mb-3">
                                             <div className="card-body">
-                                                <div className='d-flex justify-content-between'>
+                                                <div className='d-flex justify-content-between mb-2'>
                                                     <p className='mb-1'><span className='box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2'>88555888</span>
                                                         <span className='text-FFC068 fw-semibold'>Piyush yadav</span></p>
                                                     <div className='date'>
@@ -156,7 +157,7 @@ const Home = () => {
                                     </Link>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-FF0000 fw-semibold'>Neha yadav</span></p>
                                                 <div className='date'>
@@ -174,7 +175,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'>
                                                     <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span>
@@ -203,13 +204,13 @@ const Home = () => {
                             tabindex="0"
                         >
                             <h6 className='text-010A48 fw-semibold m-0'>Session 2025-2026</h6>
-                            <p className='text-5F5F5F mb-2'>Intimation -</p> 
+                            <p className='text-5F5F5F mb-2'>Intimation -</p>
                             <div className='row'>
                                 <div className="col-12">
                                     <Link to="/reply" className='text-decoration-none'>
                                         <div className="card mb-3">
                                             <div className="card-body">
-                                                <div className='d-flex justify-content-between'>
+                                                <div className='d-flex justify-content-between mb-2'>
                                                     <p className='mb-1'> <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                         <span className='text-6B51E4 fw-semibold'>Ram Yadav</span></p>
                                                     <div className='date'>
@@ -228,7 +229,7 @@ const Home = () => {
                                     </Link>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2'>58585558</span>
                                                     <span className='text-FF79AE fw-semibold'>Sourabh yadav</span></p>
                                                 <div className='date'>
@@ -247,7 +248,7 @@ const Home = () => {
                                     <Link to="/chat" className='text-decoration-none'>
                                         <div className="card mb-3">
                                             <div className="card-body">
-                                                <div className='d-flex justify-content-between'>
+                                                <div className='d-flex justify-content-between mb-2'>
                                                     <p className='mb-1'><span className='box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2'>88555888</span>
                                                         <span className='text-FFC068 fw-semibold'>Piyush yadav</span></p>
                                                     <div className='date'>
@@ -266,7 +267,7 @@ const Home = () => {
                                     </Link>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-FF0000 fw-semibold'>Neha yadav</span></p>
                                                 <div className='date'>
@@ -284,7 +285,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'>
                                                     <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span>
@@ -316,9 +317,9 @@ const Home = () => {
                             <p className='text-5F5F5F mb-2'>Intimation -</p>
                             <div className='row'>
                                 <div className="col-12">
-                                <div className="card mb-3">
+                                    <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'> <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span></p>
                                                 <div className='date'>
@@ -336,7 +337,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2'>58585558</span>
                                                     <span className='text-FF79AE fw-semibold'>Sourabh yadav</span></p>
                                                 <div className='date'>
@@ -354,7 +355,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2'>88555888</span>
                                                     <span className='text-FFC068 fw-semibold'>Piyush yadav</span></p>
                                                 <div className='date'>
@@ -372,7 +373,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-FF0000 fw-semibold'>Neha yadav</span></p>
                                                 <div className='date'>
@@ -390,7 +391,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'>
                                                     <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span>
@@ -424,7 +425,7 @@ const Home = () => {
                                 <div className="col-12">
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'> <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span></p>
                                                 <div className='date'>
@@ -442,7 +443,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2'>58585558</span>
                                                     <span className='text-FF79AE fw-semibold'>Sourabh yadav</span></p>
                                                 <div className='date'>
@@ -460,7 +461,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2'>88555888</span>
                                                     <span className='text-FFC068 fw-semibold'>Piyush yadav</span></p>
                                                 <div className='date'>
@@ -478,7 +479,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'><span className='box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-FF0000 fw-semibold'>Neha yadav</span></p>
                                                 <div className='date'>
@@ -496,7 +497,7 @@ const Home = () => {
                                     </div>
                                     <div className="card mb-3">
                                         <div className="card-body">
-                                            <div className='d-flex justify-content-between'>
+                                            <div className='d-flex justify-content-between mb-2'>
                                                 <p className='mb-1'>
                                                     <span className='box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2'>21102933</span>
                                                     <span className='text-6B51E4 fw-semibold'>Ram Yadav</span>

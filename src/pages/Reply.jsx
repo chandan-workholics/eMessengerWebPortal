@@ -15,7 +15,7 @@ const Reply = () => {
                 <div className="container my-3">
                     <div className="row">
                         <div className="col-lg-6 col-md-6 col-12">
-                            <div className="card px-3 py-2 bg-F1F1F1 rounded-3 me-2 border-0 mb-lg-0 mb-2">
+                            <div className="card px-3 py-3 bg-FAFAFA rounded-3 me-2 border-0 mb-lg-0 mb-2">
                                 <h6 className='text-010A48 mb-0 fw-semibold'>Loraum ipsum</h6>
                                 <p className='text-5F5F5F time'>Show Upto: 2024-09-30 11:45:00</p>
                                 <img src="Images/Reply.png" alt="" className='mb-2' />
@@ -24,7 +24,7 @@ const Reply = () => {
                                     <button className='rounded-2 text-white bg-E79C1D px-lg-2 px-1 py-1 border-0 me-3 fs-14'>Add Image</button>
                                     <button className='rounded-2 text-white bg-4CD964 px-2 py-1 border-0 me-2 fs-14'>Remove image</button>
                                 </div>
-                                <div className="card px-2 py-2 my-4">
+                                <div className="card border-e0e0e0 px-2 py-2 my-4">
                                     <img src="Images/reply1.png" alt="" className='mb-1' />
                                     <p className='text-010A48 mb-0 fw-semibold check-name'>Lorem ipsum dolor sit amet,consectetur aliquip</p>
                                     <Link to='' className='text-decoration-none time'><i class="fa-brands fa-youtube text-FF0000 me-2"></i>View Youtube</Link>
@@ -33,7 +33,7 @@ const Reply = () => {
                             </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-12">
-                            <div className="card px-3 py-4 bg-F1F1F1 rounded-3 border-0">
+                            <div className="card px-3 py-4 bg-FAFAFA rounded-3 border-0">
                                 <form>
                                     <div className="mb-3">
                                         <label for="exampleInputText" className="form-label text-010A48 check-name">Input 1</label>
