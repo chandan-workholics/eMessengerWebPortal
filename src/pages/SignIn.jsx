@@ -34,7 +34,7 @@ const SignIn = () => {
                                     <div className="mb-4 col-10 px-4">
                                         <label for="exampleInputNumber" className="form-label">Enter registered mobile no</label>
                                         <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber"
-                                            aria-describedby="emailHelp" placeholder='Enter mobile number' />
+                                            aria-describedby="emailHelp" placeholder='Enter mobile number'maxLength='10'/>
                                     </div>
                                     <div className="mb-4 col-10 px-4">
                                         <label for="exampleInputNumber1" className="form-label">Student ID</label>

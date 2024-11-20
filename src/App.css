@@ -410,12 +410,17 @@
         background: transparent !important;
     }
 
+    .Remove-btn {
+        border: 1px solid #4CD964 !important;
+    }
     .Remove-btn:hover {
         background: transparent !important;
         color: #4CD964 !important;
-        border: 1px solid #4CD964 !important;
     }
-
+    
+    .Add-btn {
+        border: 1px solid #E79C1D !important;
+    }
     .Add-btn:hover {
         background: transparent !important;
         border: 1px solid #E79C1D !important;

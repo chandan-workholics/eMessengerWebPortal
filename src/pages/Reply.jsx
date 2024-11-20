@@ -21,8 +21,8 @@ const Reply = () => {
                                 <img src="Images/Reply.png" alt="" className='mb-2' />
                                 <Link to='' className='mb-2 fs-14'>https://www.google.com/search?sca_esv=ba9a00bd53z</Link>
                                 <div className="image-btn d-flex">
-                                    <button className='rounded-2 text-white bg-E79C1D px-lg-2 px-1 py-1 border-0 me-3 fs-14 Add-btn'>Add Image</button>
-                                    <button className='rounded-2 text-white bg-4CD964 px-2 py-1 border-0 me-2 fs-14 Remove-btn'>Remove image</button>
+                                    <button className='rounded-2 text-white bg-E79C1D px-lg-2 px-1 py-1  me-3 fs-14 Add-btn'>Add Image</button>
+                                    <button className='rounded-2 text-white bg-4CD964 px-2 py-1  me-2 fs-14 Remove-btn'>Remove image</button>
                                 </div>
                                 <div className="card border-e0e0e0 px-2 py-2 my-4">
                                     <img src="Images/reply1.png" alt="" className='mb-1' />
