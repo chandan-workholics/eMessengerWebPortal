@@ -32,13 +32,13 @@ const SignIn = () => {
                             <form>
                                 <div className="row d-flex justify-content-center px-xl-5">
                                     <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputEmail1" className="form-label">Enter registered mobile no</label>
-                                        <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputEmail1"
+                                        <label for="exampleInputNumber" className="form-label">Enter registered mobile no</label>
+                                        <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber"
                                             aria-describedby="emailHelp" placeholder='Enter mobile number' />
                                     </div>
                                     <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputPassword1" className="form-label">Student ID</label>
-                                        <input type="password" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputPassword1" placeholder='Enter student ID' />
+                                        <label for="exampleInputNumber1" className="form-label">Student ID</label>
+                                        <input type="Number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber1" placeholder='Enter student ID' />
                                     </div>
                                     <div className='mb-4 col-10 px-4'>
                                         <Link to="/home" className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3">Log In</Link>
