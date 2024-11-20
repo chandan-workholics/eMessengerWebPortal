@@ -149,6 +149,7 @@ const Home = () => {
                                                 <div className='show d-flex justify-content-between'>
                                                     <p className='text-5F5F5F mb-0'>Show Upto: 2024-09-30 11:45:00</p>
                                                     <div className='star'>
+                                                        <i class="fa-solid fa-comment-dots text-9FC8FF me-2"></i>
                                                         <i class="fa-regular fa-star text-FFC068 fs-5"></i>
                                                     </div>
                                                 </div>
@@ -259,6 +260,7 @@ const Home = () => {
                                                 <div className='show d-flex justify-content-between'>
                                                     <p className='text-5F5F5F mb-0'>Show Upto: 2024-09-30 11:45:00</p>
                                                     <div className='star'>
+                                                        <i class="fa-solid fa-comment-dots text-9FC8FF me-2"></i>
                                                         <i class="fa-regular fa-star text-FFC068 fs-5"></i>
                                                     </div>
                                                 </div>
@@ -366,6 +368,7 @@ const Home = () => {
                                             <div className='show d-flex justify-content-between'>
                                                 <p className='text-5F5F5F mb-0'>Show Upto: 2024-09-30 11:45:00</p>
                                                 <div className='star'>
+                                                    <i class="fa-solid fa-comment-dots text-9FC8FF me-2"></i>
                                                     <i class="fa-regular fa-star text-FFC068 fs-5"></i>
                                                 </div>
                                             </div>
@@ -472,6 +475,7 @@ const Home = () => {
                                             <div className='show d-flex justify-content-between'>
                                                 <p className='text-5F5F5F mb-0'>Show Upto: 2024-09-30 11:45:00</p>
                                                 <div className='star'>
+                                                    <i class="fa-solid fa-comment-dots text-9FC8FF me-2"></i>
                                                     <i class="fa-regular fa-star text-FFC068 fs-5"></i>
                                                 </div>
                                             </div>

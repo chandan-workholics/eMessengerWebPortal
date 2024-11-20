@@ -68,6 +68,10 @@
     color: #C7DFFF !important;
 }
 
+.text-9FC8FF {
+    color: #9FC8FF;
+}
+
 /*---------- Text-Color-End ----------*/
 
 /*---------- Background-Color-Start ----------*/
@@ -256,6 +260,7 @@
         color: transparent;
     }
 }
+
 @media only screen and (min-width:768px) {
     ::marker {
         color: transparent;
@@ -354,6 +359,12 @@
         font-size: 14px;
     }
 
+    .pay-btn button:hover {
+        color: #E79C1D !important;
+        border: 1px solid #E79C1D !important;
+        background: transparent !important;
+    }
+
     @media only screen and (min-width:768px) and (max-width:1023px) {
         .Id p {
             font-size: 10px !important;
@@ -391,6 +402,24 @@
 
     .check-name {
         font-size: 15px;
+    }
+
+    .send-btn:hover {
+        border: 1px solid #FF0000 !important;
+        color: #FF0000 !important;
+        background: transparent !important;
+    }
+
+    .remove-btn:hover {
+        background: transparent !important;
+        color: #4CD964 !important;
+        border: 1px solid #4CD964 !important;
+    }
+
+    .add-btn:hover {
+        background: transparent !important;
+        border: 1px solid #E79C1D !important;
+        color: #E79C1D !important;
     }
 
     @media only screen and (max-width:767px) {
@@ -441,18 +470,17 @@
     /* Message Bubble Styles */
     .message p {
         border-radius: 10px;
-        border-top-right-radius: 0 !important;
+        border-top-right-radius: 0px !important;
         line-height: 1.4;
     }
 
     .message.incoming p {
-        border-top-left-radius: 5px;
+        border-top-left-radius: 0px !important;
         max-width: 260px;
     }
 
     .message.outgoing {
         align-self: flex-end;
-        border-top-right-radius: 5px;
         max-width: 281px;
     }
 
