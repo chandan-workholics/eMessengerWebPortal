@@ -76,7 +76,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn d-flex align-items-center'>
+                                                <div className='Pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn d-flex align-items-center'>
+                                                <div className='Pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -124,7 +124,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn d-flex align-items-center'>
+                                                <div className='Pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -147,7 +147,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn d-flex align-items-center'>
+                                                <div className='Pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>

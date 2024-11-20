@@ -21,8 +21,8 @@ const Reply = () => {
                                 <img src="Images/Reply.png" alt="" className='mb-2' />
                                 <Link to='' className='mb-2 fs-14'>https://www.google.com/search?sca_esv=ba9a00bd53z</Link>
                                 <div className="image-btn d-flex">
-                                    <button className='rounded-2 text-white bg-E79C1D px-lg-2 px-1 py-1 border-0 me-3 fs-14 add-btn'>Add Image</button>
-                                    <button className='rounded-2 text-white bg-4CD964 px-2 py-1 border-0 me-2 fs-14 remove-btn'>Remove image</button>
+                                    <button className='rounded-2 text-white bg-E79C1D px-lg-2 px-1 py-1 border-0 me-3 fs-14 Add-btn'>Add Image</button>
+                                    <button className='rounded-2 text-white bg-4CD964 px-2 py-1 border-0 me-2 fs-14 Remove-btn'>Remove image</button>
                                 </div>
                                 <div className="card border-e0e0e0 px-2 py-2 my-4">
                                     <img src="Images/reply1.png" alt="" className='mb-1' />
@@ -46,7 +46,7 @@ const Reply = () => {
                                 </form>
                                 <p className='text-010A48 fw-normal mb-0 check-name'>Lorum ipsum</p>
                                 <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
+                                    <input className="form-check-input active" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
                                     <label className="form-check-label text-5F5F5F fs-14" for="exampleRadios1">
                                         Jacob Jones
                                     </label>
@@ -71,7 +71,7 @@ const Reply = () => {
                                 </div>
                                 <p className='text-010A48 fw-normal mb-0 check-name'>Lorum ipsum</p>
                                 <p className='text-5F5F5F fs-14'>Information regarding rakshabandhan celebration notice</p>
-                                <button className='border-0 bg-FF0000 text-white rounded-5 py-1 check-name send-btn'>Send Reply</button>
+                                <button className='border-0 bg-FF0000 text-white rounded-5 py-1 check-name Send-btn'>Send Reply</button>
                             </div>
                         </div>
                     </div>
