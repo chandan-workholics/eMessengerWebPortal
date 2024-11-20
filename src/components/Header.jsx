@@ -27,7 +27,7 @@ const Header = () => {
                         </li>
                     </ul>
                     <ul className="navbar-nav">
-                        <li className="nav-item d-flex align-items-center mx-lg-5 mx-0 my-lg-0 my-2">
+                        <li className="nav-item d-flex align-items-center mx-lg-5 mx-0  mx-md-4 my-lg-0 my-2">
                             <marquee className="py-1 text-white bg-364659 rounded-3 fw-normal" aria-current="page">Information regarding duration Information regardingInformation regarding duration Information regarding</marquee>
                         </li>
                     </ul>

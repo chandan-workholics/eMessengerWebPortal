@@ -72,11 +72,11 @@ const Profile = () => {
                                 <div className="row">
                                     <div className="col-xl-6">
                                         <div className="card mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 pb-sm-0 bg-white">
+                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
                                                 <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn'>
+                                                <div className='pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -99,7 +99,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn'>
+                                                <div className='pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -120,11 +120,11 @@ const Profile = () => {
                                     </div>
                                     <div className="col-xl-6">
                                         <div className="card mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 pb-sm-0 bg-white">
+                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
                                                 <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn'>
+                                                <div className='pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
@@ -147,7 +147,7 @@ const Profile = () => {
                                                 <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
                                                     <span className='text-010A48 fw-normal'>Session 2024-2025</span>
                                                 </p>
-                                                <div className='pay-btn'>
+                                                <div className='pay-btn d-flex align-items-center'>
                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                 </div>
                                             </div>
