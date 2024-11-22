@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import callAPI from "../Common_Method/api";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const [scrollMessage, setScrollMessage] = useState("");
+  const [appScrollNewsList, setAppScrollNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchScrollerMessage = async () => {
+  // Fetch scroller messages
+  useEffect(() => {
+    fetchData();
+  }, []); // Run on component mount
+
+  const fetchData = async () => {
     try {
-      const response = await callAPI.get(
-        "./api/appScrollerMsg/getAppScrollerMsgDetail"
-      );
-      if (response.data && response.data.message) {
-        setScrollMessage(response.data.message);
-      } else {
-        setScrollMessage("No message available at the moment.");
-      }
+      setLoading(true);
+      const response = await callAPI.get(`./appScrollerMsg/getAppScrollerMsgDetail`);
+
+      // Handling the response and updating the state
+      setAppScrollNewsList(response.data || []);
     } catch (error) {
-      console.error("Error fetching scroller message:", error);
-      setScrollMessage("Error fetching message.");
+      console.error("Error fetching welcome message data:", error.message);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchScrollerMessage();
-  }, []);
 
   return (
     <>
@@ -36,50 +33,8 @@ const Header = () => {
             <img src="Images/e-logo.png" alt="" className="me-1" />
             eMessenger
           </Link>
-          <ul className="d-lg-none d-block mb-0">
-            <li className="nav-item dropdown-start py-2">
-              <Link
-                className="nav-link dropdown-toggle text-white"
-                to="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <div className="d-flex justify-content-center align-items-center">
-                  <img src="Images/profile.png" alt="" className="me-1" />
-                </div>
-              </Link>
-              <ul className="dropdown-menu header-dropdown">
-                <li>
-                  <Link className="dropdown-item" to="">
-                    Welcome Ram!
-                  </Link>
-                </li>
-                <hr className="m-0" />
-                <li>
-                  <Link className="dropdown-item" to="/profile">
-                    <i className="fa-regular fa-user me-1"></i>Profile
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="#">
-                    <i className="fa-solid fa-circle-info me-1"></i>Support
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="#">
-                    <i className="fa-solid fa-book me-1"></i>Terms & Conditions
-                  </Link>
-                </li>
-                <li>
-                  <Link className="dropdown-item" to="/">
-                    <i className="fa-solid fa-right-from-bracket me-1"></i>
-                    Logout
-                  </Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
+
+          {/* Marquee for scrolling messages */}
           <ul className="navbar-nav">
             <li className="nav-item d-flex align-items-center mx-lg-5 mx-0 mx-md-4 my-lg-0 my-2">
               {loading ? (
@@ -91,11 +46,21 @@ const Header = () => {
                   className="py-1 text-white bg-364659 rounded-3 fw-normal"
                   aria-current="page"
                 >
-                  {scrollMessage || "No scroller message available."}
+                  {appScrollNewsList.length > 0 ? (
+                    appScrollNewsList.map((item, index) => (
+                      <span key={index} className="me-4">
+                        {item.detail}
+                      </span>
+                    ))
+                  ) : (
+                    "No scroller messages available."
+                  )}
                 </marquee>
               )}
             </li>
           </ul>
+
+          {/* Rest of the navbar for profile and other items */}
           <ul className="navbar-nav d-lg-block d-none">
             <li className="nav-item dropdown bg-273341 py-2">
               <Link
@@ -128,7 +93,6 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <></>
                   <Link className="dropdown-item" to="#">
                     <i className="fa-solid fa-circle-info me-1"></i>Support
                   </Link>

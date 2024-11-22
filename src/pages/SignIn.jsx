@@ -15,6 +15,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   let otpTimeout;
 
+  // Handle mobile number input change
   const handleMobileChange = (e) => {
     const value = e.target.value;
 
@@ -32,6 +33,7 @@ const SignIn = () => {
     setMobile(value);
   };
 
+  // Handle mobile number form submission
   const handleMobileSubmit = async (e) => {
     e.preventDefault();
 
@@ -46,19 +48,24 @@ const SignIn = () => {
         "http://206.189.130.102:3550/api/parents/otp",
         { mobile_no: mobile }
       );
-
-      if (response.status === 200 && response.data.status) {
-        setReceivedOtp(response.data.otp);
+      const data = await response.data;
+      console.log(data, "data=========")
+      if (response.status === 200 && data.status) {
+        setReceivedOtp(data.otp);
         setShowOtpInput(true);
         setFormVisible(false);
 
         otpTimeout = setTimeout(() => {
           setShowOtpInput(false);
           setFormVisible(true);
-          // toast.error("OTP expired. Please try again.");
+          toast.error("OTP expired. Please try again.");
         }, 8000);
+
+        const { token } = data.token;
+        sessionStorage.setItem('token', token);  // Store token in sessionStorage
+        console.log(data)
       } else {
-        toast.error(response.data.message || "Failed to send OTP.");
+        toast.error(data.message || "Failed to send OTP.");
       }
     } catch (err) {
       toast.error("Error sending OTP. Please try again.");
@@ -67,7 +74,15 @@ const SignIn = () => {
     }
   };
 
+  // Handle OTP form submission
   const handleOtpSubmit = async () => {
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      toast.error("No token provided. Please log in again.");
+      navigate("/login");
+      return;
+    }
+
     if (otp === receivedOtp) {
       toast.success("OTP verified successfully!");
       setLoading(true);
@@ -83,6 +98,7 @@ const SignIn = () => {
     }
   };
 
+  // Cleanup OTP timeout on component unmount
   useEffect(() => {
     return () => clearTimeout(otpTimeout); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -119,33 +135,6 @@ const SignIn = () => {
               <p className="text-78828A text-center">
                 Enter your registered mobile number to proceed.
               </p>
-                            </div>
-                            <form>
-                                <div className="row d-flex justify-content-center px-xl-5">
-                                    <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputNumber" className="form-label">Enter registered mobile no</label>
-                                        <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber"
-                                            aria-describedby="emailHelp" placeholder='Enter mobile number'maxLength='10'/>
-                                    </div>
-                                    <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputNumber1" className="form-label">Student ID</label>
-                                        <input type="Number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber1" placeholder='Enter student ID' />
-                                    </div>
-                                    <div className='mb-4 col-10 px-4'>
-                                        <Link to="/home" className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3">Log In</Link>
-                                    </div>
-                                    <div className="sign-up text-center">
-                                        <Link to="/" className='text-DA251C fw-semibold fs-6'>How to install App ?</Link>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div className="d-lg-none bg-273341 login-bottom d-flex justify-content-center py-3 px-2 position-absolute start-0 bottom-0">
-                        <img src="Images\lb.png" alt="" className='me-4' />
-                        <img src="Images\lb1.png" alt="" />
-                    </div>
-                </div>
             </div>
             {formVisible && (
               <form onSubmit={handleMobileSubmit}>
@@ -156,9 +145,8 @@ const SignIn = () => {
                     </label>
                     <input
                       type="text"
-                      className={`form-control text-8E8E8E py-2 fw-light rounded-3 ${
-                        error ? "is-invalid" : ""
-                      }`}
+                      className={`form-control text-8E8E8E py-2 fw-light rounded-3 ${error ? "is-invalid" : ""
+                        }`}
                       id="mobile_no"
                       placeholder="Enter mobile number"
                       value={mobile}
