@@ -128,6 +128,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
+                  <></>
                   <Link className="dropdown-item" to="#">
                     <i className="fa-solid fa-circle-info me-1"></i>Support
                   </Link>
