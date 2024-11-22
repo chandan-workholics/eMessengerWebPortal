@@ -119,6 +119,33 @@ const SignIn = () => {
               <p className="text-78828A text-center">
                 Enter your registered mobile number to proceed.
               </p>
+                            </div>
+                            <form>
+                                <div className="row d-flex justify-content-center px-xl-5">
+                                    <div className="mb-4 col-10 px-4">
+                                        <label for="exampleInputNumber" className="form-label">Enter registered mobile no</label>
+                                        <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber"
+                                            aria-describedby="emailHelp" placeholder='Enter mobile number'maxLength='10'/>
+                                    </div>
+                                    <div className="mb-4 col-10 px-4">
+                                        <label for="exampleInputNumber1" className="form-label">Student ID</label>
+                                        <input type="Number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber1" placeholder='Enter student ID' />
+                                    </div>
+                                    <div className='mb-4 col-10 px-4'>
+                                        <Link to="/home" className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3">Log In</Link>
+                                    </div>
+                                    <div className="sign-up text-center">
+                                        <Link to="/" className='text-DA251C fw-semibold fs-6'>How to install App ?</Link>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div className="d-lg-none bg-273341 login-bottom d-flex justify-content-center py-3 px-2 position-absolute start-0 bottom-0">
+                        <img src="Images\lb.png" alt="" className='me-4' />
+                        <img src="Images\lb1.png" alt="" />
+                    </div>
+                </div>
             </div>
             {formVisible && (
               <form onSubmit={handleMobileSubmit}>
