@@ -15,7 +15,6 @@ const SignIn = () => {
   const navigate = useNavigate();
   let otpTimeout;
 
-  // Handle mobile number input change
   const handleMobileChange = (e) => {
     const value = e.target.value;
 
@@ -33,7 +32,6 @@ const SignIn = () => {
     setMobile(value);
   };
 
-  // Handle mobile number form submission
   const handleMobileSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,24 +46,23 @@ const SignIn = () => {
         "http://206.189.130.102:3550/api/parents/otp",
         { mobile_no: mobile }
       );
-      const data = await response.data;
-      console.log(data, "data=========")
-      if (response.status === 200 && data.status) {
-        setReceivedOtp(data.otp);
+
+      if (response.status === 200 && response.data.status) {
+        setReceivedOtp(response.data.otp);
         setShowOtpInput(true);
         setFormVisible(false);
+
+        // Store the token in sessionStorage
+        const { token } = response.data;
+        sessionStorage.setItem('token', token);
 
         otpTimeout = setTimeout(() => {
           setShowOtpInput(false);
           setFormVisible(true);
-          toast.error("OTP expired. Please try again.");
+          // toast.error("OTP expired. Please try again.");
         }, 8000);
-
-        const { token } = data.token;
-        sessionStorage.setItem('token', token);  // Store token in sessionStorage
-        console.log(data)
       } else {
-        toast.error(data.message || "Failed to send OTP.");
+        toast.error(response.data.message || "Failed to send OTP.");
       }
     } catch (err) {
       toast.error("Error sending OTP. Please try again.");
@@ -74,9 +71,9 @@ const SignIn = () => {
     }
   };
 
-  // Handle OTP form submission
   const handleOtpSubmit = async () => {
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token'); // Get the token from sessionStorage
+
     if (!token) {
       toast.error("No token provided. Please log in again.");
       navigate("/login");
@@ -86,10 +83,37 @@ const SignIn = () => {
     if (otp === receivedOtp) {
       toast.success("OTP verified successfully!");
       setLoading(true);
-      setTimeout(() => {
+
+      try {
+        // Send the OTP to the verification endpoint
+        const response = await axios.post(
+          "http://206.189.130.102:3550/api/parents/otp-verify",
+          { mobile_no: mobile, otp: otp },
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // Add token to Authorization header
+            }
+          }
+        );
+
+        // Handle the response and store token in sessionStorage
+        if (response.status === 200 && response.data.status) {
+          const { token: newToken } = response.data;
+          sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
+
+          // Redirect to home page after successful verification
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/home");
+          }, 2000);
+        } else {
+          toast.error(response.data.message || "Failed to verify OTP.");
+          setLoading(false);
+        }
+      } catch (error) {
+        toast.error("Error during OTP verification. Please try again.");
         setLoading(false);
-        navigate("/home");
-      }, 2000);
+      }
     } else {
       toast.error("Invalid OTP. Please try again.");
       setOtp("");
@@ -98,7 +122,6 @@ const SignIn = () => {
     }
   };
 
-  // Cleanup OTP timeout on component unmount
   useEffect(() => {
     return () => clearTimeout(otpTimeout); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

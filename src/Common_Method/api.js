@@ -8,7 +8,7 @@ export const interceptor = () => {
     axiosApiInstance.interceptors.request.use(
         async (config) => {
             const token = sessionStorage.getItem("token");
-            console.log(token)
+
             config.headers = {
                 Accept: "application/json",
                 ...(token && { Authorization: `Bearer ${token}` }),
