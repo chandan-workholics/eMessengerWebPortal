@@ -52,6 +52,10 @@ const SignIn = () => {
         setShowOtpInput(true);
         setFormVisible(false);
 
+        // Store the token in sessionStorage
+        const { token } = response.data;
+        sessionStorage.setItem('token', token);
+
         otpTimeout = setTimeout(() => {
           setShowOtpInput(false);
           setFormVisible(true);
@@ -68,13 +72,48 @@ const SignIn = () => {
   };
 
   const handleOtpSubmit = async () => {
+    const token = sessionStorage.getItem('token'); // Get the token from sessionStorage
+
+    if (!token) {
+      toast.error("No token provided. Please log in again.");
+      navigate("/login");
+      return;
+    }
+
     if (otp === receivedOtp) {
       toast.success("OTP verified successfully!");
       setLoading(true);
-      setTimeout(() => {
+
+      try {
+        // Send the OTP to the verification endpoint
+        const response = await axios.post(
+          "http://206.189.130.102:3550/api/parents/otp-verify",
+          { mobile_no: mobile, otp: otp },
+          {
+            headers: {
+              Authorization: `Bearer ${token}` // Add token to Authorization header
+            }
+          }
+        );
+
+        // Handle the response and store token in sessionStorage
+        if (response.status === 200 && response.data.status) {
+          const { token: newToken } = response.data;
+          sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
+
+          // Redirect to home page after successful verification
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/home");
+          }, 2000);
+        } else {
+          toast.error(response.data.message || "Failed to verify OTP.");
+          setLoading(false);
+        }
+      } catch (error) {
+        toast.error("Error during OTP verification. Please try again.");
         setLoading(false);
-        navigate("/home");
-      }, 2000);
+      }
     } else {
       toast.error("Invalid OTP. Please try again.");
       setOtp("");
@@ -119,33 +158,6 @@ const SignIn = () => {
               <p className="text-78828A text-center">
                 Enter your registered mobile number to proceed.
               </p>
-                            </div>
-                            <form>
-                                <div className="row d-flex justify-content-center px-xl-5">
-                                    <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputNumber" className="form-label">Enter registered mobile no</label>
-                                        <input type="number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber"
-                                            aria-describedby="emailHelp" placeholder='Enter mobile number'maxLength='10'/>
-                                    </div>
-                                    <div className="mb-4 col-10 px-4">
-                                        <label for="exampleInputNumber1" className="form-label">Student ID</label>
-                                        <input type="Number" className="form-control text-8E8E8E py-2 fw-light rounded-3" id="exampleInputNumber1" placeholder='Enter student ID' />
-                                    </div>
-                                    <div className='mb-4 col-10 px-4'>
-                                        <Link to="/home" className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3">Log In</Link>
-                                    </div>
-                                    <div className="sign-up text-center">
-                                        <Link to="/" className='text-DA251C fw-semibold fs-6'>How to install App ?</Link>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div className="d-lg-none bg-273341 login-bottom d-flex justify-content-center py-3 px-2 position-absolute start-0 bottom-0">
-                        <img src="Images\lb.png" alt="" className='me-4' />
-                        <img src="Images\lb1.png" alt="" />
-                    </div>
-                </div>
             </div>
             {formVisible && (
               <form onSubmit={handleMobileSubmit}>
@@ -156,9 +168,8 @@ const SignIn = () => {
                     </label>
                     <input
                       type="text"
-                      className={`form-control text-8E8E8E py-2 fw-light rounded-3 ${
-                        error ? "is-invalid" : ""
-                      }`}
+                      className={`form-control text-8E8E8E py-2 fw-light rounded-3 ${error ? "is-invalid" : ""
+                        }`}
                       id="mobile_no"
                       placeholder="Enter mobile number"
                       value={mobile}
