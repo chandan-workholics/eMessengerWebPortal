@@ -11,7 +11,7 @@ import Chat from './pages/Chat';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter basename="/eMessenger/">
+  <BrowserRouter basename="/eMessengerWebPortal/">
     <Routes>
       <Route path="/" element={<App />}>
         <Route path='/' element={<SignIn />} />
