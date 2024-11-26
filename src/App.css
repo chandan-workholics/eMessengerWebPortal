@@ -145,6 +145,12 @@
 
 /*---------- Background-Color-End ----------*/
 
+/*---------- Font-Size-Start ----------*/
+.fs-16{
+    font-size: 16px;
+}
+/*---------- Font-Size--End ----------*/
+
 
 .border-e0e0e0 {
     border: 1px solid #e0e0e0;
@@ -506,7 +512,8 @@
         display: flex;
         flex-direction: column;
         border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        border: 1px solid #F1F1F1;
+        background: #FAFAFA;
         overflow: hidden;
     }
 
@@ -540,7 +547,7 @@
     /* Input Area */
     .chatbox-input {
         padding: 10px;
-        border-top: 1px solid #ddd;
+        border-top: 1px solid #EDEDED;
         bottom: 0;
         left: 0;
     }
@@ -554,13 +561,14 @@
 
     .chatbox-input button {
         margin-left: 8px;
-        padding: 8px 15px;
         border: none;
         color: #fff;
         font-size: 14px;
         cursor: pointer;
         border-radius: 20px;
         transition: background-color 0.3s;
+        width: 35px;
+        height: 35px;
     }
 
     .info {

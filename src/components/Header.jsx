@@ -57,7 +57,7 @@ const Header = () => {
                   aria-current="page"
                 >
                   {appScrollNewsList?.data?.appScrollerMsg?.map((item, index) => (
-                    <span key={index} className="me-4">
+                    <span key={index} className="me-4 fs-16">
                       {item.detail || "No detail provided"}
                     </span>
                   ))}

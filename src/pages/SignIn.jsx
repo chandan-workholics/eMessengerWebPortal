@@ -214,7 +214,7 @@ const SignIn = () => {
                   </label>
                   <input
                     type="text"
-                    className="form-control text-8E8E8E py-2 fw-light rounded-3"
+                    className="form-control text-8E8E8E py-3 fw-light rounded-3"
                     id="otp"
                     placeholder="Enter OTP"
                     value={otp}
@@ -231,7 +231,7 @@ const SignIn = () => {
                   )}
                   <button
                     type="button"
-                    className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3 mt-3"
+                    className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-3 mt-3"
                     onClick={handleOtpSubmit}
                   >
                     Verify OTP

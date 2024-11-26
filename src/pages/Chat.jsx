@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
+import sendMsgBtn from '../sendMsg-btn.png'
 
 const Chat = () => {
     return (
@@ -10,10 +11,10 @@ const Chat = () => {
                 <div className="container">
                     <div className="row my-3">
                         <div className=" col-xl-9 col-lg-8 col-md-8 col-12">
-                            <div className="card bg-FAFAFA mb-lg-0 mb-1 h-80vh  position-relative">
+                            <div className="card bg-FAFAFA mb-lg-0 mb-1 h-80vh position-relative border-0">
                                 <div class="chatbox py-0 h-100">
-                                    <div className="card-header bg-FAFAFA py-0">
-                                        <div className="chatbox-header py-1 px-1">
+                                    <div className="card-header bg-FAFAFA py-0" style={{ borderColor: '#EDEDED' }}>
+                                        <div className="chatbox-header py-2 px-1">
                                             <p className='mb-0 fw-semibold text-010A48 chat-head'>88555888 - Piyush yadav</p>
                                         </div>
                                     </div>
@@ -47,24 +48,29 @@ const Chat = () => {
                                                 <img src="Images/profile2.png" alt="" className='me-2' />
                                                 <div className="message-name">
                                                     <p className='mb-0 text-010A48 info'>446464688 - Mohan Kumar</p>
-                                                    <p className='bg-F3F0FF px-2 py-2 info mb-0'><i class="fa-solid fa-circle me-1 text-C7DFFF"></i><i class="fa-solid fa-circle me-1 text-C7DFFF"></i><i class="fa-solid fa-circle text-C7DFFF"></i></p>
+                                                    <p className='bg-F3F0FF px-2 py-2 info mb-0'>
+                                                        <i class="fa-solid fa-circle me-1 text-C7DFFF"></i>
+                                                        <i class="fa-solid fa-circle me-1 text-C7DFFF"></i>
+                                                        <i class="fa-solid fa-circle text-C7DFFF"></i>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="chatbox-input d-flex align-items-center position-absolute w-100">
+                                        <div className="chatbox-input d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                             <input type="text" placeholder="Reply..." className='me-3 p-2 rounded-3' />
                                             <Link> <i className="fa-solid fa-camera text-969599 me-3"></i></Link>
                                             <Link> <i className="fa-solid fa-image text-969599"></i></Link>
-                                            <button className='bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center'><i class="fa-solid fa-paper-plane"></i></button>
+                                            <button className='bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center'>
+                                                <img src={sendMsgBtn} alt="" className="ms-1" />
+                                            </button>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <div className="col-xl-3 col-lg-4 col-md-4 col-12">
-                            <div className="card bg-FAFAFA">
-                                <div className="card-header bg-FAFAFA">
+                            <div className="card bg-FAFAFA" style={{ borderColor: '#F1F1F1' }}>
+                                <div className="card-header bg-FAFAFA" style={{ borderColor: '#EDEDED' }}>
                                     <p className='mb-0 text-010A48 fw-semibold'><i className="fa-solid fa-circle me-2 text-4CD964"></i>Available Teacher</p>
                                 </div>
                                 <div className="card-body">
