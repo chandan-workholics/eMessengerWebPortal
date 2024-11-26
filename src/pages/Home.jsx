@@ -61,13 +61,13 @@ const Home = () => {
                 <div className="row">
                     <div className="col-xl-8 col-lg-12 mb-lg-2">
                         <ul
-                            className="nav nav-tabs border-0 justify-content-around"
+                            className="nav nav-tabs border-0 justify-content-between"
                             id="myTab"
                             role="tablist"
                         >
                             <li className="nav-item" role="presentation">
                                 <button
-                                    className="nav-link me-3 rounded-1 text-010A48 active home-tab-btn mb-lg-0 mb-2"
+                                    className="nav-link me-3 rounded-2 text-010A48 active home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
                                     id="day-tab-1"
                                     data-bs-toggle="tab"
                                     data-bs-target="#day-tab-1-pane"
@@ -81,7 +81,7 @@ const Home = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button
-                                    className="nav-link me-3 rounded-1 text-010A48 home-tab-btn mb-lg-0 mb-2"
+                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
                                     id="day-tab-2"
                                     data-bs-toggle="tab"
                                     data-bs-target="#day-tab-2-pane"
@@ -95,7 +95,7 @@ const Home = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button
-                                    className="nav-link me-3 rounded-1 text-010A48 home-tab-btn mb-lg-0 mb-2"
+                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
                                     id="day-tab-3"
                                     data-bs-toggle="tab"
                                     data-bs-target="#day-tab-3-pane"
@@ -109,7 +109,7 @@ const Home = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button
-                                    className="nav-link me-3 rounded-1 text-010A48 home-tab-btn mb-lg-0 mb-2"
+                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
                                     id="day-tab-4"
                                     data-bs-toggle="tab"
                                     data-bs-target="#day-tab-4-pane"
