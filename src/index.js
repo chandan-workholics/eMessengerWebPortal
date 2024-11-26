@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Reply from './pages/Reply';
 import Chat from './pages/Chat';
+import WelcomeMsg from './pages/WelcomeMsg';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,10 +16,11 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}>
         <Route path='/' element={<SignIn />} />
+        <Route path='/welcome-message' element={<WelcomeMsg />} />
         <Route path='/home' element={<Home />} />
-        <Route path='/profile' element={<Profile />}/>
-        <Route path='/reply' element={<Reply />}/>
-        <Route path='/chat' element={<Chat/>}/>
+        <Route path='/profile' element={<Profile />} />
+        <Route path='/reply' element={<Reply />} />
+        <Route path='/chat' element={<Chat />} />
       </Route>
     </Routes>
   </BrowserRouter>

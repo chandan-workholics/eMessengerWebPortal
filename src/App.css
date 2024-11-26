@@ -80,7 +80,7 @@
 }
 
 .bg-E79C1D {
-    background: #E79C1D;
+    background: #E79C1D !important;
 }
 
 .bg-F4F4F4 {
@@ -183,7 +183,6 @@
     }
 
     .log-btn:hover {
-        color: #E79C1D !important;
         border: 1px solid #E79C1D !important;
     }
 
@@ -282,6 +281,22 @@
 }
 
 /*---------- Splash-Css-End ----------*/
+
+/*---------- Welcome-Page-Css-Start ----------*/
+.welcomeMsg-page {
+    background-image: url(../public/Images/splashScreen-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+
+    .awssld__content {
+        background-color: #ffffff;
+        border-radius: 30px;
+    }
+}
+
+/*---------- Welcome-Page-Css-End ----------*/
 
 /*---------- Home-Css-Start ----------*/
 .head-top p {

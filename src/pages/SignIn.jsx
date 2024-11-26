@@ -114,7 +114,7 @@ const SignIn = () => {
           // Redirect to home page after successful verification
           setTimeout(() => {
             setLoading(false);
-            navigate("/home");
+            navigate("/welcome-message");
           }, 2000);
         } else {
           toast.error(response.data.message || "Failed to verify OTP.");
