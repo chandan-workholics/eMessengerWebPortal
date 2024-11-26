@@ -7,6 +7,7 @@ import callAPI, { interceptor } from "../Common_Method/api";
 const Home = () => {
     const [loading, setLoading] = useState(true);
     const [noticeBoardDetail, setNoticeBoardDetail] = useState([])
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     useEffect(() => {
         fetchData();    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -17,7 +18,7 @@ const Home = () => {
             setLoading(true);
             interceptor();
 
-            const response = await callAPI.get(`./welcomemsg/appTopWelcomeMsg`);
+            const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`);
 
             if (response.data) {
                 setNoticeBoardDetail(response.data || []);
@@ -46,9 +47,9 @@ const Home = () => {
                                 </p>
                             ) : (
                                 <p className="text-010A48 fw-normal mb-0">
-                                    {noticeBoardDetail?.data?.map((item, index) => (
+                                    {noticeBoardDetail?.data?.noticeMsg?.map((item, index) => (
                                         <span key={index} className="me-4">
-                                            {item?.detail || "No detail provided"}
+                                            {item?.student_name}-{item?.noticeMsg}
                                         </span>
                                     ))}
 

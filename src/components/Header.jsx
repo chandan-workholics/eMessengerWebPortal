@@ -17,7 +17,7 @@ const Header = () => {
       setLoading(true);
       interceptor();
 
-      const response = await callAPI.get(`./appScrollerMsg/getAppScrollerMsgDetail`);
+      const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`);
       if (response.data) {
         setAppScrollNewsList(response.data || []);
       } else {
@@ -56,7 +56,7 @@ const Header = () => {
                   className="py-1 text-white bg-364659 rounded-3 fw-normal"
                   aria-current="page"
                 >
-                  {appScrollNewsList?.data?.map((item, index) => (
+                  {appScrollNewsList?.data?.appScrollerMsg?.map((item, index) => (
                     <span key={index} className="me-4">
                       {item.detail || "No detail provided"}
                     </span>
