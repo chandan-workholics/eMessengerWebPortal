@@ -6,6 +6,7 @@ import { interceptor } from "../Common_Method/api";
 const Header = () => {
   const [appScrollNewsList, setAppScrollNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const user = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
     fetchData();
@@ -16,7 +17,7 @@ const Header = () => {
       setLoading(true);
       interceptor();
 
-      const response = await callAPI.get(`./appScrollerMsg/getAppScrollerMsgDetail`);
+      const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`);
       if (response.data) {
         setAppScrollNewsList(response.data || []);
       } else {
@@ -30,6 +31,11 @@ const Header = () => {
       setLoading(false);
     }
   };
+
+  const logout = () => {
+    sessionStorage.clear();
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-2B3848 p-0">
@@ -50,7 +56,7 @@ const Header = () => {
                   className="py-1 text-white bg-364659 rounded-3 fw-normal"
                   aria-current="page"
                 >
-                  {appScrollNewsList?.data?.map((item, index) => (
+                  {appScrollNewsList?.data?.appScrollerMsg?.map((item, index) => (
                     <span key={index} className="me-4">
                       {item.detail || "No detail provided"}
                     </span>
@@ -73,9 +79,9 @@ const Header = () => {
                 <div className="d-flex justify-content-center align-items-center">
                   <img src="Images/profile.png" alt="Profile Icon" className="me-1" />
                   <p className="mb-0 me-1 lh-1">
-                    Ram Yadav
+                    {user?.student_name ? user?.student_name : ''}
                     <br />
-                    7415309294
+                    {user?.mobile_no ? user?.mobile_no : ''}
                   </p>
                   <i className="fa-solid fa-chevron-down"></i>
                 </div>
@@ -83,7 +89,7 @@ const Header = () => {
               <ul className="dropdown-menu">
                 <li>
                   <Link className="dropdown-item" to="">
-                    Welcome Ram!
+                    Welcome {user?.student_name ? user?.student_name : ''} !
                   </Link>
                 </li>
                 <hr className="m-0" />
@@ -103,7 +109,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item" to="/">
+                  <Link className="dropdown-item" onClick={logout} to="/" >
                     <i className="fa-solid fa-right-from-bracket me-1"></i>Logout
                   </Link>
                 </li>
