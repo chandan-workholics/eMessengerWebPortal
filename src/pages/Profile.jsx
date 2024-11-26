@@ -1,8 +1,67 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
+import callAPI, { interceptor } from "../Common_Method/api";
 
 const Profile = () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    const [loading, setLoading] = useState(true);
+    const [profile, setProfile] = useState('')
+    const [fees, setFees] = useState('')
+
+    const getprofile = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./combine/getRelatedProfile?mobilenumber=${user?.mobile_no}`);
+
+            if (response.data) {
+                setProfile(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setProfile([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setProfile([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const getfees = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./fees/getFeesDetail?mobilenumber=${user?.mobile_no}`);
+
+            if (response.data) {
+                setFees(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setFees([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setFees([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+
+
+    useEffect(() => {
+        getprofile();    // eslint-disable-next-line react-hooks/exhaustive-deps
+        getfees();    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const logout = () => {
+        sessionStorage.clear();
+    }
+
     return (
         <>
             <Header />
@@ -13,181 +72,129 @@ const Profile = () => {
                             <div className='d-flex  align-items-center'>
                                 <img src="Images/profile.png" alt="" className='me-2' />
                                 <div className="id-name">
-                                    <p className='text-white mb-0 fs-6'> Ram Yadav</p>
-                                    <p className='name mb-0 text-white'>7415309294</p>
+                                    <p className='text-white mb-0 fs-6'> {user?.student_name ? user?.student_name : ''}</p>
+                                    <p className='name mb-0 text-white'>{user?.mobile_no ? user?.mobile_no : ''}</p>
                                 </div>
                             </div>
                             <div className='logout'>
-                                <Link to='/'>
+                                <Link onClick={logout} to='/'>
                                     <button className='border-0 text-white bg-transparent'> <i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button></Link>
                             </div>
                         </div>
                     </div>
 
-                    <div className='row my-4'>
-                        <div className="col-xl-4">
-                            <div className="card px-3 py-4 bg-FAFAFA mb-xl-0 mb-3">
-                                <h6 className='text-010A48'>Profile</h6>
-                                <div className='card mb-4'>
-                                    <div className='d-flex justify-content-between align-items-center px-2 py-2'>
-                                        <div className='d-flex  align-items-center'>
-                                            <img src="Images/profile7.png" alt="" className='me-2' />
-                                            <p className='mb-0'><span className='text-010A48 fw-semibold Id'> 21102933</span><br />
-                                                <span className='text-666666 fw-normal name'> 9752745292</span></p>
-                                        </div>
-                                        <div className='name'>
-                                            <p className='text-010A48 bg-E9E9E9 rounded-1 px-1 fw-semibold'>Piyush yadav</p>
-                                        </div>
+
+                    {loading ? (
+                        <p className="text-010A48 fw-normal mb-0">
+                            Loading message...
+                        </p>
+                    ) : (
+                        <>
+                            <div className='row my-4'>
+                                <div className="col-xl-4">
+                                    <div className="card px-3 py-4 bg-FAFAFA mb-xl-0 mb-3">
+                                        <h6 className='text-010A48'>Profile</h6>
+
+                                        {profile?.data?.map((val, index) => {
+                                            return (
+                                                <>
+                                                    <div key={index} className='card mb-4'>
+                                                        <div className='d-flex justify-content-between align-items-center px-2 py-2'>
+                                                            <div className='d-flex  align-items-center'>
+                                                                <img src="Images/profile7.png" alt="" className='me-2' />
+                                                                <p className='mb-0'><span className={`${val?.color} text-010A48`}>{val?.student_number} </span><br />
+                                                                    <span className='text-666666 fw-normal name'> {val?.student_family_mobile_number}</span></p>
+                                                            </div>
+                                                            <div className='name'>
+                                                                <p className='text-010A48 bg-E9E9E9 rounded-1 px-1 fw-semibold'>{val?.student_name}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )
+                                        })}
+
+
+
                                     </div>
                                 </div>
-                                <div className='card mb-4'>
-                                    <div className='d-flex justify-content-between align-items-center px-2 py-2'>
-                                        <div className='d-flex  align-items-center'>
-                                            <img src="Images/profile.png" alt="" className='me-2' />
-                                            <p className='mb-0'><span className='text-010A48 fw-semibold Id'> 88555888</span><br />
-                                                <span className='text-666666 fw-normal name'> 9752745292</span></p>
-                                        </div>
-                                        <div className='name'>
-                                            <p className='text-010A48 bg-E9E9E9 rounded-1 px-1 fw-semibold'>Ram yadav</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='card'>
-                                    <div className='d-flex justify-content-between align-items-center px-2 py-2'>
-                                        <div className='d-flex  align-items-center'>
-                                            <img src="Images/profile8.png" alt="" className='me-2' />
-                                            <p className='mb-0'><span className='text-010A48 fw-semibold Id'> 4646464</span><br />
-                                                <span className='text-666666 fw-normal name'> 9752745292</span></p>
-                                        </div>
-                                        <div className='name'>
-                                            <p className='text-010A48 bg-E9E9E9 rounded-1 px-1 fw-semibold'>Neha yadav</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-xl-8">
-                            <div className="card bg-FAFAFA py-3 px-3">
-                                <h6 className='text-010A48'>Outstanding Fees</h6>
-                                <div className="row">
-                                    <div className="col-xl-6">
-                                        <div className="card mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
-                                                <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
-                                                    <span className='text-010A48 fw-normal'>Session 2024-2025</span>
-                                                </p>
-                                                <div className='Pay-btn d-flex align-items-center'>
-                                                    <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
-                                                </div>
-                                            </div>
-                                            <div className="card-body py-1 term">
-                                                <p className='text-010A48 fw-semibold mb-0'>Term 1</p>
-                                                <table className="table table-borderless mb-0">
-                                                    <tr>
-                                                        <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
-                                                        <th className='text-FF0000 fw-normal'>:  25,0000</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className='text-010A48 fw-normal'>Due Date </td>
-                                                        <td className='text-010A48 fw-normal'>:  14 Aug 2024</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div className="card mb-lg-0 mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
-                                                <p className='mb-0'><span className='text-6B51E4 fw-semibold'>21102933 - Piyush yadav</span><br />
-                                                    <span className='text-010A48 fw-normal'>Session 2024-2025</span>
-                                                </p>
-                                                <div className='Pay-btn d-flex align-items-center'>
-                                                    <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
-                                                </div>
-                                            </div>
-                                            <div className="card-body py-1 term">
-                                                <p className='text-010A48 fw-semibold mb-0'>Term 1</p>
-                                                <table className="table table-borderless mb-0">
-                                                    <tr>
-                                                        <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
-                                                        <th className='text-FF0000 fw-normal'>:  25,0000</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className='text-010A48 fw-normal'>Due Date </td>
-                                                        <td className='text-010A48 fw-normal'>:  14 Aug 2024</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-6">
-                                        <div className="card mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
-                                                <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
-                                                    <span className='text-010A48 fw-normal'>Session 2024-2025</span>
-                                                </p>
-                                                <div className='Pay-btn d-flex align-items-center'>
-                                                    <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
-                                                </div>
-                                            </div>
-                                            <div className="card-body py-1 term">
-                                                <p className='text-010A48 fw-semibold mb-0'>Term 2</p>
-                                                <table className="table table-borderless mb-0">
-                                                    <tr>
-                                                        <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
-                                                        <th className='text-FF0000 fw-normal'>:  25,0000</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className='text-010A48 fw-normal'>Due Date </td>
-                                                        <td className='text-010A48 fw-normal'>:  14 Aug 2024</td>
-                                                    </tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div className="card mb-lg-0 mb-2">
-                                            <div className="card-header d-flex justify-content-between pb-1 bg-white">
-                                                <p className='mb-0'><span className='text-FF79AE fw-semibold'>2635546 - Neha yadav</span><br />
-                                                    <span className='text-010A48 fw-normal'>Session 2024-2025</span>
-                                                </p>
-                                                <div className='Pay-btn d-flex align-items-center'>
-                                                    <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
-                                                </div>
-                                            </div>
-                                            <div className="card-body py-1 term">
-                                                <p className='text-010A48 fw-semibold mb-0'>Term 2</p>
-                                                <table className="table table-borderless mb-0">
-                                                    <tr>
-                                                        <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
-                                                        <th className='text-FF0000 fw-normal'>:  25,0000</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className='text-010A48 fw-normal'>Due Date </td>
-                                                        <td className='text-010A48 fw-normal'>:  14 Aug 2024</td>
-                                                    </tr>
-                                                </table>
+                                <div className="col-xl-8">
+                                    <div className="card bg-FAFAFA py-3 px-3">
+                                        <h6 className='text-010A48'>Outstanding Fees</h6>
+                                        <div className="row">
+
+                                            <div className="col-xl-6">
+
+                                                {fees?.data == null ? (
+                                                    <p className="text-010A48 fw-normal mb-0">
+                                                        No Data Found
+                                                    </p>
+                                                ) : (
+                                                    <>
+                                                        {fees?.data?.map((val, index) => {
+                                                            return (
+                                                                <>
+                                                                    <div key={index} className="card mb-2">
+                                                                        <div className="card-header d-flex justify-content-between pb-1 bg-white">
+                                                                            <p className='mb-0'><span className='text-6B51E4 fw-semibold'>{val?.student?.student_number} - {val?.student?.student_name}</span><br />
+                                                                                <span className='text-010A48 fw-normal'>{val?.student?.student_family_mobile_number}</span>
+                                                                            </p>
+                                                                            <div className='Pay-btn d-flex align-items-center'>
+                                                                                <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="card-body py-1 term">
+                                                                            <p className='text-010A48 fw-semibold mb-0'>Term {val?.term}</p>
+                                                                            <table className="table table-borderless mb-0">
+                                                                                <tr>
+                                                                                    <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
+                                                                                    <th className='text-FF0000 fw-normal'>: ₹ {val?.outstandingfees}</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td className='text-010A48 fw-normal'>Due Date </td>
+                                                                                    <td className='text-010A48 fw-normal'>:  {val?.duedate}</td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </>
+                                                            )
+                                                        })}
+                                                    </>
+                                                )}
+
+
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="row mb-3">
-                        <div className="col-xl-4">
-                            <div className="card bg-FAFAFA py-3 px-3">
-                                <h6 className='text-010A48'>All ID</h6>
-                                <div className="card py-1 px-2 mb-2">
-                                    <p className='text-010A48 fw-semibold mb-0'>21102933 - Piyush yadav</p>
-                                </div>
-                                <div className="card py-1 px-2 mb-2">
-                                    <p className='text-010A48 fw-semibold mb-0'>2635546  - Neha yadav</p>
-                                </div>
-                                <div className="card py-1 px-2">
-                                    <p className='text-010A48 fw-semibold mb-0'>2635546 - Ram yadav</p>
+                            <div className="row mb-3">
+                                <div className="col-xl-4">
+                                    <div className="card bg-FAFAFA py-3 px-3">
+                                        <h6 className='text-010A48'>All ID</h6>
+
+                                        {profile?.data?.map((val, index) => {
+                                            return (
+                                                <>
+                                                    <div key={index} className="card py-1 px-2">
+                                                        <p className='text-010A48 fw-semibold mb-0'>{val?.student_number} - {val?.student_name}</p>
+                                                    </div>
+                                                </>
+                                            )
+                                        })}
+
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </>
+                    )}
+
+
+
                 </div>
-            </div>
+            </div >
         </>
     )
 }

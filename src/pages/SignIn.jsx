@@ -100,7 +100,7 @@ const SignIn = () => {
         if (response.status === 200 && response.data.status) {
           const { token: newToken } = response.data;
           sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
-
+          sessionStorage.setItem('user', JSON.stringify(response.data.user));
           // Redirect to home page after successful verification
           setTimeout(() => {
             setLoading(false);

@@ -32,6 +32,7 @@ const Home = () => {
             setLoading(false)
         }
     }
+
     return (
         <>
             <Header />
@@ -47,7 +48,7 @@ const Home = () => {
                                 <p className="text-010A48 fw-normal mb-0">
                                     {noticeBoardDetail?.data?.map((item, index) => (
                                         <span key={index} className="me-4">
-                                            {item.detail || "No detail provided"}
+                                            {item?.detail || "No detail provided"}
                                         </span>
                                     ))}
 
