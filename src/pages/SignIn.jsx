@@ -3,8 +3,18 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import SplashScreen from "./SplashScreen";
 
 const SignIn = () => {
+
+  const [isLoadingSplash, setIsLoadingSplash] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingSplash(false);
+    }, 2000);
+  }, []);
+
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
   const [receivedOtp, setReceivedOtp] = useState("");
@@ -126,7 +136,9 @@ const SignIn = () => {
     return () => clearTimeout(otpTimeout); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
+  return isLoadingSplash ? (
+    <SplashScreen />
+  ) : (
     <div className="container-fluid p-0 login-page">
       <div className="row mx-auto h-100vh position-relative">
         <div className="col-lg-6 p-0 h-100 d-none d-lg-block">
@@ -139,7 +151,7 @@ const SignIn = () => {
                 </h3>
               </div>
               <div className="login-image d-flex justify-content-center align-items-center">
-                <img src="Images/login image.png" alt="Login Illustration" />
+                <img src="Images/login image.png" alt="Login Illustration" className="w-75" />
               </div>
               <div className="login-bottom d-flex justify-content-center mt-5">
                 <img src="Images/lb.png" alt="Img" className="me-4" />
@@ -156,7 +168,7 @@ const SignIn = () => {
                 Hi, Welcome 👋
               </h2>
               <p className="text-78828A text-center">
-                Enter your registered mobile number to proceed.
+                Agrawal Groups Communication App
               </p>
             </div>
             {formVisible && (
@@ -168,7 +180,7 @@ const SignIn = () => {
                     </label>
                     <input
                       type="text"
-                      className={`form-control text-8E8E8E py-2 fw-light rounded-3 ${error ? "is-invalid" : ""
+                      className={`form-control text-8E8E8E py-3 fw-light rounded-4 ${error ? "is-invalid" : ""
                         }`}
                       id="mobile_no"
                       placeholder="Enter mobile number"
@@ -181,7 +193,7 @@ const SignIn = () => {
                   <div className="mb-4 col-10 px-4">
                     <button
                       type="submit"
-                      className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-2 rounded-3"
+                      className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-4"
                     >
                       Log In
                     </button>

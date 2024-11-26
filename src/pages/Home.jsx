@@ -3,7 +3,6 @@ import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
 
-
 const Home = () => {
     const [loading, setLoading] = useState(true);
     const [noticeBoardDetail, setNoticeBoardDetail] = useState([])
@@ -38,7 +37,7 @@ const Home = () => {
             <div className="bg-F4F4F4 home-page">
                 <div className="container">
                     <div className="row">
-                        <div className="col-12 head-top py-2">
+                        <div className="col-12 head-top py-1">
                             {loading ? (
                                 <p className="text-010A48 fw-normal mb-0">
                                     Loading message...
@@ -57,86 +56,90 @@ const Home = () => {
                     </div>
                 </div>
             </div>
-            <div className="container mt-3">
-                <div className="row">
-                    <div className="col-xl-8 col-lg-12 mb-lg-2">
-                        <ul
-                            className="nav nav-tabs border-0 justify-content-between"
-                            id="myTab"
-                            role="tablist"
-                        >
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link me-3 rounded-2 text-010A48 active home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
-                                    id="day-tab-1"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#day-tab-1-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="day-tab-1-pane"
-                                    aria-selected="true"
-                                >
-                                    Inbox
+            <div className="container-fluid p-0 shadow-sm">
+                <div className="container pt-3">
+                    <div className="row">
+                        <div className="col-xl-8 col-lg-12 mb-lg-2 pe-lg-4 pe-xl-5">
+                            <ul
+                                className="nav nav-tabs border-0 justify-content-between"
+                                id="myTab"
+                                role="tablist"
+                            >
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link me-3 rounded-2 text-010A48 active home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        id="day-tab-1"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#day-tab-1-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="day-tab-1-pane"
+                                        aria-selected="true"
+                                    >
+                                        Inbox
+                                    </button>
+                                </li>
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        id="day-tab-2"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#day-tab-2-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="day-tab-2-pane"
+                                        aria-selected="false"
+                                    >
+                                        Last Day
+                                    </button>
+                                </li>
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        id="day-tab-3"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#day-tab-3-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="day-tab-3-pane"
+                                        aria-selected="false"
+                                    >
+                                        Seen
+                                    </button>
+                                </li>
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        id="day-tab-4"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#day-tab-4-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="day-tab-4-pane"
+                                        aria-selected="false"
+                                    >
+                                        Starred
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
+                            <div className="input-group mb-3">
+                                <input
+                                    type="search"
+                                    className="form-control bg-EFEFEF border-end-0"
+                                    placeholder="Search"
+                                    aria-label="Username"
+                                />
+                                <button className="input-group-text bg-EFEFEF">
+                                    <i className="fa-solid fa-magnifying-glass"></i>
                                 </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
-                                    id="day-tab-2"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#day-tab-2-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="day-tab-2-pane"
-                                    aria-selected="false"
-                                >
-                                    Last Day
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
-                                    id="day-tab-3"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#day-tab-3-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="day-tab-3-pane"
-                                    aria-selected="false"
-                                >
-                                    Seen
-                                </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                                <button
-                                    className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
-                                    id="day-tab-4"
-                                    data-bs-toggle="tab"
-                                    data-bs-target="#day-tab-4-pane"
-                                    type="button"
-                                    role="tab"
-                                    aria-controls="day-tab-4-pane"
-                                    aria-selected="false"
-                                >
-                                    Starred
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
-                        <div className="input-group mb-3">
-                            <input
-                                type="search"
-                                className="form-control bg-EFEFEF border-end-0"
-                                placeholder="Search"
-                                aria-label="Username"
-                            />
-                            <button className="input-group-text bg-EFEFEF">
-                                <i className="fa-solid fa-magnifying-glass"></i>
-                            </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className="container mt-3">
                 <div className="pb-20">
                     <div className="tab-content" id="myTabContent">
                         <div
@@ -151,7 +154,7 @@ const Home = () => {
                             <div className="row">
                                 <div className="col-12">
                                     <Link to="/reply" className="text-decoration-none">
-                                        <div className="card mb-3">
+                                        <div className="msg-card card mb-3">
                                             <div className="card-body">
                                                 <div className="d-flex justify-content-between mb-2">
                                                     <p className="mb-1">
@@ -185,7 +188,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <div className="card mb-3">
+                                    <div className="msg-card card mb-3">
                                         <div className="card-body">
                                             <div className="d-flex justify-content-between mb-2">
                                                 <p className="mb-1">
@@ -218,7 +221,7 @@ const Home = () => {
                                         </div>
                                     </div>
                                     <Link to="/chat" className="text-decoration-none">
-                                        <div className="card mb-3">
+                                        <div className="msg-card card mb-3">
                                             <div className="card-body">
                                                 <div className="d-flex justify-content-between mb-2">
                                                     <p className="mb-1">
@@ -251,7 +254,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </Link>
-                                    <div className="card mb-3">
+                                    <div className="msg-card card mb-3">
                                         <div className="card-body">
                                             <div className="d-flex justify-content-between mb-2">
                                                 <p className="mb-1">
@@ -282,7 +285,7 @@ const Home = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="card mb-3">
+                                    <div className="msg-card card mb-3">
                                         <div className="card-body">
                                             <div className="d-flex justify-content-between mb-2">
                                                 <p className="mb-1">
