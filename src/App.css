@@ -609,3 +609,75 @@
 }
 
 /*----------Chat-Css-End-----------*/
+
+
+.reply-page {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* Header Section */
+.message-header {
+    background-color: #007bff;
+    color: white;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+/* Message Body Section */
+.message-body-section {
+    background-color: #f0f4f8;
+}
+
+.message-item {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.message-item:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Spacing between sections */
+.py-5 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+}
+
+h1, h3 {
+    font-size: 1.5rem;
+}
+
+p {
+    font-size: 1.125rem;
+    color: #555;
+}
+
+a {
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.btn-link {
+    font-weight: normal;
+    padding: 0;
+}
+
+/* Footer Section */
+.message-footer {
+    background-color: #343a40;
+    color: white;
+    font-size: 1.125rem;
+    padding: 1.5rem 0;
+}
+
+.message-footer p {
+    margin: 0;
+}

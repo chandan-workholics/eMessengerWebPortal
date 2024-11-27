@@ -1,16 +1,37 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 import callAPI, { interceptor } from "../Common_Method/api";
 
 const Home = () => {
     const [loading, setLoading] = useState(true);
-    const [noticeBoardDetail, setNoticeBoardDetail] = useState([])
+    const [noticeBoardDetail, setNoticeBoardDetail] = useState([]);
+    const [message, setMessage] = useState([]);
+    const [lastdaymessage, setLastdaymessage] = useState([]);
+    const [seenmessage, setSeenmessage] = useState([]);
+    const [starredmessage, setStarredmessage] = useState([]);
+
     const user = JSON.parse(sessionStorage.getItem("user"));
 
-    useEffect(() => {
-        fetchData();    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    const toggleStarStatus = async (id, currentStatus) => {
+        try {
+            interceptor();
+            const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 and 0
+            await callAPI.put(`./msg/staredStatusUpdateMsgDetail/${id}`, {
+                star_status: newStatus,
+            });
+            // Optimistically update UI by mutating the local state
+            message.data = message.data.map((item) =>
+                item.id === id ? { ...item, is_starred: newStatus } : item
+            );
+            fetchMessage();
+            fetchStarredMessage();
+        } catch (error) {
+            console.error("Error updating star status:", error);
+        }
+    };
+
 
     const fetchData = async () => {
         try {
@@ -32,6 +53,99 @@ const Home = () => {
             setLoading(false)
         }
     }
+
+    const fetchMessage = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./msg/getInboxMsgDetail/${user?.mobile_no}`);
+
+            if (response.data) {
+                setMessage(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setMessage([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setMessage([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const fetchlastDayMessage = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./msg/getLastdayMsgDetail/${user?.mobile_no}`);
+
+            if (response.data) {
+                setLastdaymessage(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setLastdaymessage([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setLastdaymessage([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const fetchSeenMessage = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./msg/getSeenMsgDetail/${user?.mobile_no}`);
+
+            if (response.data) {
+                setSeenmessage(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setSeenmessage([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setSeenmessage([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+
+    const fetchStarredMessage = async () => {
+        try {
+            setLoading(true);
+            interceptor();
+
+            const response = await callAPI.get(`./msg/getStaredMsgDetail/${user?.mobile_no}`);
+
+            if (response.data) {
+                setStarredmessage(response.data || []);
+            } else {
+                console.warn("No data received from API.")
+                setStarredmessage([]);
+            }
+        } catch (error) {
+            console.error("Error fetching Notice Board messages:", error.message);
+            setStarredmessage([]);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchData();    // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchMessage();    // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchlastDayMessage();
+        fetchSeenMessage();
+        fetchStarredMessage();
+    }, []);
 
     return (
         <>
@@ -144,6 +258,8 @@ const Home = () => {
             <div className="container mt-3">
                 <div className="pb-20">
                     <div className="tab-content" id="myTabContent">
+
+
                         <div
                             className="tab-pane fade show active"
                             id="day-tab-1-pane"
@@ -154,174 +270,80 @@ const Home = () => {
                             <h6 className="text-010A48 fw-semibold m-0">Session 2024-2025</h6>
                             <p className="text-5F5F5F mb-2">Intimation -</p>
                             <div className="row">
+
                                 <div className="col-12">
-                                    <Link to="/reply" className="text-decoration-none">
-                                        <div className="msg-card card mb-3">
-                                            <div className="card-body">
-                                                <div className="d-flex justify-content-between mb-2">
-                                                    <p className="mb-1">
-                                                        {" "}
-                                                        <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                            21102933
-                                                        </span>
-                                                        <span className="text-6B51E4 fw-semibold">
-                                                            Ram Yadav
-                                                        </span>
-                                                    </p>
-                                                    <div className="date">
-                                                        <p className="text-5F5F5F mb-1">
-                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                            01 Aug 2024
+
+                                    {message?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+
+                                                <div className="msg-card card mb-3">
+                                                    <div className="card-body">
+                                                        <div className="d-flex justify-content-between mb-2">
+                                                            <p className="mb-1">
+                                                                {" "}
+                                                                <span
+                                                                    style={{ backgroundColor: val?.student?.color }}
+                                                                    className="box text-white rounded-1 px-1 fw-semibold me-2 mb-2"
+                                                                >
+                                                                    {val?.student?.student_number}
+                                                                </span>
+
+                                                                <span style={{ color: val?.student?.color || "#000000" }} className="fw-semibold">
+                                                                    {val?.student?.student_name}
+                                                                </span>
+
+
+                                                            </p>
+                                                            <div className="date">
+                                                                <p className="text-5F5F5F mb-1">
+                                                                    <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                    {format(new Date(val?.sended_date), "MMMM d, yyyy")}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-010A48 fs-6 mb-2 lh-1 ">
+                                                            {val?.msg_mst?.subject_text}
                                                         </p>
+                                                        <div className="show d-flex justify-content-between">
+                                                            <p className="text-5F5F5F mb-0">
+                                                                Show Upto:  {formattedDate}
+                                                            </p>
+                                                            <div className="star">
+                                                                <Link to={`/reply/${val?.msg_id}/${val?.sended_msg_id}`} className="text-decoration-none">
+                                                                    <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
+                                                                </Link>
+                                                            </div>
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-message text-FFC068 fs-5"></i>
+                                                            </div>
+
+                                                            <div className="star">
+                                                                <i
+                                                                    className={`fa-star fs-5 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                    style={{ cursor: "pointer" }}
+                                                                ></i>
+                                                            </div>
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                    The text informs about the deadlines for making fee
-                                                    payments for the 2nd Quarter.
-                                                </p>
-                                                <div className="show d-flex justify-content-between">
-                                                    <p className="text-5F5F5F mb-0">
-                                                        Show Upto: 2024-09-30 11:45:00
-                                                    </p>
-                                                    <div className="star">
-                                                        <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <div className="msg-card card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        58585558
-                                                    </span>
-                                                    <span className="text-FF79AE fw-semibold">
-                                                        Sourabh yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                List of Books, Notebooks, and Stationery for the
-                                                2024-2025 Academic Year
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Link to="/chat" className="text-decoration-none">
-                                        <div className="msg-card card mb-3">
-                                            <div className="card-body">
-                                                <div className="d-flex justify-content-between mb-2">
-                                                    <p className="mb-1">
-                                                        <span className="box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                            88555888
-                                                        </span>
-                                                        <span className="text-FFC068 fw-semibold">
-                                                            Piyush yadav
-                                                        </span>
-                                                    </p>
-                                                    <div className="date">
-                                                        <p className="text-5F5F5F mb-1">
-                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                            01 Aug 2024
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                    Information regarding group chat duration for biology
-                                                    subject
-                                                </p>
-                                                <div className="show d-flex justify-content-between">
-                                                    <p className="text-5F5F5F mb-0">
-                                                        Show Upto: 2024-09-30 11:45:00
-                                                    </p>
-                                                    <div className="star">
-                                                        <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <div className="msg-card card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-FF0000 fw-semibold">
-                                                        Neha yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding rakshabandhan celebration notice
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="msg-card card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                            </>
+                                        )
+                                    })}
+
+
+
                                 </div>
                             </div>
                         </div>
+
+
+
                         <div
                             className="tab-pane fade"
                             id="day-tab-2-pane"
@@ -333,173 +355,63 @@ const Home = () => {
                             <p className="text-5F5F5F mb-2">Intimation -</p>
                             <div className="row">
                                 <div className="col-12">
-                                    <Link to="/reply" className="text-decoration-none">
-                                        <div className="card mb-3">
-                                            <div className="card-body">
-                                                <div className="d-flex justify-content-between mb-2">
-                                                    <p className="mb-1">
-                                                        {" "}
-                                                        <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                            21102933
-                                                        </span>
-                                                        <span className="text-6B51E4 fw-semibold">
-                                                            Ram Yadav
-                                                        </span>
-                                                    </p>
-                                                    <div className="date">
-                                                        <p className="text-5F5F5F mb-1">
-                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                            01 Aug 2024
+                                    {lastdaymessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+
+                                                <div className="msg-card card mb-3">
+                                                    <div className="card-body">
+                                                        <div className="d-flex justify-content-between mb-2">
+                                                            <p className="mb-1">
+                                                                {" "}
+                                                                <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
+                                                                    {val?.student?.student_number}
+                                                                </span>
+                                                                <span className="text-6B51E4 fw-semibold">
+                                                                    {val?.student?.student_name}
+                                                                </span>
+                                                            </p>
+                                                            <div className="date">
+                                                                <p className="text-5F5F5F mb-1">
+                                                                    <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                    {format(new Date(val?.sended_date), "MMMM d, yyyy")}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-010A48 fs-6 mb-2 lh-1 ">
+                                                            {val?.msg_mst?.subject_text}
                                                         </p>
+                                                        <div className="show d-flex justify-content-between">
+                                                            <p className="text-5F5F5F mb-0">
+                                                                Show Upto:  {formattedDate}
+                                                            </p>
+                                                            <div className="star">
+                                                                <Link to="/reply" className="text-decoration-none">
+                                                                    <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
+                                                                </Link>
+                                                            </div>
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-message text-FFC068 fs-5"></i>
+                                                            </div>
+
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-star text-FFC068 fs-5"></i>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                    The text informs about the deadlines for making fee
-                                                    payments for the 2nd Quarter.
-                                                </p>
-                                                <div className="show d-flex justify-content-between">
-                                                    <p className="text-5F5F5F mb-0">
-                                                        Show Upto: 2024-09-30 11:45:00
-                                                    </p>
-                                                    <div className="star">
-                                                        <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        58585558
-                                                    </span>
-                                                    <span className="text-FF79AE fw-semibold">
-                                                        Sourabh yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                List of Books, Notebooks, and Stationery for the
-                                                2024-2025 Academic Year
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Link to="/chat" className="text-decoration-none">
-                                        <div className="card mb-3">
-                                            <div className="card-body">
-                                                <div className="d-flex justify-content-between mb-2">
-                                                    <p className="mb-1">
-                                                        <span className="box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                            88555888
-                                                        </span>
-                                                        <span className="text-FFC068 fw-semibold">
-                                                            Piyush yadav
-                                                        </span>
-                                                    </p>
-                                                    <div className="date">
-                                                        <p className="text-5F5F5F mb-1">
-                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                            01 Aug 2024
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                    Information regarding group chat duration for biology
-                                                    subject
-                                                </p>
-                                                <div className="show d-flex justify-content-between">
-                                                    <p className="text-5F5F5F mb-0">
-                                                        Show Upto: 2024-09-30 11:45:00
-                                                    </p>
-                                                    <div className="star">
-                                                        <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-FF0000 fw-semibold">
-                                                        Neha yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding rakshabandhan celebration notice
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                            </>
+                                        )
+                                    })}
+
                                 </div>
                             </div>
                         </div>
+
+
                         <div
                             className="tab-pane fade"
                             id="day-tab-3-pane"
@@ -511,169 +423,63 @@ const Home = () => {
                             <p className="text-5F5F5F mb-2">Intimation -</p>
                             <div className="row">
                                 <div className="col-12">
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    {" "}
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
+                                    {seenmessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+
+                                                <div className="msg-card card mb-3">
+                                                    <div className="card-body">
+                                                        <div className="d-flex justify-content-between mb-2">
+                                                            <p className="mb-1">
+                                                                {" "}
+                                                                <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
+                                                                    {val?.student?.student_number}
+                                                                </span>
+                                                                <span className="text-6B51E4 fw-semibold">
+                                                                    {val?.student?.student_name}
+                                                                </span>
+                                                            </p>
+                                                            <div className="date">
+                                                                <p className="text-5F5F5F mb-1">
+                                                                    <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                    {format(new Date(val?.sended_date), "MMMM d, yyyy")}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-010A48 fs-6 mb-2 lh-1 ">
+                                                            {val?.msg_mst?.subject_text}
+                                                        </p>
+                                                        <div className="show d-flex justify-content-between">
+                                                            <p className="text-5F5F5F mb-0">
+                                                                Show Upto:  {formattedDate}
+                                                            </p>
+                                                            <div className="star">
+                                                                <Link to="/reply" className="text-decoration-none">
+                                                                    <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
+                                                                </Link>
+                                                            </div>
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-message text-FFC068 fs-5"></i>
+                                                            </div>
+
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-star text-FFC068 fs-5"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        58585558
-                                                    </span>
-                                                    <span className="text-FF79AE fw-semibold">
-                                                        Sourabh yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                List of Books, Notebooks, and Stationery for the
-                                                2024-2025 Academic Year
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        88555888
-                                                    </span>
-                                                    <span className="text-FFC068 fw-semibold">
-                                                        Piyush yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding group chat duration for biology
-                                                subject
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-FF0000 fw-semibold">
-                                                        Neha yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding rakshabandhan celebration notice
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                            </>
+                                        )
+                                    })}
+
                                 </div>
                             </div>
                         </div>
+
+
                         <div
                             className="tab-pane fade"
                             id="day-tab-4-pane"
@@ -685,169 +491,60 @@ const Home = () => {
                             <p className="text-5F5F5F mb-2">Intimation -</p>
                             <div className="row">
                                 <div className="col-12">
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    {" "}
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
+                                    {starredmessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+
+                                                <div className="msg-card card mb-3">
+                                                    <div className="card-body">
+                                                        <div className="d-flex justify-content-between mb-2">
+                                                            <p className="mb-1">
+                                                                {" "}
+                                                                <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
+                                                                    {val?.student?.student_number}
+                                                                </span>
+                                                                <span className="text-6B51E4 fw-semibold">
+                                                                    {val?.student?.student_name}
+                                                                </span>
+                                                            </p>
+                                                            <div className="date">
+                                                                <p className="text-5F5F5F mb-1">
+                                                                    <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                    {format(new Date(val?.sended_date), "MMMM d, yyyy")}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-010A48 fs-6 mb-2 lh-1 ">
+                                                            {val?.msg_mst?.subject_text}
+                                                        </p>
+                                                        <div className="show d-flex justify-content-between">
+                                                            <p className="text-5F5F5F mb-0">
+                                                                Show Upto:  {formattedDate}
+                                                            </p>
+                                                            <div className="star">
+                                                                <Link to="/reply" className="text-decoration-none">
+                                                                    <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
+                                                                </Link>
+                                                            </div>
+                                                            <div className="star">
+                                                                <i className="fa-regular fa-message text-FFC068 fs-5"></i>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF79AE rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        58585558
-                                                    </span>
-                                                    <span className="text-FF79AE fw-semibold">
-                                                        Sourabh yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                List of Books, Notebooks, and Stationery for the
-                                                2024-2025 Academic Year
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-E79C1D rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        88555888
-                                                    </span>
-                                                    <span className="text-FFC068 fw-semibold">
-                                                        Piyush yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding group chat duration for biology
-                                                subject
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-FF0000 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-FF0000 fw-semibold">
-                                                        Neha yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                Information regarding rakshabandhan celebration notice
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="card mb-3">
-                                        <div className="card-body">
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <p className="mb-1">
-                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                        21102933
-                                                    </span>
-                                                    <span className="text-6B51E4 fw-semibold">
-                                                        Ram Yadav
-                                                    </span>
-                                                </p>
-                                                <div className="date">
-                                                    <p className="text-5F5F5F mb-1">
-                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                        01 Aug 2024
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-010A48 fs-6 mb-2 lh-1">
-                                                The text informs about the deadlines for making fee
-                                                payments for the 2nd Quarter.
-                                            </p>
-                                            <div className="show d-flex justify-content-between">
-                                                <p className="text-5F5F5F mb-0">
-                                                    Show Upto: 2024-09-30 11:45:00
-                                                </p>
-                                                <div className="star">
-                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                            </>
+                                        )
+                                    })}
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>

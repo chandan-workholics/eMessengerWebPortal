@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../Common_Method/api";
 import { Link } from "react-router-dom";
 import { interceptor } from "../Common_Method/api";
+import eLogo from '../e-logo.png'
+import profile from '../profile.png'
 
 const Header = () => {
   const [appScrollNewsList, setAppScrollNewsList] = useState([]);
@@ -41,7 +43,7 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg bg-2B3848 p-0">
         <div className="container">
           <Link className="navbar-brand text-white fw-semibold" to="/home">
-            <img src="Images/e-logo.png" alt="eMessenger Logo" className="me-1" />
+            <img src={eLogo} alt="eMessenger Logo" className="me-1" />
             eMessenger
           </Link>
 
@@ -77,7 +79,7 @@ const Header = () => {
                 aria-expanded="false"
               >
                 <div className="d-flex justify-content-center align-items-center">
-                  <img src="Images/profile.png" alt="Profile Icon" className="me-1" />
+                  <img src={profile} alt="Profile Icon" className="me-1" />
                   <p className="mb-0 me-1 lh-1">
                     {user?.student_name ? user?.student_name : ''}
                     <br />

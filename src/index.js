@@ -12,14 +12,14 @@ import WelcomeMsg from './pages/WelcomeMsg';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter basename="/eMessengerWebPortal/">
+  <BrowserRouter basename="/eMessengerWebPortal">
     <Routes>
       <Route path="/" element={<App />}>
         <Route path='/' element={<SignIn />} />
         <Route path='/welcome-message' element={<WelcomeMsg />} />
         <Route path='/home' element={<Home />} />
         <Route path='/profile' element={<Profile />} />
-        <Route path='/reply' element={<Reply />} />
+        <Route path='/reply/:msg_id/:sended_msg_id' element={<Reply />} />
         <Route path='/chat' element={<Chat />} />
       </Route>
     </Routes>
