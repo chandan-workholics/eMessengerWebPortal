@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
 import callAPI, { interceptor } from "../Common_Method/api";
+import { format } from "date-fns";
 
 const Profile = () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -152,7 +153,7 @@ const Profile = () => {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td className='text-010A48 fw-normal'>Due Date </td>
-                                                                                    <td className='text-010A48 fw-normal'>:  {val?.duedate}</td>
+                                                                                    <td className='text-010A48 fw-normal'>:  {format(new Date(val?.duedate), "dd-MMM-yyyy")}</td>
                                                                                 </tr>
                                                                             </table>
                                                                         </div>

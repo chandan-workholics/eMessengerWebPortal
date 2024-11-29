@@ -192,7 +192,6 @@ const Chat = () => {
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender?.student_number} -{" "}
                                                                 {chat.sender?.student_name}
                                                             </p>
                                                         )}
