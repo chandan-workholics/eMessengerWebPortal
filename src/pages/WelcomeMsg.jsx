@@ -31,7 +31,7 @@ const WelcomeMsg = () => {
     return (
         <div className="container-fluid p-0 welcomeMsg-page position-relative">
             {/* Main Content Section */}
-            <div className="container pt-5">
+            <div className="container pt-5 pt-lg-0">
                 <div className="row pt-5 justify-content-center">
                     {/* Responsive Column */}
                     <div className="col-12 col-md-10 col-lg-6 col-xxxl-6  col-xxl-6 col-xl-6 px-3 px-lg-5 mx-auto">
