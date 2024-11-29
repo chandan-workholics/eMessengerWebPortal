@@ -245,16 +245,14 @@ const Home = () => {
                             </ul>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
-                            <div className="input-group mb-3">
+                            <div className=" mb-3 position-relative">
                                 <input
                                     type="search"
-                                    className="form-control bg-F4F4F4 border-0"
+                                    className="form-control bg-F4F4F4 border rounded"
                                     placeholder="Search"
                                     aria-label="Username"
                                 />
-                                <button className="input-group-text bg-F4F4F4 border-0">
-                                    <i className="fa-solid fa-magnifying-glass text-797979"></i>
-                                </button>
+                                <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i>
                             </div>
                         </div>
                     </div>
@@ -329,19 +327,15 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link to="/chat" className="me-2">
-                                                                        <img
-                                                                            src="Images/chat-icon.png"
-                                                                            alt=""
-                                                                            className=""
-                                                                        />
+                                                                    <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
+                                                                        <img src="Images/chat-icon.png" alt="" className="" />
                                                                         {/* <i class="fa-solid fa-comment-dots fs-4 text-6B51E4"></i> */}
                                                                     </Link>
                                                                     <Link className="star">
                                                                         <i
                                                                             className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
-                                                                                    ? "fa-solid text-warning"
-                                                                                    : "fa-regular text-FFC068"
+                                                                                ? "fa-solid text-warning"
+                                                                                : "fa-regular text-FFC068"
                                                                                 }`}
                                                                             onClick={() =>
                                                                                 toggleStarStatus(
@@ -375,65 +369,66 @@ const Home = () => {
                                 </h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    <div className="col-12">
-                                        {lastdaymessage?.data?.map((val) => {
-                                            const showUpto = val?.msg_mst?.show_upto;
-                                            const formattedDate = showUpto
-                                                ? format(new Date(showUpto), "MMMM d, yyyy")
-                                                : "N/A";
-                                            return (
-                                                <>
-                                                    <div className="msg-card card mb-3">
-                                                        <div className="card-body">
-                                                            <div className="d-flex justify-content-between mb-2">
-                                                                <p className="mb-1">
-                                                                    {" "}
-                                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                                        {val?.student?.student_number}
-                                                                    </span>
-                                                                    <span className="text-6B51E4 fw-semibold">
-                                                                        {val?.student?.student_name}
-                                                                    </span>
-                                                                </p>
-                                                                <div className="date">
-                                                                    <p className="text-5F5F5F mb-1">
-                                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                        {format(
-                                                                            new Date(val?.sended_date),
-                                                                            "MMMM d, yyyy"
-                                                                        )}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <p className="text-010A48 fs-6 mb-2 lh-1 ">
-                                                                {val?.msg_mst?.subject_text}
-                                                            </p>
-                                                            <div className="show d-flex justify-content-between">
-                                                                <p className="text-5F5F5F mb-0">
-                                                                    Show Upto: {formattedDate}
-                                                                </p>
-                                                                <div className="star">
-                                                                    <Link
-                                                                        to="/reply"
-                                                                        className="text-decoration-none"
-                                                                    >
-                                                                        <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
-                                                                    </Link>
-                                                                </div>
-                                                                <div className="star">
-                                                                    <i className="fa-regular fa-message text-FFC068 fs-5"></i>
-                                                                </div>
+                                    {lastdaymessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+                                                <div className="col-12 mb-4">
+                                                    <Link to={`/reply/${val?.msg_id}/${val?.sended_msg_id}`} className="text-decoration-none">
+                                                        <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
+                                                            <div className="card-body">
+                                                                <div className="d-flex justify-content-between mb-2">
+                                                                    <h6 className="mb-1">
+                                                                        {" "}
+                                                                        <span
+                                                                            style={{ backgroundColor: val?.student?.color }}
+                                                                            className="text-white rounded-1 px-1 fw-semibold me-2 mb-2"
+                                                                        >
+                                                                            {val?.student?.student_number}
+                                                                        </span>
 
-                                                                <div className="star">
-                                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
+                                                                        <span style={{ color: val?.student?.color || "#000000" }} className="fs-18 fw-semibold">
+                                                                            {val?.student?.student_name}
+                                                                        </span>
+                                                                    </h6>
+                                                                    <div className="date">
+                                                                        <p className="text-5F5F5F mb-1">
+                                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                            {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="">
+                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                        {val?.msg_mst?.subject_text}
+                                                                    </h6>
+                                                                </div>
+                                                                <div className="show d-flex justify-content-between align-items-end">
+                                                                    <p className="text-5F5F5F mb-0">
+                                                                        Show Upto:  {formattedDate}
+                                                                    </p>
+                                                                    <div className="d-flex align-items-center">
+                                                                        <Link to='/chat' className="me-2" >
+                                                                            <img src="Images/chat-icon.png" alt="" className="" />
+                                                                            {/* <i class="fa-solid fa-comment-dots fs-4 text-6B51E4"></i> */}
+                                                                        </Link>
+                                                                        <Link className="star">
+                                                                            <i
+                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                style={{ cursor: "pointer" }}
+                                                                            ></i>
+                                                                        </Link>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </>
-                                            );
-                                        })}
-                                    </div>
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
                                 </div>
                             </div>
 
@@ -449,65 +444,66 @@ const Home = () => {
                                 </h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    <div className="col-12">
-                                        {seenmessage?.data?.map((val) => {
-                                            const showUpto = val?.msg_mst?.show_upto;
-                                            const formattedDate = showUpto
-                                                ? format(new Date(showUpto), "MMMM d, yyyy")
-                                                : "N/A";
-                                            return (
-                                                <>
-                                                    <div className="msg-card card mb-3">
-                                                        <div className="card-body">
-                                                            <div className="d-flex justify-content-between mb-2">
-                                                                <p className="mb-1">
-                                                                    {" "}
-                                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                                        {val?.student?.student_number}
-                                                                    </span>
-                                                                    <span className="text-6B51E4 fw-semibold">
-                                                                        {val?.student?.student_name}
-                                                                    </span>
-                                                                </p>
-                                                                <div className="date">
-                                                                    <p className="text-5F5F5F mb-1">
-                                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                        {format(
-                                                                            new Date(val?.sended_date),
-                                                                            "MMMM d, yyyy"
-                                                                        )}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <p className="text-010A48 fs-6 mb-2 lh-1 ">
-                                                                {val?.msg_mst?.subject_text}
-                                                            </p>
-                                                            <div className="show d-flex justify-content-between">
-                                                                <p className="text-5F5F5F mb-0">
-                                                                    Show Upto: {formattedDate}
-                                                                </p>
-                                                                <div className="star">
-                                                                    <Link
-                                                                        to="/reply"
-                                                                        className="text-decoration-none"
-                                                                    >
-                                                                        <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
-                                                                    </Link>
-                                                                </div>
-                                                                <div className="star">
-                                                                    <i className="fa-regular fa-message text-FFC068 fs-5"></i>
-                                                                </div>
+                                    {seenmessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+                                                <div className="col-12 mb-4">
+                                                    <Link to={`/reply/${val?.msg_id}/${val?.sended_msg_id}`} className="text-decoration-none">
+                                                        <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
+                                                            <div className="card-body">
+                                                                <div className="d-flex justify-content-between mb-2">
+                                                                    <h6 className="mb-1">
+                                                                        {" "}
+                                                                        <span
+                                                                            style={{ backgroundColor: val?.student?.color }}
+                                                                            className="text-white rounded-1 px-1 fw-semibold me-2 mb-2"
+                                                                        >
+                                                                            {val?.student?.student_number}
+                                                                        </span>
 
-                                                                <div className="star">
-                                                                    <i className="fa-regular fa-star text-FFC068 fs-5"></i>
+                                                                        <span style={{ color: val?.student?.color || "#000000" }} className="fs-18 fw-semibold">
+                                                                            {val?.student?.student_name}
+                                                                        </span>
+                                                                    </h6>
+                                                                    <div className="date">
+                                                                        <p className="text-5F5F5F mb-1">
+                                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                            {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="">
+                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                        {val?.msg_mst?.subject_text}
+                                                                    </h6>
+                                                                </div>
+                                                                <div className="show d-flex justify-content-between align-items-end">
+                                                                    <p className="text-5F5F5F mb-0">
+                                                                        Show Upto:  {formattedDate}
+                                                                    </p>
+                                                                    <div className="d-flex align-items-center">
+                                                                        <Link to='/chat' className="me-2" >
+                                                                            <img src="Images/chat-icon.png" alt="" className="" />
+                                                                            {/* <i class="fa-solid fa-comment-dots fs-4 text-6B51E4"></i> */}
+                                                                        </Link>
+                                                                        <Link className="star">
+                                                                            <i
+                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                style={{ cursor: "pointer" }}
+                                                                            ></i>
+                                                                        </Link>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </>
-                                            );
-                                        })}
-                                    </div>
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
                                 </div>
                             </div>
 
@@ -523,61 +519,66 @@ const Home = () => {
                                 </h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    <div className="col-12">
-                                        {starredmessage?.data?.map((val) => {
-                                            const showUpto = val?.msg_mst?.show_upto;
-                                            const formattedDate = showUpto
-                                                ? format(new Date(showUpto), "MMMM d, yyyy")
-                                                : "N/A";
-                                            return (
-                                                <>
-                                                    <div className="msg-card card mb-3">
-                                                        <div className="card-body">
-                                                            <div className="d-flex justify-content-between mb-2">
-                                                                <p className="mb-1">
-                                                                    {" "}
-                                                                    <span className="box text-white bg-6B51E4 rounded-1 px-1 fw-semibold me-2 mb-2">
-                                                                        {val?.student?.student_number}
-                                                                    </span>
-                                                                    <span className="text-6B51E4 fw-semibold">
-                                                                        {val?.student?.student_name}
-                                                                    </span>
-                                                                </p>
-                                                                <div className="date">
-                                                                    <p className="text-5F5F5F mb-1">
-                                                                        <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                        {format(
-                                                                            new Date(val?.sended_date),
-                                                                            "MMMM d, yyyy"
-                                                                        )}
+                                    {starredmessage?.data?.map((val) => {
+                                        const showUpto = val?.msg_mst?.show_upto;
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        return (
+                                            <>
+                                                <div className="col-12 mb-4">
+                                                    <Link to={`/reply/${val?.msg_id}/${val?.sended_msg_id}`} className="text-decoration-none">
+                                                        <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
+                                                            <div className="card-body">
+                                                                <div className="d-flex justify-content-between mb-2">
+                                                                    <h6 className="mb-1">
+                                                                        {" "}
+                                                                        <span
+                                                                            style={{ backgroundColor: val?.student?.color }}
+                                                                            className="text-white rounded-1 px-1 fw-semibold me-2 mb-2"
+                                                                        >
+                                                                            {val?.student?.student_number}
+                                                                        </span>
+
+                                                                        <span style={{ color: val?.student?.color || "#000000" }} className="fs-18 fw-semibold">
+                                                                            {val?.student?.student_name}
+                                                                        </span>
+                                                                    </h6>
+                                                                    <div className="date">
+                                                                        <p className="text-5F5F5F mb-1">
+                                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                            {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="">
+                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                        {val?.msg_mst?.subject_text}
+                                                                    </h6>
+                                                                </div>
+                                                                <div className="show d-flex justify-content-between align-items-end">
+                                                                    <p className="text-5F5F5F mb-0">
+                                                                        Show Upto:  {formattedDate}
                                                                     </p>
-                                                                </div>
-                                                            </div>
-                                                            <p className="text-010A48 fs-6 mb-2 lh-1 ">
-                                                                {val?.msg_mst?.subject_text}
-                                                            </p>
-                                                            <div className="show d-flex justify-content-between">
-                                                                <p className="text-5F5F5F mb-0">
-                                                                    Show Upto: {formattedDate}
-                                                                </p>
-                                                                <div className="star">
-                                                                    <Link
-                                                                        to="/reply"
-                                                                        className="text-decoration-none"
-                                                                    >
-                                                                        <i className="fa-regular fa-eye text-FFC068 fs-5"></i>
-                                                                    </Link>
-                                                                </div>
-                                                                <div className="star">
-                                                                    <i className="fa-regular fa-message text-FFC068 fs-5"></i>
+                                                                    <div className="d-flex align-items-center">
+                                                                        <Link to='/chat' className="me-2" >
+                                                                            <img src="Images/chat-icon.png" alt="" className="" />
+                                                                            {/* <i class="fa-solid fa-comment-dots fs-4 text-6B51E4"></i> */}
+                                                                        </Link>
+                                                                        <Link className="star">
+                                                                            <i
+                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                style={{ cursor: "pointer" }}
+                                                                            ></i>
+                                                                        </Link>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </>
-                                            );
-                                        })}
-                                    </div>
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
                                 </div>
                             </div>
                         </div>
