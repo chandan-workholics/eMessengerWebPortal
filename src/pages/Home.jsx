@@ -308,7 +308,7 @@ const Home = () => {
                                                                     Show Upto:  {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
+                                                                    <Link to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
                                                                         <img src="Images/chat-icon.png" alt="" className="" />
                                                                         {/* <i class="fa-solid fa-comment-dots fs-4 text-6B51E4"></i> */}
                                                                     </Link>

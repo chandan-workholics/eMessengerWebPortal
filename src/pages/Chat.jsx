@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import sendMsgBtn from "../sendMsg-btn.png";
@@ -10,8 +10,9 @@ const Chat = () => {
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]); // Stores chat messages
     const [message, setMessage] = useState(""); // Stores the message input by the user
+    const [isScrolling, setIsScrolling] = useState(false); // Tracks if user is scrolling manually
+    const chatBoxRef = useRef(null); // Ref for the chatbox container
     const user = JSON.parse(sessionStorage.getItem("user")); // User details
-    const chatContainerRef = useRef(null); // Ref for the chat messages container
 
     const fetchData = async () => {
         try {
@@ -33,7 +34,6 @@ const Chat = () => {
             setDetail([]);
         } finally {
             setLoading(false);
-            scrollToBottom(); // Scroll to the latest message
         }
     };
 
@@ -42,7 +42,7 @@ const Chat = () => {
 
         const payload = {
             msg_id: parseInt(msg_id),
-            sender_id: sender_id, // Assume `id` is available in `user`
+            sender_id: sender_id,
             chat_type: "GROUPCHAT",
             group_id: parseInt(msg_id),
             mobile_no: user?.mobile_no,
@@ -54,32 +54,49 @@ const Chat = () => {
             await callAPI.post("/chat/send_chat_msg1", payload);
             setMessage(""); // Clear input
             fetchData(); // Fetch updated messages
+            // Scroll to the bottom after sending a message
+            setTimeout(() => {
+                if (chatBoxRef.current) {
+                    chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+                }
+            }, 100);
         } catch (error) {
             console.error("Error sending message:", error.message);
         }
     };
 
-    const handleKeyDown = (event) => {
-        if (event.key === "Enter") {
-            handleSendMessage(); // Call send message on Enter key press
-        }
-    };
+    const handleScroll = () => {
+        if (!chatBoxRef.current) return;
 
-    const scrollToBottom = () => {
-        if (chatContainerRef.current) {
-            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-        }
+        // Check if the user is at the top of the chatbox
+        const isAtTop = chatBoxRef.current.scrollTop === 0;
+        setIsScrolling(!isAtTop);
     };
 
     useEffect(() => {
         fetchData(); // Fetch messages on component mount
 
         const interval = setInterval(() => {
-            fetchData(); // Fetch messages every 2 seconds
+            if (!isScrolling) {
+                fetchData(); // Fetch messages only if not manually scrolling
+            }
         }, 2000);
 
         return () => clearInterval(interval); // Cleanup on component unmount
-    }, []);
+    }, [isScrolling]);
+
+    useEffect(() => {
+        // Scroll to the bottom when messages are loaded, only if not scrolling manually
+        if (!isScrolling && chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [detail]);
+
+    const handleKeyPress = (e) => {
+        if (e.key === "Enter") {
+            handleSendMessage();
+        }
+    };
 
     return (
         <>
@@ -103,7 +120,9 @@ const Chat = () => {
                                     </div>
                                     <div
                                         className="card-body py-1 chatbox-messages"
-                                        ref={chatContainerRef} // Attach the ref to the chat container
+                                        ref={chatBoxRef}
+                                        onScroll={handleScroll}
+                                        style={{ overflowY: "scroll", height: "70vh" }}
                                     >
                                         <p className="text-010A48 fw-semibold mb-0 teach">
                                             Information regarding group chat duration for biology
@@ -157,7 +176,7 @@ const Chat = () => {
                                             className="me-3 p-2 rounded-3"
                                             value={message}
                                             onChange={(e) => setMessage(e.target.value)}
-                                            onKeyDown={handleKeyDown} // Listen for Enter key press
+                                            onKeyPress={handleKeyPress}
                                         />
                                         <Link>
                                             <i className="fa-solid fa-camera text-969599 me-3"></i>
