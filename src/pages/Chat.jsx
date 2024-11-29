@@ -203,6 +203,12 @@ const Chat = () => {
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
                                                             {chat.message}
+                                                            {chat?.link == null ? '' : <img
+                                                                src={chat?.link}
+                                                                alt=""
+                                                                style={{ height: 100 }}
+                                                                className="me-2"
+                                                            />}
                                                         </p>
                                                     </div>
                                                 </div>

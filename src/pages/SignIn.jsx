@@ -160,7 +160,7 @@ const SignIn = () => {
             </div>
           </div>
         </div>
-        <div className="col-lg-6 col-md-12 d-flex align-items-center justify-content-center pb-5">
+        <div className="col-lg-6 col-md-12 d-flex align-items-center justify-content-center">
           <div className="container px-xl-5">
             <div className="right py-4 row justify-content-center align-items-center">
               <img src="Images/e-logo.png" alt="eMessenger Logo" />
@@ -174,7 +174,7 @@ const SignIn = () => {
             {formVisible && (
               <form onSubmit={handleMobileSubmit}>
                 <div className="row d-flex justify-content-center px-xl-5">
-                  <div className="mb-4 col-10 px-4">
+                  <div className="mb-4 col-12 px-4">
                     <label htmlFor="mobile" className="form-label">
                       Enter registered mobile no
                     </label>
@@ -190,7 +190,7 @@ const SignIn = () => {
                     />
                     {error && <div className="invalid-feedback">{error}</div>}
                   </div>
-                  <div className="mb-4 col-10 px-4">
+                  <div className="mb-4 col-12 px-4">
                     <button
                       type="submit"
                       className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-4"
@@ -208,7 +208,7 @@ const SignIn = () => {
             )}
             {showOtpInput && (
               <div className="row d-flex justify-content-center px-xl-5">
-                <div className="mb-4 col-10 px-4">
+                <div className="mb-4 col-12 px-4">
                   <label htmlFor="otp" className="form-label">
                     Enter OTP
                   </label>
