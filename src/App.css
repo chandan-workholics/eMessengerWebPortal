@@ -323,10 +323,20 @@
     height: 100vh;
 
     .awssld__content {
-        background-color: #ffffff;
+        background-color: #ffff;
         border-radius: 30px;
     }
 }
+
+.AutoSliderStyle {
+    height: 250px;
+}
+
+.noticeboardImg {
+    height: 250px;
+    width: 700px;
+}
+
 
 /*---------- Welcome-Page-Css-End ----------*/
 
