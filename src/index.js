@@ -20,7 +20,7 @@ root.render(
         <Route path='/home' element={<Home />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/reply/:msg_id/:sended_msg_id' element={<Reply />} />
-        <Route path='/chat' element={<Chat />} />
+        <Route path='/chat/:msg_id/:sender_id' element={<Chat />} />
       </Route>
     </Routes>
   </BrowserRouter> 
