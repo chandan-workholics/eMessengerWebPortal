@@ -11,7 +11,6 @@ const Home = () => {
     const [lastdaymessage, setLastdaymessage] = useState([]);
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
-
     const user = JSON.parse(sessionStorage.getItem("user"));
 
     const toggleStarStatus = async (id, currentStatus) => {
@@ -154,6 +153,7 @@ const Home = () => {
         fetchSeenMessage();
         fetchStarredMessage();
     }, []);
+
 
     return (
         <>
