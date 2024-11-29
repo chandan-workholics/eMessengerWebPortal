@@ -23,6 +23,6 @@ root.render(
         <Route path='/chat' element={<Chat />} />
       </Route>
     </Routes>
-  </BrowserRouter>
+  </BrowserRouter> 
 );
 

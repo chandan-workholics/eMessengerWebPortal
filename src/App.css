@@ -72,6 +72,18 @@
     color: #9FC8FF;
 }
 
+.text-797979 {
+    color: #797979;
+}
+
+.text-525252 {
+    color: #525252 !important;
+}
+
+.text-6B51E4 {
+    color: #6B51E4 !important;
+}
+
 /*---------- Text-Color-End ----------*/
 
 /*---------- Background-Color-Start ----------*/
@@ -143,12 +155,21 @@
     background: #EFEFEF;
 }
 
+.bg-F1F3FA {
+    background: #F1F3FA;
+}
+
 /*---------- Background-Color-End ----------*/
 
 /*---------- Font-Size-Start ----------*/
-.fs-16{
-    font-size: 16px;
+.fs-16 {
+    font-size: 16px !important;
 }
+
+.fs-18 {
+    font-size: 18px !important;
+}
+
 /*---------- Font-Size--End ----------*/
 
 
@@ -260,6 +281,11 @@
     left: auto !important;
 }
 
+.navbar-page .dropdown-item:active {
+    color: #FFFFFF !important;
+    background-color: #e79c1d;
+}
+
 @media only screen and (max-width:767px) {
     ::marker {
         color: transparent;
@@ -310,7 +336,7 @@
 }
 
 .box {
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .show p {
@@ -349,6 +375,16 @@
 
 .msg-card {
     border: 1px solid #EEEEEE;
+}
+
+@media only screen and (max-width:767px) {
+    .home-tab-btn {
+        width: 80px;
+        display: flex;
+        justify-content: center;
+        border: 1px solid #EFEFEF !important;
+        padding: 6px 10px;
+    }
 }
 
 @media only screen and (min-width:768px) and (max-width:1023px) {
@@ -610,13 +646,13 @@
 
 /*----------Chat-Css-End-----------*/
 
-
+/* 
 .reply-page {
     background-color: #f8f9fa;
     min-height: 100vh;
 }
 
-/* Header Section */
+
 .message-header {
     background-color: #007bff;
     color: white;
@@ -624,7 +660,7 @@
     padding: 30px;
 }
 
-/* Message Body Section */
+
 .message-body-section {
     background-color: #f0f4f8;
 }
@@ -642,13 +678,14 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Spacing between sections */
+
 .py-5 {
     padding-top: 3rem !important;
     padding-bottom: 3rem !important;
 }
 
-h1, h3 {
+h1,
+h3 {
     font-size: 1.5rem;
 }
 
@@ -670,7 +707,7 @@ a:hover {
     padding: 0;
 }
 
-/* Footer Section */
+
 .message-footer {
     background-color: #343a40;
     color: white;
@@ -680,4 +717,4 @@ a:hover {
 
 .message-footer p {
     margin: 0;
-}
+} */
