@@ -228,7 +228,6 @@ const Reply = () => {
                 <p>Footer Content Here</p>
             </div>
 
-
         </>
     )
 }

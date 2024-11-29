@@ -103,19 +103,58 @@ const Chat = () => {
             <Header />
             <div className="container-fluid p-0 chat-page">
                 <div className="container">
-                    <div className="row my-3">
+                    <div className="row my-0 my-md-4">
                         {/* Chatbox */}
-                        <div className="col-xl-9 col-lg-8 col-md-8 col-12">
-                            <div className="card bg-FAFAFA mb-lg-0 mb-1 h-80vh position-relative border-0">
-                                <div className="chatbox py-0 h-100">
+                        <div className="col-xl-9 col-lg-8 col-md-12 col-12 px-0 px-md-0 px-xl-auto">
+                            <div className="card bg-FAFAFA mb-lg-0 h-87vh position-relative border-0">
+                                <div className="chatbox pt-0 h-100">
                                     <div
                                         className="card-header bg-FAFAFA py-0"
                                         style={{ borderColor: "#EDEDED" }}
                                     >
-                                        <div className="chatbox-header py-2 px-1">
+                                        <div className="chatbox-header py-2 px-1 d-flex justify-content-between">
                                             <p className="mb-0 fw-semibold text-010A48 chat-head">
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
+                                            <div class="dropdown d-block d-lg-none">
+                                                <button class="dropdown-toggle border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
+                                                </button>
+                                                <ul class="dropdown-menu p-0 border-0">
+                                                    <li className="">
+                                                        <div
+                                                            className="card bg-FAFAFA shadow"
+                                                            style={{ borderColor: "#F1F1F1" }}
+                                                        >
+                                                            <div
+                                                                className="card-header px-2 bg-FAFAFA"
+                                                                style={{ borderColor: "#EDEDED" }}
+                                                            >
+                                                                <p className="mb-0 text-010A48 fw-semibold">
+                                                                    <i className="fa-solid fa-circle me-2 text-4CD964"></i>
+                                                                    Available Teacher
+                                                                </p>
+                                                            </div>
+                                                            <div className="card-body">
+                                                                {/* Dynamic Teacher List */}
+                                                                {detail?.five_numbers_Details?.map((teacher) => (
+                                                                    <p
+                                                                        key={teacher.student_main_id}
+                                                                        className="mb-0 my-2 text-010A48 fw-normal teach"
+                                                                    >
+                                                                        <img
+                                                                            src={`Images/profile${teacher.student_main_id}.png`}
+                                                                            alt=""
+                                                                            className="me-2"
+                                                                        />
+                                                                        {teacher.student_number} - {teacher.student_name}
+                                                                    </p>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                     <div
@@ -169,7 +208,7 @@ const Chat = () => {
                                         })}
                                     </div>
                                     {/* Chatbox Input */}
-                                    <div className="chatbox-input d-flex align-items-center position-absolute w-100 bg-FAFAFA">
+                                    <div className="chatbox-input border rounded-bottom-3 d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                         <input
                                             type="text"
                                             placeholder="Reply..."
@@ -195,7 +234,7 @@ const Chat = () => {
                             </div>
                         </div>
                         {/* Available Teachers */}
-                        <div className="col-xl-3 col-lg-4 col-md-4 col-12">
+                        <div className="col-xl-3 col-lg-4 col-md-4 col-12 d-none d-lg-block">
                             <div
                                 className="card bg-FAFAFA"
                                 style={{ borderColor: "#F1F1F1" }}
