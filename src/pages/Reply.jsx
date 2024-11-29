@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from '../components/Header';
-import { Link } from 'react-router-dom'
+
 import { useParams } from 'react-router-dom';
 import callAPI, { interceptor } from "../Common_Method/api";
 
@@ -31,7 +31,7 @@ const Reply = () => {
     };
 
     useEffect(() => {
-        fetchData(); // Fetch message details when component is mounted
+        fetchData();  // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [msg_id, sended_msg_id]);
 
     if (loading) {
