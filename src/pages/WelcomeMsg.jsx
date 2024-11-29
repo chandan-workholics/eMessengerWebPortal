@@ -31,7 +31,7 @@ const WelcomeMsg = () => {
     return (
         <div className="container-fluid p-0 welcomeMsg-page position-relative">
             {/* Main Content Section */}
-            <div className="container pt-3">
+            <div className="container pt-5">
                 <div className="row pt-5 justify-content-center">
                     {/* Responsive Column */}
                     <div className="col-12 col-md-10 col-lg-6 col-xxxl-6  col-xxl-6 col-xl-6 px-3 px-lg-5 mx-auto">
@@ -79,8 +79,8 @@ const WelcomeMsg = () => {
                 </div>
 
                 {/* Bottom Navigation */}
-                <div className="position-absolute bottom-0 end-0 w-100 d-flex justify-content-end">
-                    <Link to="/home" className="btn bg-E79C1D rounded-pill me-5 mb-4 px-4">
+                <div className="position-absolute top-0 end-0 w-100 d-flex justify-content-end">
+                    <Link to="/home" className="btn bg-E79C1D rounded-pill me-4 mt-4 px-4">
                         Next
                     </Link>
                 </div>

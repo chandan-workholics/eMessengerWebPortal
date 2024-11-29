@@ -349,15 +349,21 @@
         background-color: #ffff;
         border-radius: 30px;
     }
-}
 
-.AutoSliderStyle {
-    height: 250px;
-}
+    .AutoSliderStyle {
+        height: 250px;
+    }
 
-.noticeboardImg {
-    height: 250px;
-    width: 700px;
+    .noticeboardImg {
+        height: 250px;
+    }
+
+    @media only screen and (max-width:767px) {
+        .bottomImage img {
+            height: 275px;
+            object-fit: cover !important;
+        }
+    }
 }
 
 
@@ -661,6 +667,7 @@
         .teach {
             font-size: 13px;
         }
+
         .h-87vh {
             height: 84.5vh;
         }
