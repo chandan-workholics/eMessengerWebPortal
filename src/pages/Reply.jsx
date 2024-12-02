@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import { useParams } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
 import axios from "axios";
+import { format } from "date-fns";
 
 const Reply = () => {
     const { msg_id, sended_msg_id } = useParams();
@@ -290,7 +291,7 @@ const Reply = () => {
             return (
                 <>
                     {data_text?.title && <h5 className="text-010A48 mb-0">{data_text.title}</h5>}
-                    {data_text?.text && <p>{data_text.text}</p>}
+                    {data_text?.text && <p dangerouslySetInnerHTML={{ __html: data_text.text }}></p>}
                     {data_text?.link && (
                         <a
                             href={data_text.link}
@@ -354,6 +355,8 @@ const Reply = () => {
                 <div className="idname py-1 border-bottom">
                     <div className="container py-1">
                         <h6 className="text-1F2C37 fw-normal mb-0">
+                            {detail?.data?.msg_detail?.subject_text}<br />
+                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy")}
 
                         </h6>
                     </div>
@@ -362,8 +365,8 @@ const Reply = () => {
                     <div className="row">
                         {/* First Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            {/* <h5 className="text-010A48">Display</h5> */}
-                            <div className="card px-3 py-4 bg-FAF9FF rounded-3 border-0 mb-xl-0 mb-4">
+
+                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {firstColumn?.map((msgBody, index) => (
                                     <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
@@ -375,8 +378,8 @@ const Reply = () => {
 
                         {/* Second Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            {/* <h5 className="text-010A48">Input</h5> */}
-                            <div className="card px-3 py-4 bg-FAF9FF rounded-3 border-0 mb-xl-0 mb-4">
+
+                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {secondColumn?.map((msgBody, index) => (
                                     <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
