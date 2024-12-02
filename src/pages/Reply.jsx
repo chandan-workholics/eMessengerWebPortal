@@ -190,9 +190,31 @@ const Reply = () => {
                             accept="image/*"
                             capture="camera"
                             className="form-control"
-                            onChange={e => {
+                            onChange={async (e) => {
                                 const file = e.target.files[0];
-                                handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: file ? URL.createObjectURL(file) : "" }));
+                                if (file) {
+                                    try {
+                                        const formData = new FormData();
+                                        formData.append("file", file); // The key "image" should match the API's expected field name
+
+                                        const response = await axios.post(
+                                            "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                                            formData,
+                                            {
+                                                headers: {
+                                                    "Content-Type": "multipart/form-data",
+                                                },
+                                            }
+                                        );
+
+                                        const imageLink = response?.data?.url; // Assuming API returns the link in `data.link`
+                                        console.log(imageLink)
+                                        handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
+                                    } catch (error) {
+                                        console.error("Error uploading file:", error);
+                                        alert("Failed to upload the file. Please try again.");
+                                    }
+                                }
                             }}
                         />
                     </div>
