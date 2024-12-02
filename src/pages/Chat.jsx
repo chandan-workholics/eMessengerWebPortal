@@ -8,11 +8,12 @@ import callAPI, { interceptor } from "../Common_Method/api";
 const Chat = () => {
     const { msg_id, sender_id } = useParams();
     const [loading, setLoading] = useState(true);
-    const [detail, setDetail] = useState([]); // Stores chat messages
-    const [message, setMessage] = useState(""); // Stores the message input by the user
-    const [isScrolling, setIsScrolling] = useState(false); // Tracks if user is scrolling manually
-    const chatBoxRef = useRef(null); // Ref for the chatbox container
-    const user = JSON.parse(sessionStorage.getItem("user")); // User details
+    const [detail, setDetail] = useState([]);
+    const [fivemember, setFivemember] = useState([]);
+    const [message, setMessage] = useState("");
+    const [isScrolling, setIsScrolling] = useState(false);
+    const chatBoxRef = useRef(null);
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     const fetchData = async () => {
         try {
@@ -25,6 +26,7 @@ const Chat = () => {
 
             if (response.data) {
                 setDetail(response.data.data);
+                setFivemember(response.data.five_numbers_Details);
             } else {
                 console.warn("No data received from API.");
                 setDetail([]);
@@ -199,7 +201,6 @@ const Chat = () => {
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender?.student_number} -{" "}
                                                                 {chat.sender?.student_name}
                                                             </p>
                                                         )}
@@ -269,7 +270,7 @@ const Chat = () => {
                                 </div>
                                 <div className="card-body">
                                     {/* Dynamic Teacher List */}
-                                    {detail?.five_numbers_Details?.map((teacher) => (
+                                    {fivemember?.map((teacher) => (
                                         <p
                                             key={teacher.student_main_id}
                                             className="mb-0 my-2 text-010A48 fw-normal teach"

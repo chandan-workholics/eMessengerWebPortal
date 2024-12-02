@@ -319,7 +319,7 @@ const Home = () => {
                                     {filteredMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
-                                            ? format(new Date(showUpto), "MMMM d, yyyy")
+                                            ? format(new Date(showUpto), "dd-MMM-yyyy")
                                             : "N/A";
                                         return (
                                             <div className="col-12 mb-4" key={val?.msg_id}>
@@ -351,7 +351,7 @@ const Home = () => {
                                                                 <div className="date">
                                                                     <p className="text-5F5F5F mb-1">
                                                                         <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                        {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                        {format(new Date(val?.sended_date), "dd-MMM-yyyy")}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -365,16 +365,20 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link
-                                                                        to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
-                                                                        className="me-2"
-                                                                    >
-                                                                        <img
-                                                                            src="Images/chat-icon.png"
-                                                                            alt=""
-                                                                            className=""
-                                                                        />
-                                                                    </Link>
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+
+
                                                                     <Link className="star">
                                                                         <i
                                                                             className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
@@ -414,7 +418,7 @@ const Home = () => {
                                     {filteredLastDayMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
-                                            ? format(new Date(showUpto), "MMMM d, yyyy")
+                                            ? format(new Date(showUpto), "dd-MMM-yyyy")
                                             : "N/A";
                                         return (
                                             <div className="col-12 mb-4" key={val?.msg_id}>
@@ -446,7 +450,7 @@ const Home = () => {
                                                                 <div className="date">
                                                                     <p className="text-5F5F5F mb-1">
                                                                         <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                        {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                        {format(new Date(val?.sended_date), "dd-MMM-yyyy")}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -460,16 +464,19 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link
-                                                                        to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`}
-                                                                        className="me-2"
-                                                                    >
-                                                                        <img
-                                                                            src="Images/chat-icon.png"
-                                                                            alt=""
-                                                                            className=""
-                                                                        />
-                                                                    </Link>
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+
                                                                     <Link className="star">
                                                                         <i
                                                                             className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
@@ -510,7 +517,7 @@ const Home = () => {
                                 <div className="row">
                                     {filteredSeenmessage?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
-                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
                                         return (
                                             <>
                                                 <div className="col-12 mb-4">
@@ -534,7 +541,7 @@ const Home = () => {
                                                                     <div className="date">
                                                                         <p className="text-5F5F5F mb-1">
                                                                             <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                            {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                            {format(new Date(val?.sended_date), "dd-MMM-yyyy")}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -548,9 +555,19 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
-                                                                            <img src="Images/chat-icon.png" alt="" className="" />
-                                                                        </Link>
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+
                                                                         <Link className="star">
                                                                             <i
                                                                                 className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
@@ -584,7 +601,7 @@ const Home = () => {
                                 <div className="row">
                                     {filteredStarredmessage?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
-                                        const formattedDate = showUpto ? format(new Date(showUpto), "MMMM d, yyyy") : "N/A";
+                                        const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
                                         return (
                                             <>
                                                 <div className="col-12 mb-4">
@@ -608,7 +625,7 @@ const Home = () => {
                                                                     <div className="date">
                                                                         <p className="text-5F5F5F mb-1">
                                                                             <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
-                                                                            {format(new Date(val?.sended_date), "d MMM, yyyy")}
+                                                                            {format(new Date(val?.sended_date), "dd-MMM-yyyy")}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -622,9 +639,19 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
-                                                                            <img src="Images/chat-icon.png" alt="" className="" />
-                                                                        </Link>
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+
                                                                         <Link className="star">
                                                                             <i
                                                                                 className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
