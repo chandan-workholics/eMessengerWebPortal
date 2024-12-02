@@ -130,11 +130,13 @@ const Reply = () => {
                 )}
                 {data_text?.msg_type === `CHECKBOX-${detail?.data?.msg_detail?.msg_chat_type}` && (
                     <div className="mt-3">
-                        <h4>{msgBody.data_text.title}</h4>
-                        {msgBody.data_text.options.map((option, idx) => (
-                            <div key={idx}>
-                                <input type="checkbox" id={`option-${idx}`} />
-                                <label htmlFor={`option-${idx}`} className="ml-2">{option.option}</label>
+                        <h4>{data_text.title}</h4>
+                        {data_text?.options?.map((option, idx) => (
+                            <div key={idx} className="form-check form-check-inline">
+                                <input class="form-check-input"
+                                    id={`inlineCheckbox${idx}`}
+                                    type="checkbox" value="option1" />
+                                <label class="form-check-label" htmlFor={`inlineCheckbox${idx}`} for="1">{option.option}</label>
                             </div>
                         ))}
                     </div>
@@ -142,13 +144,14 @@ const Reply = () => {
                 {data_text?.options && (
                     <div>
                         <h4>{data_text.title}</h4>
-                        <ul className="list-group">
+                        <div className="d-flex gap-4">
                             {data_text.options?.map((option, idx) => (
-                                <li key={idx} className="list-group-item">
-                                    {option.option}
-                                </li>
+                                <div key={idx} className="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
+                                    <label class="form-check-label" for="flexRadioDefault1">{option.option}</label>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     </div>
                 )}
                 {data_text?.placeholder && (
