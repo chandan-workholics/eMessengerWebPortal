@@ -10,6 +10,7 @@ import Reply from './pages/Reply';
 import Chat from './pages/Chat';
 import WelcomeMsg from './pages/WelcomeMsg';
 import Individualchat from './pages/Individualchat';
+import Support from './pages/Support';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -23,6 +24,7 @@ root.render(
         <Route path='/reply/:msg_id/:sended_msg_id' element={<Reply />} />
         <Route path='/chat/GROUPCHAT/:msg_id/:sender_id' element={<Chat />} />
         <Route path='/chat/INDIVIDUALCHAT/:msg_id/:sender_id' element={<Individualchat />} />
+        <Route path='/support' element={<Support />} />
       </Route>
     </Routes>
   </BrowserRouter>

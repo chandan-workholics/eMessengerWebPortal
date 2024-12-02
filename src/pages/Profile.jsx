@@ -92,14 +92,13 @@ const Profile = () => {
                     ) : (
                         <>
                             <div className='row my-4'>
-                                <div className="col-xl-4">
-                                    <div className="card px-3 py-4 bg-FAFAFA mb-xl-0 mb-3">
+                                <div className="col-xl-4 mb-3">
+                                    <div className="card px-3 py-4 bg-FAFAFA mb-xl-0">
                                         <h6 className='text-010A48'>Profile</h6>
-
                                         {profile?.data?.map((val, index) => {
                                             return (
                                                 <>
-                                                    <div key={index} className='card mb-4'>
+                                                    <div key={index} className='card mb-2'>
                                                         <div className='d-flex justify-content-between align-items-center px-2 py-2'>
                                                             <div className='d-flex  align-items-center'>
                                                                 <img src="Images/profile7.png" alt="" className='me-2' />
@@ -114,17 +113,14 @@ const Profile = () => {
                                                 </>
                                             )
                                         })}
-
-
-
                                     </div>
                                 </div>
-                                <div className="col-xl-8">
+                                <div className="col-xl-4 mb-3">
                                     <div className="card bg-FAFAFA py-3 px-3">
                                         <h6 className='text-010A48'>Outstanding Fees</h6>
                                         <div className="row">
 
-                                            <div className="col-xl-6">
+                                            <div className="col-12">
 
                                                 {fees?.data == null ? (
                                                     <p className="text-010A48 fw-normal mb-0">
@@ -163,23 +159,18 @@ const Profile = () => {
                                                         })}
                                                     </>
                                                 )}
-
-
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="row mb-3">
-                                <div className="col-xl-4">
-                                    <div className="card bg-FAFAFA py-3 px-3">
+                                <div className="col-xl-4 mb-3">
+                                    <div className="card bg-FAFAFA py-3 px-2">
                                         <h6 className='text-010A48'>All ID</h6>
 
                                         {profile?.data?.map((val, index) => {
                                             return (
                                                 <>
-                                                    <div key={index} className="card py-1 px-2">
+                                                    <div key={index} className="card py-1 px-2 mb-2">
                                                         <p className='text-010A48 fw-semibold mb-0'>{val?.student_number} - {val?.student_name}</p>
                                                     </div>
                                                 </>

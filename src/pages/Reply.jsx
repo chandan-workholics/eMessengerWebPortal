@@ -96,7 +96,7 @@ const Reply = () => {
             if (msg_type?.startsWith("OPTION")) {
                 return (
                     <div>
-                        <h4>{data_text.title}</h4>
+                        <label className="fw-bolder">{data_text.title}</label>
                         <select
                             onChange={e => {
                                 const selectedValue = e.target.value;
@@ -120,11 +120,11 @@ const Reply = () => {
                 const parsedText = parseReplyText(data_text.data_reply_text);
                 return (
                     <div>
-                        <h4>{data_text.title}</h4>
+                        <label className="fw-bolder">{data_text.title}</label>
                         {data_text.options.map((option, idx) => {
                             const isChecked = parsedText.selected?.[idx] || false;
                             return (
-                                <div key={idx}>
+                                <div key={idx} className="">
                                     <input
                                         type="checkbox"
                                         id={`option-${idx}`}
@@ -135,7 +135,7 @@ const Reply = () => {
                                             handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
                                         }}
                                     />
-                                    <label htmlFor={`option-${idx}`} className="ml-2">{option.option}</label>
+                                    <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
                                 </div>
                             );
                         })}
@@ -148,7 +148,7 @@ const Reply = () => {
                 const parsedText = parseReplyText(data_text.data_reply_text);
                 return (
                     <div>
-                        <label>{data_text.title}</label>
+                        <label className="fw-bolder">{data_text.title}</label>
                         <input
                             type="text"
                             className="form-control"
@@ -167,7 +167,7 @@ const Reply = () => {
                 const parsedText = parseReplyText(data_text.data_reply_text);
                 return (
                     <div>
-                        <label>{data_text.title}</label>
+                        <label className="fw-bolder">{data_text.title}</label>
                         <textarea
                             className="form-control"
                             value={parsedText.text || ""}
@@ -184,7 +184,7 @@ const Reply = () => {
             if (msg_type?.startsWith("CAMERA")) {
                 return (
                     <div className="mt-3">
-                        <h4>{data_text.title || "Camera Input"}</h4>
+                        <label className="fw-bolder">{data_text.title || "Camera Input"}</label>
                         <input
                             type="file"
                             accept="image/*"
@@ -225,7 +225,7 @@ const Reply = () => {
             if (msg_type?.startsWith("FILE")) {
                 return (
                     <div className="mt-3">
-                        <h4>Upload File</h4>
+                        <label  className="fw-bolder">Upload File</label>
                         <input
                             type="file"
                             className="form-control"
@@ -303,7 +303,7 @@ const Reply = () => {
                     )}
                     {data_text?.options && (
                         <div>
-                            <h4>{data_text.title}</h4>
+                            <label className="fw-bolder">{data_text.title}</label>
                             <ul className="list-group">
                                 {data_text.options?.map((option, idx) => (
                                     <li key={idx} className="list-group-item">
@@ -362,12 +362,12 @@ const Reply = () => {
                     <div className="row">
                         {/* First Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            <h5 className="text-010A48">Display</h5>
-                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
+                            {/* <h5 className="text-010A48">Display</h5> */}
+                            <div className="card px-3 py-4 bg-FAF9FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {firstColumn?.map((msgBody, index) => (
-                                    <div key={index} className="">
+                                    <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
-                                        <hr />
+
                                     </div>
                                 ))}
                             </div>
@@ -375,12 +375,12 @@ const Reply = () => {
 
                         {/* Second Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            <h5 className="text-010A48">Input</h5>
-                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
+                            {/* <h5 className="text-010A48">Input</h5> */}
+                            <div className="card px-3 py-4 bg-FAF9FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {secondColumn?.map((msgBody, index) => (
-                                    <div key={index} className="">
+                                    <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
-                                        <hr />
+
                                     </div>
                                 ))}
 
