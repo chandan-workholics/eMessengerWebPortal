@@ -128,7 +128,7 @@ const Reply = () => {
                         {data_text.link}
                     </a>
                 )}
-                {/* {data_text?.msg_type === `CHECKBOX-${detail?.data?.msg_detail?.msg_chat_type}` && (
+                {data_text?.msg_type === `CHECKBOX-${detail?.data?.msg_detail?.msg_chat_type}` && (
                     <div className="mt-3">
                         <h4>{msgBody.data_text.title}</h4>
                         {msgBody.data_text.options.map((option, idx) => (
@@ -138,7 +138,7 @@ const Reply = () => {
                             </div>
                         ))}
                     </div>
-                )} */}
+                )}
                 {data_text?.options && (
                     <div>
                         <h4>{data_text.title}</h4>
@@ -180,10 +180,12 @@ const Reply = () => {
                     <div className="row">
                         {/* First Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            <div className="card px-3 py-4 bg-FAFAFA rounded-3 border-0">
+                            <h5 className="text-010A48">Display</h5>
+                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {firstColumn?.map((msgBody, index) => (
-                                    <div key={index} className="mb-4">
+                                    <div key={index} className="">
                                         <MessageCard msgBody={msgBody} />
+                                        <hr />
                                     </div>
                                 ))}
                             </div>
@@ -191,12 +193,15 @@ const Reply = () => {
 
                         {/* Second Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            <div className="card px-3 py-4 bg-FAFAFA rounded-3 border-0">
+                            <h5 className="text-010A48">Input</h5>
+                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
                                 {secondColumn?.map((msgBody, index) => (
-                                    <div key={index} className="mb-4">
+                                    <div key={index} className="">
                                         <MessageCard msgBody={msgBody} />
+                                        <hr />
                                     </div>
                                 ))}
+                                <button className='btn border-0 bg-FF0000 text-white rounded-5'>Send Reply</button>
                             </div>
                         </div>
                     </div>
