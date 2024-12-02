@@ -365,16 +365,20 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link
-                                                                        to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
-                                                                        className="me-2"
-                                                                    >
-                                                                        <img
-                                                                            src="Images/chat-icon.png"
-                                                                            alt=""
-                                                                            className=""
-                                                                        />
-                                                                    </Link>
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+
+
                                                                     <Link className="star">
                                                                         <i
                                                                             className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
@@ -460,16 +464,19 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    <Link
-                                                                        to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`}
-                                                                        className="me-2"
-                                                                    >
-                                                                        <img
-                                                                            src="Images/chat-icon.png"
-                                                                            alt=""
-                                                                            className=""
-                                                                        />
-                                                                    </Link>
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+
                                                                     <Link className="star">
                                                                         <i
                                                                             className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
@@ -548,9 +555,19 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
-                                                                            <img src="Images/chat-icon.png" alt="" className="" />
-                                                                        </Link>
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+
                                                                         <Link className="star">
                                                                             <i
                                                                                 className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
@@ -622,9 +639,19 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        <Link to={`/chat/${val?.msg_id}/${val?.student?.student_main_id}`} className="me-2" >
-                                                                            <img src="Images/chat-icon.png" alt="" className="" />
-                                                                        </Link>
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+
                                                                         <Link className="star">
                                                                             <i
                                                                                 className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
