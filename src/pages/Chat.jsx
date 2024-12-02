@@ -117,7 +117,12 @@ const Chat = () => {
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
                                             <div class="dropdown d-block d-lg-none">
-                                                <button class="dropdown-toggle border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button
+                                                    class="dropdown-toggle border-0 bg-transparent"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
                                                     <i class="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
                                                 </button>
                                                 <ul class="dropdown-menu p-0 border-0">
@@ -137,19 +142,22 @@ const Chat = () => {
                                                             </div>
                                                             <div className="card-body">
                                                                 {/* Dynamic Teacher List */}
-                                                                {detail?.five_numbers_Details?.map((teacher) => (
-                                                                    <p
-                                                                        key={teacher.student_main_id}
-                                                                        className="mb-0 my-2 text-010A48 fw-normal teach"
-                                                                    >
-                                                                        <img
-                                                                            src={`Images/profile${teacher.student_main_id}.png`}
-                                                                            alt=""
-                                                                            className="me-2"
-                                                                        />
-                                                                        {teacher.student_number} - {teacher.student_name}
-                                                                    </p>
-                                                                ))}
+                                                                {detail?.five_numbers_Details?.map(
+                                                                    (teacher) => (
+                                                                        <p
+                                                                            key={teacher.student_main_id}
+                                                                            className="mb-0 my-2 text-010A48 fw-normal teach"
+                                                                        >
+                                                                            <img
+                                                                                src={`Images/profile${teacher.student_main_id}.png`}
+                                                                                alt=""
+                                                                                className="me-2"
+                                                                            />
+                                                                            {teacher.student_number} -{" "}
+                                                                            {teacher.student_name}
+                                                                        </p>
+                                                                    )
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </li>
@@ -170,14 +178,15 @@ const Chat = () => {
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
-                                                chat.sender?.student_number === parseInt(user?.scholar_no);
+                                                chat.sender?.student_number ===
+                                                parseInt(user?.scholar_no);
 
                                             return (
                                                 <div
                                                     key={chat.chat_msg_id}
                                                     className={`message ${isUserMessage
-                                                        ? "outgoing align-self-end text-end"
-                                                        : "incoming d-flex align-items-center align-self-start"
+                                                            ? "outgoing align-self-end text-end"
+                                                            : "incoming d-flex align-items-center align-self-start"
                                                         } mb-1`}
                                                 >
                                                     {!isUserMessage && (
@@ -196,17 +205,21 @@ const Chat = () => {
                                                         )}
                                                         <p
                                                             className={`${isUserMessage
-                                                                ? "bg-E79C1D text-white"
-                                                                : "bg-F3F0FF text-0D082C"
+                                                                    ? "bg-E79C1D text-white"
+                                                                    : "bg-F3F0FF text-0D082C"
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
                                                             {chat.message}
-                                                            {chat?.link == null ? '' : <img
-                                                                src={chat?.link}
-                                                                alt=""
-                                                                style={{ height: 100 }}
-                                                                className="me-2"
-                                                            />}
+                                                            {chat?.link == null ? (
+                                                                ""
+                                                            ) : (
+                                                                <img
+                                                                    src={chat?.link}
+                                                                    alt=""
+                                                                    style={{ height: 100 }}
+                                                                    className="me-2"
+                                                                />
+                                                            )}
                                                         </p>
                                                     </div>
                                                 </div>
