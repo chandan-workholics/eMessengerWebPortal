@@ -3,7 +3,7 @@ import Header from "../components/Header";
 
 const Support = () => {
     const [description, setDescription] = useState("");
-    const [studentId, setStudentId] = useState("58986"); // Default value for student_id
+    const [studentId, setStudentId] = useState("58986");
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -15,7 +15,7 @@ const Support = () => {
         setErrorMessage("");
 
         const raw = JSON.stringify({
-            student_id: studentId,
+            parent_id: studentId,
             description: description,
         });
 
