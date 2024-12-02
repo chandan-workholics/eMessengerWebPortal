@@ -365,9 +365,21 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                         <Link
-                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+                                                                    {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
                                                                         >
                                                                             <img
@@ -464,9 +476,21 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                         <Link
-                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+                                                                    {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
                                                                         >
                                                                             <img
@@ -555,9 +579,21 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+                                                                        {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
                                                                             >
                                                                                 <img
@@ -639,9 +675,22 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+                                                                        {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
                                                                             >
                                                                                 <img

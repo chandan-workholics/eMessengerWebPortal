@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import Reply from './pages/Reply';
 import Chat from './pages/Chat';
 import WelcomeMsg from './pages/WelcomeMsg';
+import Individualchat from './pages/Individualchat';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -20,7 +21,8 @@ root.render(
         <Route path='/home' element={<Home />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/reply/:msg_id/:sended_msg_id' element={<Reply />} />
-        <Route path='/chat/:chat_type/:msg_id/:sender_id' element={<Chat />} />
+        <Route path='/chat/GROUPCHAT/:msg_id/:sender_id' element={<Chat />} />
+        <Route path='/chat/INDIVIDUALCHAT/:msg_id/:sender_id' element={<Individualchat />} />
       </Route>
     </Routes>
   </BrowserRouter>
