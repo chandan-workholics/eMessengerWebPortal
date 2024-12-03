@@ -63,6 +63,31 @@ const Profile = () => {
         sessionStorage.clear();
     }
 
+    const [activeItems, setActiveItems] = useState(() => {
+        // Initialize active items from session storage
+        const storedItems = sessionStorage.getItem('activeStudents');
+        return storedItems ? JSON.parse(storedItems) : [];
+    });
+
+    const handleCardClick = (studentNumber) => {
+        let updatedItems;
+        if (activeItems.includes(studentNumber)) {
+            // Remove the student number if already active
+            updatedItems = activeItems.filter(item => item !== studentNumber);
+        } else {
+            // Add the student number if not active
+            updatedItems = [...activeItems, studentNumber];
+        }
+        setActiveItems(updatedItems);
+        sessionStorage.setItem('activeStudents', JSON.stringify(updatedItems));
+    };
+
+    useEffect(() => {
+        // Update session storage if state changes (for safety)
+        sessionStorage.setItem('activeStudents', JSON.stringify(activeItems));
+    }, [activeItems]);
+
+
     return (
         <>
             <Header />
@@ -172,15 +197,18 @@ const Profile = () => {
                                     <div className="card border-0 shadow-sm rounded-3 bg-FAFAFA p-3 pb-2">
                                         <h6 className='text-010A48'>All ID</h6>
 
-                                        {profile?.data?.map((val, index) => {
-                                            return (
-                                                <>
-                                                    <div key={index} className="card border-0 rounded-3 shadow-sm mb-3 py-1 px-2">
-                                                        <p className='text-010A48 fw-semibold mb-0'>{val?.student_number} - {val?.student_name}</p>
-                                                    </div>
-                                                </>
-                                            )
-                                        })}
+                                        {profile?.data?.map((val, index) => (
+                                            <div
+                                                key={index}
+                                                className={`card border-0 rounded-3 shadow-sm mb-3 py-1 px-2 ${activeItems.includes(val?.student_number) ? 'active' : ''}`}
+                                                onClick={() => handleCardClick(val?.student_number)}
+                                                style={{ cursor: 'pointer' }} // Add cursor pointer here
+                                            >
+                                                <p className="text-010A48 fw-semibold mb-0">
+                                                    {val?.student_number} - {val?.student_name}
+                                                </p>
+                                            </div>
+                                        ))}
 
                                     </div>
                                 </div>
