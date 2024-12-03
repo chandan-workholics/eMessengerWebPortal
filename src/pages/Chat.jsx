@@ -137,9 +137,9 @@ const Chat = () => {
                                                                     Available Teacher
                                                                 </p>
                                                             </div>
-                                                            <div className="card-body">
+                                                            <div className="card-body p-1 pb-2">
                                                                 {/* Dynamic Teacher List */}
-                                                                {detail?.five_numbers_Details?.map((teacher) => (
+                                                                {fivemember?.map((teacher) => (
                                                                     <p
                                                                         key={teacher.student_main_id}
                                                                         className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -183,11 +183,14 @@ const Chat = () => {
                                                         } mb-1`}
                                                 >
                                                     {!isUserMessage && (
-                                                        <img
-                                                            src={`Images/profile${chat.sender?.student_number}.png`}
-                                                            alt=""
-                                                            className="me-2"
-                                                        />
+                                                        // <img
+                                                        //     src={`Images/profile${chat.sender?.student_number}.png`}
+                                                        //     alt=""
+                                                        //     className="me-2"
+                                                        // />
+                                                        <span className="me-2 pt-3">
+                                                            <i class="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.sender?.color }}></i>
+                                                        </span>
                                                     )}
                                                     <div className="message-content">
                                                         {!isUserMessage && (
@@ -195,20 +198,23 @@ const Chat = () => {
                                                                 {chat.sender?.student_name}
                                                             </p>
                                                         )}
-                                                        <p
-                                                            className={`${isUserMessage
-                                                                ? "bg-E79C1D text-white"
-                                                                : "bg-F3F0FF text-0D082C"
-                                                                } px-2 py-2 mb-0 info`}
-                                                        >
-                                                            {chat.message}
-                                                            {chat?.link == null ? '' : <img
-                                                                src={chat?.link}
-                                                                alt=""
-                                                                style={{ height: 100 }}
-                                                                className="me-2"
-                                                            />}
-                                                        </p>
+                                                        <div className="d-flex align-items-center">
+                                                            <p
+                                                                className={`${isUserMessage
+                                                                    ? "bg-E79C1D text-white"
+                                                                    : "bg-F3F0FF text-0D082C"
+                                                                    } px-2 py-2 mb-0 info`}
+                                                            >
+                                                                {chat.message}
+                                                                <br />
+                                                                {chat?.link == null ? '' : <img
+                                                                    src={chat?.link}
+                                                                    alt=""
+                                                                    style={{ height: 100 }}
+                                                                    className="me-2"
+                                                                />}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             );

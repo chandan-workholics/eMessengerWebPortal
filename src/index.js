@@ -14,7 +14,7 @@ import Support from './pages/Support';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter basename="/eMessengerWebPortal">
+  <BrowserRouter basename="/eMessengerWebPortal/">
     <Routes>
       <Route path="/" element={<App />}>
         <Route path='/' element={<SignIn />} />

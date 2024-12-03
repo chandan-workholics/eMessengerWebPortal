@@ -73,8 +73,10 @@ const Profile = () => {
                             <div className='d-flex  align-items-center'>
                                 <img src="Images/profile.png" alt="" className='me-2' />
                                 <div className="id-name">
-                                    <p className='text-white mb-0 fs-6'> {user?.student_name ? user?.student_name : ''}</p>
-                                    <p className='name mb-0 text-white'>{user?.mobile_no ? user?.mobile_no : ''}</p>
+                                    {/* <div className="">
+                                        <h6 className='text-white mb-0'> {user?.student_name ? user?.student_name : ''}</h6>
+                                        <h6 className='name mb-0 text-white mb-0'>{user?.mobile_no ? user?.mobile_no : ''}</h6>
+                                    </div> */}
                                 </div>
                             </div>
                             <div className='logout'>
@@ -93,17 +95,19 @@ const Profile = () => {
                         <>
                             <div className='row my-4'>
                                 <div className="col-xl-4 mb-3">
-                                    <div className="card px-3 py-4 bg-FAFAFA mb-xl-0">
+                                    <div className="card border-0 shadow-sm rounded-3 p-3 pb-2 bg-FAFAFA mb-xl-0">
                                         <h6 className='text-010A48'>Profile</h6>
                                         {profile?.data?.map((val, index) => {
                                             return (
                                                 <>
-                                                    <div key={index} className='card mb-2'>
+                                                    <div key={index} className='card border-0 rounded-3 shadow-sm mb-3'>
                                                         <div className='d-flex justify-content-between align-items-center px-2 py-2'>
                                                             <div className='d-flex  align-items-center'>
                                                                 <img src="Images/profile7.png" alt="" className='me-2' />
-                                                                <p className='mb-0'><span className={`${val?.color} text-010A48`}>{val?.student_number} </span><br />
-                                                                    <span className='text-666666 fw-normal name'> {val?.student_family_mobile_number}</span></p>
+                                                                <div className="">
+                                                                    <h6 className={`${val?.color} text-010A48 mb-0`}>{val?.student_number} </h6>
+                                                                    <h6 className='text-666666 fw-normal name mb-0'> {val?.student_family_mobile_number}</h6>
+                                                                </div>
                                                             </div>
                                                             <div className='name'>
                                                                 <p className='text-010A48 bg-E9E9E9 rounded-1 px-1 fw-semibold'>{val?.student_name}</p>
@@ -116,7 +120,7 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="col-xl-4 mb-3">
-                                    <div className="card bg-FAFAFA py-3 px-3">
+                                    <div className="card rounded-3 border-0 shadow-sm bg-FAFAFA pb-2 p-3">
                                         <h6 className='text-010A48'>Outstanding Fees</h6>
                                         <div className="row">
 
@@ -131,25 +135,26 @@ const Profile = () => {
                                                         {fees?.data?.map((val, index) => {
                                                             return (
                                                                 <>
-                                                                    <div key={index} className="card mb-2">
-                                                                        <div className="card-header d-flex justify-content-between pb-1 bg-white">
-                                                                            <p className='mb-0'><span className='text-6B51E4 fw-semibold'>{val?.student?.student_number} - {val?.student?.student_name}</span><br />
-                                                                                <span className='text-010A48 fw-normal'>{val?.student?.student_family_mobile_number}</span>
-                                                                            </p>
-                                                                            <div className='Pay-btn d-flex align-items-center'>
+                                                                    <div key={index} className="card border-0 rounded-3 shadow-sm mb-3">
+                                                                        <div className="card-header border-0 d-flex justify-content-between p-2 pb-1 bg-white">
+                                                                            <div className="">
+                                                                                <h6 className='mb-0 text-6B51E4 fw-medium'>{val?.student?.student_number} - {val?.student?.student_name}</h6>
+                                                                                <h6 className='mb-0 text-010A48 fw-normal'>{val?.session_detail}</h6>
+                                                                            </div>
+                                                                            <div className='Pay-btn d-flex align-items-start'>
                                                                                 <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                                             </div>
                                                                         </div>
-                                                                        <div className="card-body py-1 term">
-                                                                            <p className='text-010A48 fw-semibold mb-0'>Term {val?.term}</p>
+                                                                        <div className="card-body p-2 term">
+                                                                            <h6 className='text-010A48 fw-medium mb-1'>Term {val?.term}</h6>
                                                                             <table className="table table-borderless mb-0">
                                                                                 <tr>
-                                                                                    <th className='text-FF0000 fw-normal'>Outstanding Fees</th>
-                                                                                    <th className='text-FF0000 fw-normal'>: ₹ {val?.outstandingfees}</th>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>Outstanding Fees</h6></td>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {val?.outstandingfees}</h6></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td className='text-010A48 fw-normal'>Due Date </td>
-                                                                                    <td className='text-010A48 fw-normal'>:  {format(new Date(val?.duedate), "dd-MMM-yyyy")}</td>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>:  {format(new Date(val?.duedate), "dd-MMM-yyyy")}</h6></td>
                                                                                 </tr>
                                                                             </table>
                                                                         </div>
@@ -164,13 +169,13 @@ const Profile = () => {
                                     </div>
                                 </div>
                                 <div className="col-xl-4 mb-3">
-                                    <div className="card bg-FAFAFA py-3 px-2">
+                                    <div className="card border-0 shadow-sm rounded-3 bg-FAFAFA p-3 pb-2">
                                         <h6 className='text-010A48'>All ID</h6>
 
                                         {profile?.data?.map((val, index) => {
                                             return (
                                                 <>
-                                                    <div key={index} className="card py-1 px-2 mb-2">
+                                                    <div key={index} className="card border-0 rounded-3 shadow-sm mb-3 py-1 px-2">
                                                         <p className='text-010A48 fw-semibold mb-0'>{val?.student_number} - {val?.student_name}</p>
                                                     </div>
                                                 </>

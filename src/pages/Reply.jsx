@@ -226,7 +226,7 @@ const Reply = () => {
             if (msg_type?.startsWith("FILE")) {
                 return (
                     <div className="mt-3">
-                        <label  className="fw-bolder">Upload File</label>
+                        <label className="fw-bolder">Upload File</label>
                         <input
                             type="file"
                             className="form-control"
@@ -283,24 +283,27 @@ const Reply = () => {
                     <img
                         src={data_text.link}
                         alt="Message Content"
-                        className="img-fluid rounded"
+                        className="img-fluid rounded-3 w-100"
                     />
                 );
             }
 
             return (
                 <>
-                    {data_text?.title && <h5 className="text-010A48 mb-0">{data_text.title}</h5>}
+                    {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
                     {data_text?.text && <p dangerouslySetInnerHTML={{ __html: data_text.text }}></p>}
                     {data_text?.link && (
-                        <a
-                            href={data_text.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-link"
-                        >
-                            {data_text.link}
-                        </a>
+                        <div className="">
+                            <label className="fw-bolder">Link Title</label>
+                            <a
+                                href={data_text.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-link text-start"
+                            >
+                                {data_text.link}
+                            </a>
+                        </div>
                     )}
                     {data_text?.options && (
                         <div>
@@ -354,10 +357,11 @@ const Reply = () => {
             <div className="container-fluid p-0 reply-page">
                 <div className="idname py-1 border-bottom">
                     <div className="container py-1">
-                        <h6 className="text-1F2C37 fw-normal mb-0">
-                            {detail?.data?.msg_detail?.subject_text}<br />
-                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy")}
-
+                        <h6 className="text-1F2C37 fw-bolder mb-0">
+                            {detail?.data?.msg_detail?.subject_text}
+                        </h6>
+                        <h6 className="text-secondary fw-normal mb-0">
+                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy  hh:mm")}
                         </h6>
                     </div>
                 </div>
@@ -366,27 +370,22 @@ const Reply = () => {
                         {/* First Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
 
-                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
+                            <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
                                 {firstColumn?.map((msgBody, index) => (
                                     <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
-
                                     </div>
                                 ))}
                             </div>
                         </div>
-
                         {/* Second Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-
-                            <div className="card px-3 py-4 bg-F3F0FF rounded-3 border-0 mb-xl-0 mb-4">
+                            <div className="card px-3 py-4 rounded-4 border-0 mb-xl-0 mb-4">
                                 {secondColumn?.map((msgBody, index) => (
                                     <div key={index} className="mb-3">
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
-
                                     </div>
                                 ))}
-
                                 {detail?.data?.msg_detail?.is_reply_required_any == 1 ?
                                     <button
                                         className='btn border-0 bg-FF0000 text-white rounded-5'
@@ -394,9 +393,8 @@ const Reply = () => {
                                         disabled={detail?.data?.is_reply_done == 1}
 
                                     >
-                                        {detail?.data?.is_reply_done == 1 ? "You have already replied" : "Click to send a reply"}
+                                        {detail?.data?.is_reply_done == 1 ? "Send Reply" : "Send Reply"}
                                     </button> : ''}
-
                             </div>
                         </div>
                     </div>

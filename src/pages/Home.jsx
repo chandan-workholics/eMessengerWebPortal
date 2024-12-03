@@ -205,15 +205,15 @@ const Home = () => {
                     <div className="row">
                         <div className="col-12 head-top py-1">
                             {loading ? (
-                                <p className="text-010A48 fw-normal mb-0">Loading message...</p>
+                                <h6 className="text-010A48 fw-normal mb-0">Loading message...</h6>
                             ) : (
-                                <p className="text-010A48 fw-normal mb-0">
+                                <h6 className="text-010A48 fw-normal mb-0">
                                     {noticeBoardDetail?.data?.noticeMsg?.map((item, index) => (
                                         <span key={index} className="me-4">
                                             {item?.student_name}-{item?.noticeMsg}
                                         </span>
                                     ))}
-                                </p>
+                                </h6>
                             )}
                         </div>
                     </div>
@@ -291,12 +291,12 @@ const Home = () => {
                                 <input
                                     type="search"
                                     className="form-control bg-F4F4F4 border rounded"
-                                    placeholder="Search"
+                                    placeholder="Search..."
                                     aria-label="Search"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                                <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i>
+                                {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
                             </div>
                         </div>
                     </div>
@@ -319,7 +319,7 @@ const Home = () => {
                                     {filteredMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
-                                            ? format(new Date(showUpto), "dd-MMM-yyyy")
+                                            ? format(new Date(showUpto), "dd-MMM-yyyy hh:mm")
                                             : "N/A";
                                         return (
                                             <div className="col-12 mb-4" key={val?.msg_id}>
@@ -329,7 +329,7 @@ const Home = () => {
                                                 >
                                                     <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
                                                         <div className="card-body">
-                                                            <div className="d-flex justify-content-between mb-2">
+                                                            <div className="d-flex justify-content-between mb-1">
                                                                 <h6 className="mb-1">
                                                                     <span
                                                                         style={{
@@ -356,7 +356,7 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="">
-                                                                <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                <h6 className="text-010A48 fs-18 mb-0 text-wrap">
                                                                     {val?.msg_mst?.subject_text}
                                                                 </h6>
                                                             </div>
@@ -467,7 +467,7 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                     {val?.msg_mst?.subject_text}
                                                                 </h6>
                                                             </div>
@@ -570,7 +570,7 @@ const Home = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
-                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                    <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                         {val?.msg_mst?.subject_text}
                                                                     </h6>
                                                                 </div>
@@ -666,7 +666,7 @@ const Home = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
-                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                    <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                         {val?.msg_mst?.subject_text}
                                                                     </h6>
                                                                 </div>

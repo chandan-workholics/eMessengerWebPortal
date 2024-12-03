@@ -9,7 +9,7 @@
 
 /*---------- Text-Color-Start ----------*/
 .text-010A48 {
-    color: #010A48;
+    color: #010A48 !important;
 }
 
 .text-78828A {
@@ -21,7 +21,7 @@
 }
 
 .text-DA251C {
-    color: #DA251C;
+    color: #DA251C !important;
 }
 
 .text-6B51E4 {
@@ -41,7 +41,7 @@
 }
 
 .text-FF0000 {
-    color: #FF0000;
+    color: #FF0000 !important;
 }
 
 .text-666666 {
@@ -158,6 +158,7 @@
 .bg-F1F3FA {
     background: #F1F3FA;
 }
+
 .bg-FAF9FF {
     background: #FAF9FF;
 }
@@ -349,7 +350,7 @@
     height: 100vh;
 
     .awssld__content {
-        background-color: #ffff;
+        background-color: transparent;
         border-radius: 30px;
     }
 
@@ -359,6 +360,10 @@
 
     .noticeboardImg {
         height: 250px;
+    }
+
+    .awssld__timer {
+        background-color: transparent;
     }
 
     @media only screen and (max-width:767px) {
@@ -391,7 +396,7 @@
 
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link.active {
-    color: #ffffff;
+    color: #ffffff !important;
     background-color: #FF0000;
     border-color: transparent;
 }

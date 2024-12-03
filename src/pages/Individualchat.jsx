@@ -144,9 +144,9 @@ const Individualchat = () => {
                                                                     Available Teacher
                                                                 </p>
                                                             </div>
-                                                            <div className="card-body">
+                                                            <div className="card-body p-1 pb-2">
                                                                 {/* Dynamic Teacher List */}
-                                                                {detail?.five_numbers_Details?.map((teacher) => (
+                                                                {fivemember?.map((teacher) => (
                                                                     <p
                                                                         key={teacher.student_main_id}
                                                                         className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -190,11 +190,14 @@ const Individualchat = () => {
                                                         } mb-1`}
                                                 >
                                                     {!isUserMessage && (
-                                                        <img
-                                                            src={`Images/profile${chat?.senderDetails?.student_number}.png`}
-                                                            alt=""
-                                                            className="me-2"
-                                                        />
+                                                        // <img
+                                                        //     src={`Images/profile${chat?.senderDetails?.student_number}.png`}
+                                                        //     alt=""
+                                                        //     className="me-2"
+                                                        // />
+                                                        <span className="me-2 pt-3">
+                                                            <i class="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.senderDetails?.color }}></i>
+                                                        </span>
                                                     )}
                                                     <div className="message-content">
                                                         {!isUserMessage && (
@@ -259,7 +262,7 @@ const Individualchat = () => {
                                 >
                                     <p className="mb-0 text-010A48 fw-semibold">
                                         <i className="fa-solid fa-circle me-2 text-4CD964"></i>
-                                        Group Members
+                                        Available Teacher
                                     </p>
                                 </div>
                                 <div className="card-body">
@@ -274,7 +277,7 @@ const Individualchat = () => {
                                                 alt=""
                                                 className="me-2"
                                             />
-                                            {teacher.mobile_no}
+                                            {teacher.student_number} - {teacher.student_name}
                                         </p>
                                     ))}
                                 </div>
