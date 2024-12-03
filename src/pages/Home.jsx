@@ -11,31 +11,16 @@ const Home = () => {
     const [lastdaymessage, setLastdaymessage] = useState([]);
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
-    const [filterValues, setfilterValues] = useState([]);
+
     const [searchQuery, setSearchQuery] = useState("");
-    const normalizedSearchQuery = searchQuery?.toLowerCase() || "";
-
-
-    useEffect(() => {
-        // Retrieve the active student numbers from session storage
-        const storedStudentNumbers = sessionStorage.getItem('activeStudents');
-        if (storedStudentNumbers) {
-            setfilterValues(JSON.parse(storedStudentNumbers));
-        }
-    }, []);
-
 
     // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const numberInName = val?.student?.student_name?.match(/\d+/)?.[0] || "";
-        const numberInText = val?.msg_mst?.subject_text?.match(/\d+/)?.[0] || "";
         return (
-            studentName.includes(normalizedSearchQuery) ||
-            subjectText.includes(normalizedSearchQuery) ||
-            numberInName.includes(searchQuery) ||
-            numberInText.includes(searchQuery)
+            studentName.includes(searchQuery.toLowerCase()) ||
+            subjectText.includes(searchQuery.toLowerCase())
         );
     });
 
@@ -64,8 +49,8 @@ const Home = () => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
         return (
-            studentName.includes(normalizedSearchQuery) ||
-            subjectText.includes(normalizedSearchQuery)
+            studentName.includes(searchQuery.toLowerCase()) ||
+            subjectText.includes(searchQuery.toLowerCase())
         );
     });
 
@@ -212,8 +197,6 @@ const Home = () => {
         fetchStarredMessage();
     }, []);
 
-
-
     return (
         <>
             <Header />
@@ -333,10 +316,7 @@ const Home = () => {
                                 <h6 className="text-010A48 fw-semibold m-0">Session 2024-2025</h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    {filteredMessages?.filter((val) => {
-                                        // If filterValues is empty, show all data; otherwise, filter by student_number
-                                        return filterValues.length === 0 || filterValues.includes(val?.student?.student_number);
-                                    })?.map((val) => {
+                                    {filteredMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
                                             ? format(new Date(showUpto), "dd-MMM-yyyy hh:mm")
@@ -447,10 +427,7 @@ const Home = () => {
                                 <h6 className="text-010A48 fw-semibold m-0">Session 2025-2026</h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    {filteredLastDayMessages?.filter((val) => {
-                                        // If filterValues is empty, show all data; otherwise, filter by student_number
-                                        return filterValues.length === 0 || filterValues.includes(val?.student?.student_number);
-                                    })?.map((val) => {
+                                    {filteredLastDayMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
                                             ? format(new Date(showUpto), "dd-MMM-yyyy")
@@ -562,10 +539,7 @@ const Home = () => {
                                 </h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    {filteredSeenmessage?.filter((val) => {
-                                        // If filterValues is empty, show all data; otherwise, filter by student_number
-                                        return filterValues.length === 0 || filterValues.includes(val?.student?.student_number);
-                                    })?.map((val) => {
+                                    {filteredSeenmessage?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
                                         return (
@@ -661,10 +635,7 @@ const Home = () => {
                                 </h6>
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
-                                    {filteredStarredmessage?.filter((val) => {
-                                        // If filterValues is empty, show all data; otherwise, filter by student_number
-                                        return filterValues.length === 0 || filterValues.includes(val?.student?.student_number);
-                                    })?.map((val) => {
+                                    {filteredStarredmessage?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
                                         return (
