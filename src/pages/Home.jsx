@@ -13,14 +13,19 @@ const Home = () => {
     const [starredmessage, setStarredmessage] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState("");
+    const normalizedSearchQuery = searchQuery?.toLowerCase() || "";
 
     // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const numberInName = val?.student?.student_name?.match(/\d+/)?.[0] || "";
+        const numberInText = val?.msg_mst?.subject_text?.match(/\d+/)?.[0] || "";
         return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            studentName.includes(normalizedSearchQuery) ||
+            subjectText.includes(normalizedSearchQuery) ||
+            numberInName.includes(searchQuery) ||
+            numberInText.includes(searchQuery)
         );
     });
 
@@ -49,8 +54,8 @@ const Home = () => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
         return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            studentName.includes(normalizedSearchQuery) ||
+            subjectText.includes(normalizedSearchQuery)
         );
     });
 

@@ -1,38 +1,75 @@
 import React, { useEffect, useState } from "react";
-import Header from '../components/Header';
-import { useParams } from 'react-router-dom';
+import Header from "../components/Header";
+import { useParams } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
+import axios from "axios";
+import { format } from "date-fns";
 
 const Reply = () => {
     const { msg_id, sended_msg_id } = useParams();
     const [loading, setLoading] = useState(true);
-    const [detail, setDetail] = useState();
+    const [detail, setDetail] = useState(null);
+    const [error, setError] = useState(null);
+    const [replyBodies, setReplyBodies] = useState([]);
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     const fetchData = async () => {
         try {
             setLoading(true);
             interceptor();
-            const response = await callAPI.get(`./msg/get_single_mst_msg_by_msg_id?msg_id=${msg_id}&sended_msg_id=${sended_msg_id}`);
+
+            const response = await callAPI.get(
+                `./msg/get_single_mst_msg_by_msg_id?msg_id=${msg_id}&sended_msg_id=${sended_msg_id}`
+            );
+
             if (response.data) {
                 setDetail(response.data);
+                setError(null);
             } else {
-                console.warn("No data received from API.");
                 setDetail(null);
+                setError("No data available.");
             }
         } catch (error) {
             console.error("Error fetching message details:", error.message);
             setDetail(null);
+            setError("An error occurred while fetching data.");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchData();  // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchData();
     }, [msg_id, sended_msg_id]);
 
+
+
+    // Function to handle user input changes
+    const handleInputChange = (msg_body_id, msg_type, value) => {
+        setReplyBodies(prev => {
+            const updated = [...prev];
+            const index = updated.findIndex(body => body.msg_body_id === msg_body_id);
+            if (index !== -1) {
+                updated[index].data_reply_text = value;
+            } else {
+                updated.push({ msg_body_id, msg_type, data_reply_text: value });
+            }
+            return updated;
+        });
+    };
+
     if (loading) {
-        return <div className="text-center">Loading...</div>;
+        return (
+            <div className="text-center">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return <div className="text-center text-danger">{error}</div>;
     }
 
     if (!detail) {
@@ -44,122 +81,321 @@ const Reply = () => {
     const firstColumn = detail?.data?.msg_body?.slice(0, midIndex);
     const secondColumn = detail?.data?.msg_body?.slice(midIndex);
 
+    const MessageCard = ({ msgBody, handleInputChange }) => {
+        const { msg_type, data_text, msg_body_id } = msgBody;
+
+        const parseReplyText = (text) => {
+            try {
+                return text ? JSON.parse(text) : {};
+            } catch (error) {
+                return {};
+            }
+        };
+
+        const renderInputField = () => {
+            // Handling OPTION type (dropdown selection)
+            if (msg_type?.startsWith("OPTION")) {
+                return (
+                    <div>
+                        <label className="fw-bolder">{data_text.title}</label>
+                        <select
+                            onChange={e => {
+                                const selectedValue = e.target.value;
+                                const updatedData = { selected: { 0: selectedValue } };
+                                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                            }}
+                            className="form-control"
+                        >
+                            {data_text.options.map((option, idx) => (
+                                <option key={idx} value={option.option}>
+                                    {option.option}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                );
+            }
+
+            // Handling CHECKBOX type (checkbox selection)
+            if (msg_type?.startsWith("CHECKBOX")) {
+                const parsedText = parseReplyText(data_text.data_reply_text);
+                return (
+                    <div>
+                        <label className="fw-bolder">{data_text.title}</label>
+                        {data_text.options.map((option, idx) => {
+                            const isChecked = parsedText.selected?.[idx] || false;
+                            return (
+                                <div key={idx} className="">
+                                    <input
+                                        type="checkbox"
+                                        id={`option-${idx}`}
+                                        checked={isChecked}
+                                        onChange={e => {
+                                            const updatedSelected = { ...parsedText.selected, [idx]: e.target.checked };
+                                            const updatedData = { selected: updatedSelected };
+                                            handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                                        }}
+                                    />
+                                    <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
+                                </div>
+                            );
+                        })}
+                    </div>
+                );
+            }
+
+            // Handling TEXTBOX type (single-line input)
+            if (msg_type?.startsWith("TEXTBOX")) {
+                const parsedText = parseReplyText(data_text.data_reply_text);
+                return (
+                    <div>
+                        <label className="fw-bolder">{data_text.title}</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            value={parsedText.text || ""}
+                            onChange={e => {
+                                const updatedData = { text: e.target.value };
+                                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                            }}
+                        />
+                    </div>
+                );
+            }
+
+            // Handling TEXTAREA type (multi-line input)
+            if (msg_type?.startsWith("TEXTAREA")) {
+                const parsedText = parseReplyText(data_text.data_reply_text);
+                return (
+                    <div>
+                        <label className="fw-bolder">{data_text.title}</label>
+                        <textarea
+                            className="form-control"
+                            value={parsedText.text || ""}
+                            onChange={e => {
+                                const updatedData = { text: e.target.value };
+                                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                            }}
+                        />
+                    </div>
+                );
+            }
+
+            // Handling CAMERA type (file input for image capture)
+            if (msg_type?.startsWith("CAMERA")) {
+                return (
+                    <div className="mt-3">
+                        <label className="fw-bolder">{data_text.title || "Camera Input"}</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            capture="camera"
+                            className="form-control"
+                            onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    try {
+                                        const formData = new FormData();
+                                        formData.append("file", file); // The key "image" should match the API's expected field name
+
+                                        const response = await axios.post(
+                                            "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                                            formData,
+                                            {
+                                                headers: {
+                                                    "Content-Type": "multipart/form-data",
+                                                },
+                                            }
+                                        );
+
+                                        const imageLink = response?.data?.url; // Assuming API returns the link in `data.link`
+                                        console.log(imageLink)
+                                        handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
+                                    } catch (error) {
+                                        console.error("Error uploading file:", error);
+                                        alert("Failed to upload the file. Please try again.");
+                                    }
+                                }
+                            }}
+                        />
+                    </div>
+                );
+            }
+
+            // Handling FILE type (file upload)
+            if (msg_type?.startsWith("FILE")) {
+                return (
+                    <div className="mt-3">
+                        <label className="fw-bolder">Upload File</label>
+                        <input
+                            type="file"
+                            className="form-control"
+                            onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    try {
+                                        const formData = new FormData();
+                                        formData.append("file", file); // The key "image" should match the API's expected field name
+
+                                        const response = await axios.post(
+                                            "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                                            formData,
+                                            {
+                                                headers: {
+                                                    "Content-Type": "multipart/form-data",
+                                                },
+                                            }
+                                        );
+
+                                        const imageLink = response?.data?.url; // Assuming API returns the link in `data.link`
+                                        console.log(imageLink)
+                                        handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
+                                    } catch (error) {
+                                        console.error("Error uploading file:", error);
+                                        alert("Failed to upload the file. Please try again.");
+                                    }
+                                }
+                            }}
+                        />
+                    </div>
+                );
+            }
+
+
+            // For other message types, display content without input handling
+            if (msg_type?.startsWith("YOUTUBE")) {
+                const videoId = new URLSearchParams(new URL(data_text.link).search).get("v");
+                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                return (
+                    <iframe
+                        src={embedUrl}
+                        title="YouTube Video"
+                        width="100%"
+                        height="300"
+                        style={{ border: "none" }}
+                        allowFullScreen
+                    ></iframe>
+                );
+            }
+
+            if (msg_type?.startsWith("IMAGE")) {
+                return (
+                    <img
+                        src={data_text.link}
+                        alt="Message Content"
+                        className="img-fluid rounded-3 w-100"
+                    />
+                );
+            }
+
+            return (
+                <>
+                    {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
+                    {data_text?.text && <p dangerouslySetInnerHTML={{ __html: data_text.text }}></p>}
+                    {data_text?.link && (
+                        <div className="">
+                            <label className="fw-bolder">Link Title</label>
+                            <a
+                                href={data_text.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-link text-start"
+                            >
+                                {data_text.link}
+                            </a>
+                        </div>
+                    )}
+                    {data_text?.options && (
+                        <div>
+                            <label className="fw-bolder">{data_text.title}</label>
+                            <ul className="list-group">
+                                {data_text.options?.map((option, idx) => (
+                                    <li key={idx} className="list-group-item">
+                                        {option.option}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </>
+            );
+        };
+
+        return <>{renderInputField()}</>;
+    };
+
+    // Handle reply submission
+    const handleReply = async () => {
+        const payload = {
+            msg_id: parseInt(msg_id),
+            mobile_no: parseInt(user?.mobile_no),  // You might want to capture this dynamically
+            student_main_id: parseInt(user?.scholar_no),  // Capture this dynamically if needed
+            sended_msg_id: parseInt(sended_msg_id),
+            student_number: user?.scholar_no,  // Capture this dynamically if needed
+            replyBodies: replyBodies,
+        };
+
+        try {
+            const response = await callAPI.post(
+                "http://206.189.130.102:3550/api/msg/insertRepliedMessageAndBodies",
+                payload
+            );
+            if (response.data) {
+                alert("Reply sent successfully!");
+                fetchData();
+            }
+        } catch (error) {
+            console.error("Error sending reply:", error.message);
+            alert("Failed to send reply.");
+        }
+    };
+
+
     return (
         <>
             <Header />
             <div className="container-fluid p-0 reply-page">
                 <div className="idname py-1 border-bottom">
                     <div className="container py-1">
-                        <h6 className='text-1F2C37 fw-normal mb-0'>21102933 - Ram yadav</h6>
+                        <h6 className="text-1F2C37 fw-bolder mb-0">
+                            {detail?.data?.msg_detail?.subject_text}
+                        </h6>
+                        <h6 className="text-secondary fw-normal mb-0">
+                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy  hh:mm")}
+                        </h6>
                     </div>
                 </div>
                 <div className="container my-3">
                     <div className="row">
-                        {/ First Column /}
+                        {/* First Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            {firstColumn?.map((msgBody, index) => (
-                                <div key={index} className="card px-3 py-4 bg-FAFAFA rounded-3 border-0 mb-4">
-                                    <div>
-                                        {/ Dynamic content rendering /}
-                                        {msgBody?.data_text?.title &&
-                                            <h5 className="text-010A48 mb-0">{msgBody.data_text.title}</h5>
-                                        }
-                                        {msgBody?.data_text?.text && <p>{msgBody.data_text.text}</p>}
-                                        {msgBody?.data_text?.link && (
-                                            <a href={msgBody.data_text.link} target="_blank" rel="noopener noreferrer" className="btn btn-link">
-                                                {msgBody.data_text.link}
-                                            </a>
-                                        )}
-                                        {msgBody?.data_text?.options && (
-                                            <div>
-                                                <h4>{msgBody.data_text.title}</h4>
-                                                <ul className="list-group">
-                                                    {msgBody.data_text.options?.map((option, idx) => (
-                                                        <li key={idx} className="list-group-item">{option.option}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        )}
-                                        {msgBody?.data_text?.placeholder && (
-                                            <div className="mt-3">
-                                                <label>{msgBody.data_text.title}</label>
-                                                <input type="text" className="form-control" placeholder={msgBody.data_text.placeholder} />
-                                            </div>
-                                        )}
-                                        {/ Conditional rendering for msg_type /}
-                                        {msgBody?.msg_type === `CHECKBOX-${detail?.data?.msg_detail?.msg_chat_type}` && (
-                                            <div className="mt-3">
-                                                <h4>{msgBody.data_text.title}</h4>
-                                                {msgBody.data_text.options.map((option, idx) => (
-                                                    <div key={idx}>
-                                                        <input type="checkbox" id={`option-${idx}`} />
-                                                        <label htmlFor={`option-${idx}`} className="ml-2">{option.option}</label>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                        {msgBody?.msg_type === `YOUTUBE-${detail?.data?.msg_detail?.msg_chat_type}` && (
-                                            (() => {
-                                                const videoId = msgBody.data_text.link.split('v=')[1]?.split('&')[0];
-                                                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                                                return (
-                                                    <div className="mt-3">
-                                                        <iframe
-                                                            src={embedUrl}
-                                                            title="YouTube Video"
-                                                            width="100%"
-                                                            height="300"
-                                                            style={{ border: "none" }}
-                                                            allowFullScreen
-                                                        ></iframe>
-                                                    </div>
-                                                );
-                                            })()
-                                        )}
-                                        {msgBody?.msg_type === `IMAGE-${detail?.data?.msg_detail?.msg_chat_type}` && (
-                                            <div className="mt-3">
-                                                <img
-                                                    src={msgBody.data_text.link}
-                                                    alt=""
-                                                    className="img-fluid rounded"
-                                                />
-                                            </div>
-                                        )}
-                                        {msgBody?.msg_type === `CAMERA-${detail?.data?.msg_detail?.msg_chat_type}` && (
-                                            <div className="mt-3">
-                                                <h4>{msgBody.data_text?.title || "Camera Input"}</h4>
-                                                <input type="file" accept="image/*" capture="camera" className="form-control" />
-                                            </div>
-                                        )}
-                                        {msgBody?.msg_type === `FILE-${detail?.data?.msg_detail?.msg_chat_type}` && (
-                                            <div className="mt-3">
-                                                <h4>Upload File</h4>
-                                                <input type="file" className="form-control" />
-                                            </div>
-                                        )}
+
+                            <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
+                                {firstColumn?.map((msgBody, index) => (
+                                    <div key={index} className="mb-3">
+                                        <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                        {/ Second Column /}
+                        {/* Second Column */}
                         <div className="col-xl-6 col-lg-6 col-12">
-                            {secondColumn?.map((msgBody, index) => (
-                                <div key={index} className="card px-3 py-4 bg-FAFAFA rounded-3 border-0 mb-4">
-                                    <div>
-                                        {/ Repeat dynamic rendering logic /}
-                                        {msgBody?.data_text?.title &&
-                                            <h5 className="text-010A48 mb-0">{msgBody.data_text.title}</h5>
-                                        }
-                                        {msgBody?.data_text?.text && <p>{msgBody.data_text.text}</p>}
-                                        {msgBody?.data_text?.link && (
-                                            <a href={msgBody.data_text.link} target="_blank" rel="noopener noreferrer" className="btn btn-link">
-                                                {msgBody.data_text.link}
-                                            </a>
-                                        )}
-                                        {/ Additional content as in the first column /}
+                            <div className="card px-3 py-4 rounded-4 border-0 mb-xl-0 mb-4">
+                                {secondColumn?.map((msgBody, index) => (
+                                    <div key={index} className="mb-3">
+                                        <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                                {detail?.data?.msg_detail?.is_reply_required_any == 1 ?
+                                    <button
+                                        className='btn border-0 bg-FF0000 text-white rounded-5'
+                                        onClick={handleReply}
+                                        disabled={detail?.data?.is_reply_done == 1}
+
+                                    >
+                                        {detail?.data?.is_reply_done == 1 ? "Send Reply" : "Send Reply"}
+                                    </button> : ''}
+                            </div>
                         </div>
                     </div>
                 </div>
