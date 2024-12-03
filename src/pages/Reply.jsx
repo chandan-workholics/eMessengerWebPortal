@@ -264,19 +264,33 @@ const Reply = () => {
 
             // For other message types, display content without input handling
             if (msg_type?.startsWith("YOUTUBE")) {
-                const videoId = new URLSearchParams(new URL(data_text.link).search).get("v");
-                const embedUrl = `https://www.youtube.com/embed/${videoId}`;
-                return (
-                    <iframe
-                        src={embedUrl}
-                        title="YouTube Video"
-                        width="100%"
-                        height="300"
-                        style={{ border: "none" }}
-                        allowFullScreen
-                    ></iframe>
-                );
+                if (!data_text.link) {
+                    // If the link is blank, return a fallback message or UI
+                    return <p className="text-muted">No YouTube link provided.</p>;
+                }
+                try {
+                    const videoId = new URLSearchParams(new URL(data_text.link).search).get("v");
+                    if (!videoId) {
+                        // If the link is invalid or doesn't contain a valid video ID
+                        return <p className="text-muted">Invalid YouTube link.</p>;
+                    }
+                    const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    return (
+                        <iframe
+                            src={embedUrl}
+                            title="YouTube Video"
+                            width="100%"
+                            height="300"
+                            style={{ border: "none" }}
+                            allowFullScreen
+                        ></iframe>
+                    );
+                } catch (error) {
+                    // If the link is not a valid URL
+                    return <p className="text-muted">Invalid YouTube link format.</p>;
+                }
             }
+
 
             if (msg_type?.startsWith("IMAGE")) {
                 return (

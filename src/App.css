@@ -770,3 +770,9 @@ a:hover {
 .message-footer p {
     margin: 0;
 } */
+
+
+.card.active {
+    border: 2px solid #0a74da; /* Example active border */
+    background-color: #eaf4fc; /* Example active background */
+}
