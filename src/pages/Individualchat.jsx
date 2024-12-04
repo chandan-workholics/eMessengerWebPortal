@@ -187,7 +187,7 @@ const Individualchat = () => {
                                                     className={`message ${isUserMessage
                                                         ? "outgoing align-self-end text-end"
                                                         : "incoming d-flex align-items-center align-self-start"
-                                                        } mb-1`}
+                                                        } mb-3`}
                                                 >
                                                     {!isUserMessage && (
                                                         // <img
