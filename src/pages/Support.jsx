@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 
 const Support = () => {
     const [description, setDescription] = useState("");
-    const [studentId, setStudentId] = useState("58986");
     const [loading, setLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,7 +16,7 @@ const Support = () => {
         setErrorMessage("");
 
         const raw = JSON.stringify({
-            parent_id: studentId,
+            parent_id: user.parents_id,
             description: description,
         });
 
