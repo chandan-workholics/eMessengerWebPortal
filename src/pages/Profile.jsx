@@ -52,8 +52,6 @@ const Profile = () => {
         }
     }
 
-
-
     useEffect(() => {
         getprofile();    // eslint-disable-next-line react-hooks/exhaustive-deps
         getfees();    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,30 +61,25 @@ const Profile = () => {
         sessionStorage.clear();
     }
 
-    const [activeItems, setActiveItems] = useState(() => {
-        // Initialize active items from session storage
-        const storedItems = sessionStorage.getItem('activeStudents');
-        return storedItems ? JSON.parse(storedItems) : [];
-    });
 
-    const handleCardClick = (studentNumber) => {
-        let updatedItems;
-        if (activeItems.includes(studentNumber)) {
-            // Remove the student number if already active
-            updatedItems = activeItems.filter(item => item !== studentNumber);
-        } else {
-            // Add the student number if not active
-            updatedItems = [...activeItems, studentNumber];
+    const updateStudentStatus = async (student_main_id, mobile, status) => {
+        const raw = {
+            student_main_id: student_main_id,
+            mobile: mobile,
+            status: status
+        };
+        try {
+            const response = await callAPI.post("/combine/updateStudentTabStatus", raw);
+            if (response?.data) {
+                console.log("Status updated successfully:", response.data);
+                getprofile();
+            } else {
+                console.error("Failed to update status:", response);
+            }
+        } catch (error) {
+            console.error("Error updating status:", error);
         }
-        setActiveItems(updatedItems);
-        sessionStorage.setItem('activeStudents', JSON.stringify(updatedItems));
     };
-
-    useEffect(() => {
-        // Update session storage if state changes (for safety)
-        sessionStorage.setItem('activeStudents', JSON.stringify(activeItems));
-    }, [activeItems]);
-
 
     return (
         <>
@@ -97,12 +90,7 @@ const Profile = () => {
                         <div className='d-flex justify-content-between align-items-center'>
                             <div className='d-flex  align-items-center'>
                                 <img src="Images/profile.png" alt="" className='me-2' />
-                                <div className="id-name">
-                                    {/* <div className="">
-                                        <h6 className='text-white mb-0'> {user?.student_name ? user?.student_name : ''}</h6>
-                                        <h6 className='name mb-0 text-white mb-0'>{user?.mobile_no ? user?.mobile_no : ''}</h6>
-                                    </div> */}
-                                </div>
+
                             </div>
                             <div className='logout'>
                                 <Link onClick={logout} to='/'>
@@ -193,25 +181,30 @@ const Profile = () => {
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="col-xl-4 mb-3">
                                     <div className="card border-0 shadow-sm rounded-3 bg-FAFAFA p-3 pb-2">
-                                        <h6 className='text-010A48'>All ID</h6>
+                                        <h6 className="text-010A48">All ID</h6>
 
                                         {profile?.data?.map((val, index) => (
                                             <div
                                                 key={index}
-                                                className={`card border-0 rounded-3 shadow-sm mb-3 py-1 px-2 ${activeItems.includes(val?.student_number) ? 'active' : ''}`}
-                                                onClick={() => handleCardClick(val?.student_number)}
-                                                style={{ cursor: 'pointer' }} // Add cursor pointer here
+                                                className={`card border-0 rounded-3 shadow-sm mb-3 py-1 px-2 ${val?.tab_active_status == 1 ? "active" : ""
+                                                    }`}
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() =>
+                                                    updateStudentStatus(val.student_main_id, user.mobile_no, val.tab_active_status === 1 ? 0 : 1)
+                                                }
                                             >
                                                 <p className="text-010A48 fw-semibold mb-0">
                                                     {val?.student_number} - {val?.student_name}
                                                 </p>
                                             </div>
                                         ))}
-
                                     </div>
                                 </div>
+
+
                             </div>
                         </>
                     )}
