@@ -16,11 +16,13 @@ const Home = () => {
 
     // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
-        const studentName = val?.student?.student_name?.toLowerCase() || "";
-        const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentName = val?.student?.student_name || "";
+        const subjectText = val?.msg_mst?.subject_text || "";
+        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery) // Numbers do not need `toLowerCase()`
         );
     });
 
@@ -28,9 +30,11 @@ const Home = () => {
     const filteredLastDayMessages = lastdaymessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
@@ -38,19 +42,23 @@ const Home = () => {
     const filteredSeenmessage = seenmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
-    // Filter messages for the forth tab
+    // Filter messages for the fourth tab
     const filteredStarredmessage = starredmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
@@ -390,22 +398,24 @@ const Home = () => {
                                                                         </Link>
                                                                     ) : null}
 
-
-                                                                    <Link className="star">
-                                                                        <i
-                                                                            className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
-                                                                                ? "fa-solid text-warning"
-                                                                                : "fa-regular text-FFC068"
-                                                                                }`}
-                                                                            onClick={() =>
-                                                                                toggleStarStatus(
-                                                                                    val?.sended_msg_id,
-                                                                                    val?.is_starred
-                                                                                )
-                                                                            }
-                                                                            style={{ cursor: "pointer" }}
-                                                                        ></i>
-                                                                    </Link>
+                                                                    {[1, 2, 3].includes(val?.msg_mst?.msg_priority) ?
+                                                                        null : (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-regular text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() =>
+                                                                                        toggleStarStatus(
+                                                                                            val?.sended_msg_id,
+                                                                                            val?.is_starred
+                                                                                        )
+                                                                                    }
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -701,13 +711,27 @@ const Home = () => {
                                                                             </Link>
                                                                         ) : null}
 
-                                                                        <Link className="star">
-                                                                            <i
-                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
-                                                                                onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
-                                                                                style={{ cursor: "pointer" }}
-                                                                            ></i>
-                                                                        </Link>
+                                                                        {[4, 5].includes(val?.msg_mst?.msg_priority) ? (
+                                                                            <Link className="star disabled">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 || val?.is_starred === 0
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-solid text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        ) : (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )}
+
                                                                     </div>
                                                                 </div>
                                                             </div>
