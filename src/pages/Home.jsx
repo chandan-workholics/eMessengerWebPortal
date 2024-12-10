@@ -12,10 +12,8 @@ const Home = () => {
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
     const [results, setResults] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
-<<<<<<< HEAD
     const [isLoading, setIsLoading] = useState(false);
-=======
+    const [searchQuery, setSearchQuery] = useState("");
 
     // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
@@ -64,7 +62,6 @@ const Home = () => {
             studentNumber.includes(searchQuery)
         );
     });
->>>>>>> 7749b1e9d122a88db924cf9fe5d95e8a23c0bc2a
 
     const user = JSON.parse(sessionStorage.getItem("user"));
 
