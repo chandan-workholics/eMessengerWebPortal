@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
 
 const Individualchat = () => {
-
     const { msg_id, sender_id } = useParams();
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
@@ -14,6 +13,12 @@ const Individualchat = () => {
     const [message, setMessage] = useState("");
     const [receiverMobileNumbers, setreceiverMobileNumbers] = useState("");
     const [isScrolling, setIsScrolling] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
+    const [pdfFile, setPdfFile] = useState(null);
+    const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+    const [uploadedPdfUrl, setUploadedPdfUrl] = useState(null);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedPdfs, setSelectedPdfs] = useState([]);
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -28,7 +33,9 @@ const Individualchat = () => {
 
             if (response.data) {
                 setDetail(response.data.messages);
-                setFivemember(response?.data?.messages[0]?.messageDetails?.five_mobile_number);
+                setFivemember(
+                    response?.data?.messages[0]?.messageDetails?.five_mobile_number
+                );
             } else {
                 console.warn("No data received from API.");
                 setDetail([]);
@@ -42,34 +49,54 @@ const Individualchat = () => {
     };
 
     const handleSendMessage = async () => {
-        if (!message.trim()) return; // Avoid sending empty messages
-
-        const payload = {
-            msg_id: parseInt(msg_id),
-            sender_id: sender_id,
-            msg_type: 'TEXT',
-            link: '',
-            chat_type: "INDIVIDUALCHAT",
-            mobile_no: user?.mobile_no,
-            group_id: parseInt(msg_id),
-            message: message,
-            receiverMobileNumbers: fivemember?.map((val) => ({
-                student_main_id: val.student_main_id,
-                mobilenumber: val.mobile_no,
-            })),
-        };
-
-
+        console.log("Button clicked, preparing to send message...");
+        console.log(selectedPdfs, ">>>>>>>>>>>>>>>>>>>")
+        let msgType = "TEXT";
+        let link = null;
         try {
-            await callAPI.post("/chat/send_chat_msg_individual", payload);
-            setMessage(""); // Clear input
-            fetchData(); // Fetch updated messages
-            // Scroll to the bottom after sending a message
+            if (uploadedImageUrl) {
+                console.log("Uploading image file...");
+                msgType = "IMAGE";
+                link = uploadedImageUrl;
+            } else if (uploadedPdfUrl) {
+                console.log("Uploading PDF file...");
+                msgType = "PDF";
+                link = uploadedPdfUrl;
+            }
+            if (!message.trim() && !link) {
+                console.warn("No message or file to send");
+                return;
+            }
+            const payload = {
+                msg_id: parseInt(msg_id),
+                sender_id: parseInt(sender_id),
+                msg_type: msgType,
+                link: link || "",
+                chat_type: "INDIVIDUALCHAT",
+                mobile_no: user?.mobile_no,
+                group_id: parseInt(msg_id),
+                receiver_id: null,
+                message: message.trim(),
+                receiverMobileNumbers: fivemember?.map((val) => ({
+                    student_main_id: val.student_main_id,
+                    mobilenumber: val.mobile_no,
+                })),
+            };
+            console.log("Sending payload:", payload);
+            const response = await callAPI.post("/chat/send_chat_msg_individual", payload);
+            console.log("Message sent successfully:", response.data);
+            setMessage("");
+            setImageFile(null);
+            setPdfFile(null);
+            setUploadedImageUrl(null);
+            setUploadedPdfUrl(null);
+            fetchData();
             setTimeout(() => {
                 if (chatBoxRef.current) {
                     chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
                 }
             }, 100);
+
         } catch (error) {
             console.error("Error sending message:", error.message);
         }
@@ -77,26 +104,19 @@ const Individualchat = () => {
 
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
-
-        // Check if the user is at the top of the chatbox
         const isAtTop = chatBoxRef.current.scrollTop === 0;
         setIsScrolling(!isAtTop);
     };
-
     useEffect(() => {
-        fetchData(); // Fetch messages on component mount
-
+        fetchData();
         const interval = setInterval(() => {
             if (!isScrolling) {
-                fetchData(); // Fetch messages only if not manually scrolling
+                fetchData();
             }
         }, 2000);
-
-        return () => clearInterval(interval); // Cleanup on component unmount
+        return () => clearInterval(interval);
     }, [isScrolling]);
-
     useEffect(() => {
-        // Scroll to the bottom when messages are loaded, only if not scrolling manually
         if (!isScrolling && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         }
@@ -107,6 +127,60 @@ const Individualchat = () => {
             handleSendMessage();
         }
     };
+
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedImages((prev) => [...prev, ...files]);
+        if (files.length > 0) {
+            uploadImage(files[0]);
+        }
+    };
+    const removeImage = (index) => {
+        setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    };
+    const uploadImage = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const response = await callAPI.post(`/v1/admin/imageUpload_Use/imageUpload`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            const uploadedImageUrl = response.data?.url;
+            setUploadedImageUrl(uploadedImageUrl);
+            return uploadedImageUrl;
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
+    const handlePdfUpload = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedPdfs((prev) => [...prev, ...files]);
+        if (files.length > 0) {
+            uploadPdf(files[0]);
+        }
+    };
+    const removePdf = (index) => {
+        setSelectedPdfs((prev) => prev.filter((_, i) => i !== index));
+    };
+    const uploadPdf = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const response = await callAPI.post(`/v1/admin/pdfUpload_Use/pdfUpload`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            const uploadedPdfUrl = response.data?.url;
+            setUploadedPdfUrl(uploadedPdfUrl);
+            return uploadedPdfUrl;
+        } catch (error) {
+            console.error("Error uploading PDF:", error);
+        }
+    };
+
     return (
         <>
             <Header />
@@ -126,7 +200,12 @@ const Individualchat = () => {
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
                                             <div class="dropdown d-block d-lg-none">
-                                                <button class="dropdown-toggle border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button
+                                                    class="dropdown-toggle border-0 bg-transparent"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
                                                     <i class="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
                                                 </button>
                                                 <ul class="dropdown-menu p-0 border-0">
@@ -156,7 +235,8 @@ const Individualchat = () => {
                                                                             alt=""
                                                                             className="me-2"
                                                                         />
-                                                                        {teacher.student_number} - {teacher.student_name}
+                                                                        {teacher.student_number} -{" "}
+                                                                        {teacher.student_name}
                                                                     </p>
                                                                 ))}
                                                             </div>
@@ -179,7 +259,8 @@ const Individualchat = () => {
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
-                                                chat?.senderDetails?.student_number === parseInt(user?.scholar_no);
+                                                chat?.senderDetails?.student_number ===
+                                                parseInt(user?.scholar_no);
 
                                             return (
                                                 <div
@@ -190,19 +271,17 @@ const Individualchat = () => {
                                                         } mb-3`}
                                                 >
                                                     {!isUserMessage && (
-                                                        // <img
-                                                        //     src={`Images/profile${chat?.senderDetails?.student_number}.png`}
-                                                        //     alt=""
-                                                        //     className="me-2"
-                                                        // />
                                                         <span className="me-2 pt-3">
-                                                            <i class="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.senderDetails?.color }}></i>
+                                                            <i
+                                                                class="fa-solid fa-circle-user fs-2 bg-white rounded-circle"
+                                                                style={{ color: chat?.senderDetails?.color }}
+                                                            ></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat?.senderDetails?.student_name}
+                                                                {chat.sender?.student_name}
                                                             </p>
                                                         )}
                                                         <p
@@ -212,12 +291,28 @@ const Individualchat = () => {
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
                                                             {chat.message}
-                                                            {chat?.link == null ? '' : <img
-                                                                src={chat?.link}
-                                                                alt=""
-                                                                style={{ height: 100 }}
-                                                                className="me-2"
-                                                            />}
+                                                            {chat?.link &&
+                                                                (chat.link.includes(".pdf") ? (
+                                                                    <a
+                                                                        href={chat.link}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                    >
+                                                                        <button className="btn btn-primary">
+                                                                            View PDF
+                                                                        </button>
+                                                                    </a>
+                                                                ) : (
+                                                                    <img
+                                                                        src={chat.link}
+                                                                        alt="Uploaded"
+                                                                        style={{
+                                                                            maxHeight: "100px",
+                                                                            maxWidth: "100px",
+                                                                        }}
+                                                                        className="me-2"
+                                                                    />
+                                                                ))}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -225,6 +320,29 @@ const Individualchat = () => {
                                         })}
                                     </div>
                                     {/* Chatbox Input */}
+                                    <div className="selected-files">
+                                        {selectedImages.map((image, index) => (
+                                            <div key={index} className="file-preview">
+                                                <img
+                                                    src={URL.createObjectURL(image)}
+                                                    alt={`selected-${index}`}
+                                                    style={{ maxHeight: "100px", maxWidth: "100px" }}
+                                                />
+                                                <button type="button" onClick={() => removeImage(index)} className="cancel-btn">
+                                                    <i className="fa-solid fa-times-circle"></i>
+                                                </button>
+                                            </div>))}
+                                        {selectedPdfs.map((pdf, index) => (
+                                            <div key={index} className="file-preview">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() => removePdf(index)}>
+                                                    {pdf.name}
+                                                    <i className="fa-solid fa-times-circle cancel-btn"></i>
+                                                </button>
+                                            </div>))}
+                                    </div>
                                     <div className="chatbox-input border rounded-bottom-3 d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                         <input
                                             type="text"
@@ -234,17 +352,31 @@ const Individualchat = () => {
                                             onChange={(e) => setMessage(e.target.value)}
                                             onKeyPress={handleKeyPress}
                                         />
-                                        <Link>
-                                            <i className="fa-solid fa-camera text-969599 me-3"></i>
-                                        </Link>
-                                        <Link>
-                                            <i className="fa-solid fa-image text-969599"></i>
-                                        </Link>
+                                        <input
+                                            type="file"
+                                            accept="application/pdf"
+                                            className="d-none"
+                                            id="pdf-upload"
+                                            onChange={handlePdfUpload}
+                                        />
+                                        <label htmlFor="pdf-upload">
+                                            <i className="fa-solid fa-file-pdf pe-2"></i>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="d-none"
+                                            id="image-upload"
+                                            onChange={handleImageUpload}
+                                        />
+                                        <label htmlFor="image-upload">
+                                            <i className="fa-solid fa-image pe-2"></i>
+                                        </label>
                                         <button
-                                            className="bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center"
+                                            className="send-message-btn bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center"
                                             onClick={handleSendMessage}
                                         >
-                                            <img src={sendMsgBtn} alt="" className="ms-1" />
+                                            <img src={sendMsgBtn} alt="Send" className="ms-1" />
                                         </button>
                                     </div>
                                 </div>
@@ -287,7 +419,7 @@ const Individualchat = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Individualchat
+export default Individualchat;

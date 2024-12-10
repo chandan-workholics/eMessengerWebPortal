@@ -12,26 +12,29 @@ const Home = () => {
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
     const [results, setResults] = useState([]);
+<<<<<<< HEAD
     const [isLoading, setIsLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+=======
+    const [searchQuery, setSearchQuery] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+>>>>>>> 324dc8cfd29a2b899ad686b40fd8ca03285ad745
 
-    // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
         const studentName = val?.student?.student_name || "";
         const subjectText = val?.msg_mst?.subject_text || "";
-        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
             subjectText.includes(searchQuery.toLowerCase()) ||
-            studentNumber.includes(searchQuery) // Numbers do not need `toLowerCase()`
+            studentNumber.includes(searchQuery)
         );
     });
 
-    // Filter messages for the second tab
     const filteredLastDayMessages = lastdaymessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
             subjectText.includes(searchQuery.toLowerCase()) ||
@@ -39,11 +42,11 @@ const Home = () => {
         );
     });
 
-    // Filter messages for the third tab
+
     const filteredSeenmessage = seenmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
             subjectText.includes(searchQuery.toLowerCase()) ||
@@ -51,11 +54,10 @@ const Home = () => {
         );
     });
 
-    // Filter messages for the fourth tab
     const filteredStarredmessage = starredmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || ""; // Replace 'mobile' with the correct field for the number
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
             subjectText.includes(searchQuery.toLowerCase()) ||
@@ -68,11 +70,11 @@ const Home = () => {
     const toggleStarStatus = async (id, currentStatus) => {
         try {
             interceptor();
-            const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 and 0
+            const newStatus = currentStatus === 1 ? 0 : 1;
             await callAPI.put(`./msg/staredStatusUpdateMsgDetail/${id}`, {
                 star_status: newStatus,
             });
-            // Optimistically update UI by mutating the local state
+
             message.data = message.data.map((item) =>
                 item.id === id ? { ...item, is_starred: newStatus } : item
             );
