@@ -12,6 +12,12 @@ const Chat = () => {
     const [fivemember, setFivemember] = useState([]);
     const [message, setMessage] = useState("");
     const [isScrolling, setIsScrolling] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
+    const [pdfFile, setPdfFile] = useState(null);
+    const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+    const [uploadedPdfUrl, setUploadedPdfUrl] = useState(null);
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [selectedPdfs, setSelectedPdfs] = useState([]);
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -38,25 +44,37 @@ const Chat = () => {
             setLoading(false);
         }
     };
-
     const handleSendMessage = async () => {
-        if (!message.trim()) return; // Avoid sending empty messages
+        console.log("Button clicked, preparing to send message...");
+        console.log(selectedPdfs, ">>>>>>>>>>>>>>>>>>>")
+        let msgType = "TEXT";
+        let link = null;
+
+        if (uploadedImageUrl) {
+            msgType = "IMAGE";
+            link = uploadedImageUrl;
+        } else if (uploadedPdfUrl) {
+            msgType = "PDF";
+            link = uploadedPdfUrl;
+        }
+
+        if (!message.trim() && !link) return;
 
         const payload = {
             msg_id: parseInt(msg_id),
-            sender_id: sender_id,
+            sender_id: parseInt(sender_id),
             chat_type: "GROUPCHAT",
+            msg_type: msgType,
             group_id: parseInt(msg_id),
             mobile_no: user?.mobile_no,
             receiver_id: null,
-            message,
-        };
-
+            message: msgType === "TEXT" ? message.trim() : '',
+            link: link,
+        }
         try {
             await callAPI.post("/chat/send_chat_msg1", payload);
-            setMessage(""); // Clear input
-            fetchData(); // Fetch updated messages
-            // Scroll to the bottom after sending a message
+            setMessage("");
+            fetchData();
             setTimeout(() => {
                 if (chatBoxRef.current) {
                     chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
@@ -99,6 +117,58 @@ const Chat = () => {
             handleSendMessage();
         }
     };
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedImages((prev) => [...prev, ...files]);
+        if (files.length > 0) {
+            uploadImage(files[0]);
+        }
+    };
+    const removeImage = (index) => {
+        setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    };
+    const uploadImage = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const response = await callAPI.post(`/v1/admin/imageUpload_Use/imageUpload`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            const uploadedImageUrl = response.data?.url;
+            setUploadedImageUrl(uploadedImageUrl);
+            return uploadedImageUrl;
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
+    const handlePdfUpload = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedPdfs((prev) => [...prev, ...files]);
+        if (files.length > 0) {
+            uploadPdf(files[0]);
+        }
+    };
+    const removePdf = (index) => {
+        setSelectedPdfs((prev) => prev.filter((_, i) => i !== index));
+    };
+    const uploadPdf = async (file) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        try {
+            const response = await callAPI.post(`/v1/admin/pdfUpload_Use/pdfUpload`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            const uploadedPdfUrl = response.data?.url;
+            setUploadedPdfUrl(uploadedPdfUrl);
+            return uploadedPdfUrl;
+        } catch (error) {
+            console.error("Error uploading PDF:", error);
+        }
+    };
 
     return (
         <>
@@ -119,7 +189,12 @@ const Chat = () => {
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
                                             <div class="dropdown d-block d-lg-none">
-                                                <button class="dropdown-toggle border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button
+                                                    class="dropdown-toggle border-0 bg-transparent"
+                                                    type="button"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false"
+                                                >
                                                     <i class="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
                                                 </button>
                                                 <ul class="dropdown-menu p-0 border-0">
@@ -172,7 +247,8 @@ const Chat = () => {
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
-                                                chat.sender?.student_number === parseInt(user?.scholar_no);
+                                                chat.sender?.student_number ===
+                                                parseInt(user?.scholar_no);
 
                                             return (
                                                 <div
@@ -198,29 +274,57 @@ const Chat = () => {
                                                                 {chat.sender?.student_name}
                                                             </p>
                                                         )}
-                                                        <div className="d-flex align-items-center">
-                                                            <p
-                                                                className={`${isUserMessage
-                                                                    ? "bg-E79C1D text-white"
-                                                                    : "bg-F3F0FF text-0D082C"
-                                                                    } px-2 py-2 mb-0 info`}
-                                                            >
-                                                                {chat.message}
-                                                                <br />
-                                                                {chat?.link == null ? '' : <img
-                                                                    src={chat?.link}
-                                                                    alt=""
-                                                                    style={{ height: 100 }}
-                                                                    className="me-2"
-                                                                />}
-                                                            </p>
-                                                        </div>
+                                                        <p
+                                                            className={`${isUserMessage
+                                                                ? "bg-E79C1D text-white"
+                                                                : "bg-F3F0FF text-0D082C"
+                                                                } px-2 py-2 mb-0 info`}
+                                                        >
+                                                            {chat.message}
+                                                            {chat?.link && (
+                                                                chat.link.includes('.pdf') ? (
+                                                                    <a href={chat.link} target="_blank" rel="noopener noreferrer">
+                                                                        <button className="btn btn-primary">View PDF</button>
+                                                                    </a>
+                                                                ) : (
+                                                                    <img
+                                                                        src={chat.link}
+                                                                        alt="Uploaded"
+                                                                        style={{ maxHeight: "100px", maxWidth: "100px" }}
+                                                                        className="me-2"
+                                                                    />
+                                                                )
+                                                            )}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             );
                                         })}
                                     </div>
                                     {/* Chatbox Input */}
+                                    <div className="selected-files">
+                                        {selectedImages.map((image, index) => (
+                                            <div key={index} className="file-preview">
+                                                <img
+                                                    src={URL.createObjectURL(image)}
+                                                    alt={`selected-${index}`}
+                                                    style={{ maxHeight: "100px", maxWidth: "100px" }}
+                                                />
+                                                <button type="button" onClick={() => removeImage(index)} className="cancel-btn">
+                                                    <i className="fa-solid fa-times-circle"></i>
+                                                </button>  </div>))}
+                                        {selectedPdfs.map((pdf, index) => (
+                                            <div key={index} className="file-preview">
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() => removePdf(index)}>
+                                                    {pdf.name}
+                                                    <i className="fa-solid fa-times-circle cancel-btn"></i>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                     <div className="chatbox-input border rounded-bottom-3 d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                         <input
                                             type="text"
@@ -230,17 +334,32 @@ const Chat = () => {
                                             onChange={(e) => setMessage(e.target.value)}
                                             onKeyPress={handleKeyPress}
                                         />
-                                        <Link>
-                                            <i className="fa-solid fa-camera text-969599 me-3"></i>
-                                        </Link>
-                                        <Link>
-                                            <i className="fa-solid fa-image text-969599"></i>
-                                        </Link>
+                                        <input
+                                            type="file"
+                                            className="d-none"
+                                            id="imageUpload"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                        />
+                                        <label htmlFor="imageUpload">
+                                            <i className="fa-solid fa-image text-969599 pe-2"></i>
+                                        </label>
+
+                                        <input
+                                            type="file"
+                                            className="d-none"
+                                            id="pdfUpload"
+                                            accept="application/pdf"
+                                            onChange={handlePdfUpload}
+                                        />
+                                        <label htmlFor="pdfUpload">
+                                            <i className="fa-solid fa-file-pdf pe-2"></i>
+                                        </label>
                                         <button
-                                            className="bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center"
+                                            className="send-message-btn bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center"
                                             onClick={handleSendMessage}
                                         >
-                                            <img src={sendMsgBtn} alt="" className="ms-1" />
+                                            <img src={sendMsgBtn} alt="Send" className="ms-1" />
                                         </button>
                                     </div>
                                 </div>
