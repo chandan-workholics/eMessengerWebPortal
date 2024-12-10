@@ -11,46 +11,50 @@ const Home = () => {
     const [lastdaymessage, setLastdaymessage] = useState([]);
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
-
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Filter messages for the first tab
     const filteredMessages = message?.data?.filter((val) => {
-        const studentName = val?.student?.student_name?.toLowerCase() || "";
-        const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentName = val?.student?.student_name || "";
+        const subjectText = val?.msg_mst?.subject_text || "";
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
-    // Filter messages for the second tab
     const filteredLastDayMessages = lastdaymessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
-    // Filter messages for the third tab
+
     const filteredSeenmessage = seenmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
-    // Filter messages for the forth tab
     const filteredStarredmessage = starredmessage?.data?.filter((val) => {
         const studentName = val?.student?.student_name?.toLowerCase() || "";
         const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
+        const studentNumber = val?.mobile_no || "";
         return (
             studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase())
+            subjectText.includes(searchQuery.toLowerCase()) ||
+            studentNumber.includes(searchQuery)
         );
     });
 
@@ -59,11 +63,11 @@ const Home = () => {
     const toggleStarStatus = async (id, currentStatus) => {
         try {
             interceptor();
-            const newStatus = currentStatus === 1 ? 0 : 1; // Toggle between 1 and 0
+            const newStatus = currentStatus === 1 ? 0 : 1;
             await callAPI.put(`./msg/staredStatusUpdateMsgDetail/${id}`, {
                 star_status: newStatus,
             });
-            // Optimistically update UI by mutating the local state
+
             message.data = message.data.map((item) =>
                 item.id === id ? { ...item, is_starred: newStatus } : item
             );
@@ -205,15 +209,15 @@ const Home = () => {
                     <div className="row">
                         <div className="col-12 head-top py-1">
                             {loading ? (
-                                <p className="text-010A48 fw-normal mb-0">Loading message...</p>
+                                <h6 className="text-010A48 fw-normal mb-0">Loading message...</h6>
                             ) : (
-                                <p className="text-010A48 fw-normal mb-0">
+                                <h6 className="text-010A48 fw-normal mb-0">
                                     {noticeBoardDetail?.data?.noticeMsg?.map((item, index) => (
                                         <span key={index} className="me-4">
                                             {item?.student_name}-{item?.noticeMsg}
                                         </span>
                                     ))}
-                                </p>
+                                </h6>
                             )}
                         </div>
                     </div>
@@ -291,12 +295,12 @@ const Home = () => {
                                 <input
                                     type="search"
                                     className="form-control bg-F4F4F4 border rounded"
-                                    placeholder="Search"
+                                    placeholder="Search..."
                                     aria-label="Search"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                                <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i>
+                                {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
                             </div>
                         </div>
                     </div>
@@ -319,7 +323,7 @@ const Home = () => {
                                     {filteredMessages?.map((val) => {
                                         const showUpto = val?.msg_mst?.show_upto;
                                         const formattedDate = showUpto
-                                            ? format(new Date(showUpto), "dd-MMM-yyyy")
+                                            ? format(new Date(showUpto), "dd-MMM-yyyy hh:mm")
                                             : "N/A";
                                         return (
                                             <div className="col-12 mb-4" key={val?.msg_id}>
@@ -329,7 +333,7 @@ const Home = () => {
                                                 >
                                                     <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
                                                         <div className="card-body">
-                                                            <div className="d-flex justify-content-between mb-2">
+                                                            <div className="d-flex justify-content-between mb-1">
                                                                 <h6 className="mb-1">
                                                                     <span
                                                                         style={{
@@ -356,7 +360,7 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="">
-                                                                <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                <h6 className="text-010A48 fs-18 mb-0 text-wrap">
                                                                     {val?.msg_mst?.subject_text}
                                                                 </h6>
                                                             </div>
@@ -365,9 +369,21 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                         <Link
-                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+                                                                    {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
                                                                         >
                                                                             <img
@@ -378,22 +394,24 @@ const Home = () => {
                                                                         </Link>
                                                                     ) : null}
 
-
-                                                                    <Link className="star">
-                                                                        <i
-                                                                            className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
-                                                                                ? "fa-solid text-warning"
-                                                                                : "fa-regular text-FFC068"
-                                                                                }`}
-                                                                            onClick={() =>
-                                                                                toggleStarStatus(
-                                                                                    val?.sended_msg_id,
-                                                                                    val?.is_starred
-                                                                                )
-                                                                            }
-                                                                            style={{ cursor: "pointer" }}
-                                                                        ></i>
-                                                                    </Link>
+                                                                    {[1, 2, 3].includes(val?.msg_mst?.msg_priority) ?
+                                                                        null : (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-regular text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() =>
+                                                                                        toggleStarStatus(
+                                                                                            val?.sended_msg_id,
+                                                                                            val?.is_starred
+                                                                                        )
+                                                                                    }
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -455,7 +473,7 @@ const Home = () => {
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                     {val?.msg_mst?.subject_text}
                                                                 </h6>
                                                             </div>
@@ -464,9 +482,21 @@ const Home = () => {
                                                                     Show Upto: {formattedDate}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
-                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                    {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                         <Link
-                                                                            to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                            className="me-2"
+                                                                        >
+                                                                            <img
+                                                                                src="Images/chat-icon.png"
+                                                                                alt="Chat Icon"
+                                                                                className=""
+                                                                            />
+                                                                        </Link>
+                                                                    ) : null}
+                                                                    {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        <Link
+                                                                            to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
                                                                         >
                                                                             <img
@@ -546,7 +576,7 @@ const Home = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
-                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                    <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                         {val?.msg_mst?.subject_text}
                                                                     </h6>
                                                                 </div>
@@ -555,9 +585,21 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+                                                                        {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
                                                                             >
                                                                                 <img
@@ -630,7 +672,7 @@ const Home = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="">
-                                                                    <h6 className="text-010A48 fs-6 mb-1 lh-1 text-wrap">
+                                                                    <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
                                                                         {val?.msg_mst?.subject_text}
                                                                     </h6>
                                                                 </div>
@@ -639,9 +681,22 @@ const Home = () => {
                                                                         Show Upto:  {formattedDate}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
-                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" || val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/${val?.msg_mst?.msg_chat_type}/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+                                                                        {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
                                                                             >
                                                                                 <img
@@ -652,13 +707,27 @@ const Home = () => {
                                                                             </Link>
                                                                         ) : null}
 
-                                                                        <Link className="star">
-                                                                            <i
-                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
-                                                                                onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
-                                                                                style={{ cursor: "pointer" }}
-                                                                            ></i>
-                                                                        </Link>
+                                                                        {[4, 5].includes(val?.msg_mst?.msg_priority) ? (
+                                                                            <Link className="star disabled">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 || val?.is_starred === 0
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-solid text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        ) : (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )}
+
                                                                     </div>
                                                                 </div>
                                                             </div>
