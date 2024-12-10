@@ -12,13 +12,8 @@ const Home = () => {
     const [seenmessage, setSeenmessage] = useState([]);
     const [starredmessage, setStarredmessage] = useState([]);
     const [results, setResults] = useState([]);
-<<<<<<< HEAD
-    const [isLoading, setIsLoading] = useState(false);
-    const [searchQuery, setSearchQuery] = useState("");
-=======
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
->>>>>>> 324dc8cfd29a2b899ad686b40fd8ca03285ad745
 
     const filteredMessages = message?.data?.filter((val) => {
         const studentName = val?.student?.student_name || "";
