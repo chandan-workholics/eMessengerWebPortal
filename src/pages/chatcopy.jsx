@@ -12,7 +12,7 @@ const Chat = () => {
                     <div className="row my-3">
                         <div className=" col-xl-9 col-lg-8 col-md-8 col-12">
                             <div className="card bg-FAFAFA mb-lg-0 mb-1 h-80vh position-relative border-0">
-                                <div class="chatbox py-0 h-100">
+                                <div className="chatbox py-0 h-100">
                                     <div
                                         className="card-header bg-FAFAFA py-0"
                                         style={{ borderColor: "#EDEDED" }}
@@ -87,9 +87,9 @@ const Chat = () => {
                                                         446464688 - Mohan Kumar
                                                     </p>
                                                     <p className="bg-F3F0FF px-2 py-2 info mb-0">
-                                                        <i class="fa-solid fa-circle me-1 text-C7DFFF"></i>
-                                                        <i class="fa-solid fa-circle me-1 text-C7DFFF"></i>
-                                                        <i class="fa-solid fa-circle text-C7DFFF"></i>
+                                                        <i className="fa-solid fa-circle me-1 text-C7DFFF"></i>
+                                                        <i className="fa-solid fa-circle me-1 text-C7DFFF"></i>
+                                                        <i className="fa-solid fa-circle text-C7DFFF"></i>
                                                     </p>
                                                 </div>
                                             </div>

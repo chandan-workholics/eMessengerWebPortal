@@ -94,7 +94,7 @@ const Profile = () => {
                             </div>
                             <div className='logout'>
                                 <Link onClick={logout} to='/'>
-                                    <button className='border-0 text-white bg-transparent'> <i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button></Link>
+                                    <button className='border-0 text-white bg-transparent'> <i className="fa-solid fa-right-from-bracket me-2"></i>Logout</button></Link>
                             </div>
                         </div>
                     </div>

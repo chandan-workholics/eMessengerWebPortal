@@ -188,16 +188,16 @@ const Chat = () => {
                                             <p className="mb-0 fw-semibold text-010A48 chat-head">
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
-                                            <div class="dropdown d-block d-lg-none">
+                                            <div className="dropdown d-block d-lg-none">
                                                 <button
-                                                    class="dropdown-toggle border-0 bg-transparent"
+                                                    className="dropdown-toggle border-0 bg-transparent"
                                                     type="button"
                                                     data-bs-toggle="dropdown"
                                                     aria-expanded="false"
                                                 >
-                                                    <i class="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
+                                                    <i className="fa-solid fa-ellipsis-vertical text-success fs-4"></i>
                                                 </button>
-                                                <ul class="dropdown-menu p-0 border-0">
+                                                <ul className="dropdown-menu p-0 border-0">
                                                     <li className="">
                                                         <div
                                                             className="card bg-FAFAFA shadow"
@@ -265,7 +265,7 @@ const Chat = () => {
                                                         //     className="me-2"
                                                         // />
                                                         <span className="me-2 pt-3">
-                                                            <i class="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.sender?.color }}></i>
+                                                            <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.sender?.color }}></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">

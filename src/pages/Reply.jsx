@@ -101,13 +101,20 @@ const Reply = () => {
 
     const MessageCard = ({ msgBody, handleInputChange }) => {
         const { msg_type, data_text, msg_body_id } = msgBody;
-        const parseReplyText = (text) => {
-            try {
-                return text ? JSON.parse(text) : {};
-            } catch (error) {
-                return {};
-            }
-        };
+
+        const [inputValue, setInputValue] = useState("");
+        const [textareaValue, setTextareaValue] = useState("");
+        const [selectedValues, setSelectedValues] = useState({});
+        const [selectedValue, setSelectedValue] = useState("");
+        const [selectedFileName, setSelectedFileName] = useState("");
+        const [fileName, setFileName] = useState("");
+        // const parseReplyText = (text) => {
+        //     try {
+        //         return text ? JSON.parse(text) : {};
+        //     } catch (error) {
+        //         return {};
+        //     }
+        // };
 
         const renderInputField = () => {
             if (msg_type?.startsWith("OPTION")) {
@@ -170,17 +177,15 @@ const Reply = () => {
                 );
             }
             if (msg_type?.startsWith("TEXTBOX")) {
-                const parsedReplyText = data_text?.data_reply_text
-                    ? JSON.parse(data_text.data_reply_text)
-                    : { text: "" };
+                // const parsedReplyText = data_text?.data_reply_text
+                //     ? JSON.parse(data_text.data_reply_text)
+                //     : { text: "" };
 
                 const handleChangeBox = (e) => {
-                    if (e && e.target) {
-                        const newValue = e.target.value;
-                        setInputValue(newValue);
-                        // const updatedData = { text: newValue };
-                        // handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-                    }
+                    const newValue = e.target.value;
+                    setInputValue(newValue);
+                    const updatedData = { text: newValue };
+                    handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
                 };
 
                 return (
@@ -201,15 +206,15 @@ const Reply = () => {
             }
 
             if (msg_type?.startsWith("TEXTAREA")) {
-                const parsedReplyText = data_text?.data_reply_text
-                    ? JSON.parse(data_text.data_reply_text)
-                    : { text: "" };
+                // const parsedReplyText = data_text?.data_reply_text
+                //     ? JSON.parse(data_text.data_reply_text)
+                //     : { text: "" };
 
                 const handleChange = (e) => {
                     const newValue = e.target.value;
                     setTextareaValue(newValue);
-                    // const updatedData = { text: newValue };
-                    // handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                    const updatedData = { text: newValue };
+                    handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
                 };
 
                 return (
