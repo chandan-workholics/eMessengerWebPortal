@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
-import callAPI, { interceptor } from "../Common_Method/api";
+import callAPI from "../Common_Method/api";
 import axios from "axios";
 import { format } from "date-fns";
+
 const Reply = () => {
     const { msg_id, sended_msg_id } = useParams();
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState(null);
     const [error, setError] = useState(null);
     const [replyBodies, setReplyBodies] = useState([]);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [selectedValue, setSelectedValue] = useState('');
-    const [selectedValues, setSelectedValues] = useState('');
-    const [inputValue, setInputValue] = useState('');
-    const [textareaValue, setTextareaValue] = useState('');
-    const [selectedFileName, setSelectedFileName] = useState("");
-    const [fileName, setFileName] = useState("");
-
     const user = JSON.parse(sessionStorage.getItem("user"));
+
     const fetchData = async () => {
         try {
             setLoading(true);
-            interceptor();
             const response = await callAPI.get(
-                `./msg/get_single_mst_msg_by_msg_id?msg_id=${msg_id}&sended_msg_id=${sended_msg_id}`
+                `./msg/get_single_mst_msg_by_msg_id?msg_id=114&sended_msg_id=1303`
             );
-
             if (response.data) {
                 setDetail(response.data);
                 setError(null);
@@ -42,20 +34,23 @@ const Reply = () => {
             setLoading(false);
         }
     };
+
     useEffect(() => {
         fetchData();
-    }, [msg_id, sended_msg_id]);
+    }, []);
+
+
+
+    // Function to handle user input changes
     const handleInputChange = (msg_body_id, msg_type, value) => {
         setReplyBodies(prev => {
             const updated = [...prev];
             const index = updated.findIndex(body => body.msg_body_id === msg_body_id);
-
             if (index !== -1) {
                 updated[index].data_reply_text = value;
             } else {
                 updated.push({ msg_body_id, msg_type, data_reply_text: value });
             }
-            validateForm(updated);
             return updated;
         });
     };
@@ -67,34 +62,18 @@ const Reply = () => {
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>
-        )
+        );
     }
+
     if (error) {
         return <div className="text-center text-danger">{error}</div>;
     }
+
     if (!detail) {
         return <div className="text-center">No data available.</div>;
     }
 
-    const validateForm = (updatedReplyBodies) => {
-        const allFieldsFilled = updatedReplyBodies.every(body => {
-            if (body.msg_type.startsWith("OPTION")) {
-                return body.data_reply_text && JSON.parse(body.data_reply_text).selected;
-            }
-            if (body.msg_type.startsWith("CHECKBOX")) {
-                const selectedValues = JSON.parse(body.data_reply_text).selected;
-                return Object.values(selectedValues).some(value => value);
-            }
-            if (body.msg_type.startsWith("TEXTBOX") || body.msg_type.startsWith("TEXTAREA")) {
-                return body.data_reply_text && body.data_reply_text.text.trim() !== "";
-            }
-            if (body.msg_type.startsWith("FILE") || body.msg_type.startsWith("CAMERA")) {
-                return body.data_reply_text && body.data_reply_text.imageURIsave;
-            }
-            return true;
-        });
-        setIsFormValid(allFieldsFilled);
-    };
+    // Divide the msg_body into two equal arrays for rendering
     const midIndex = Math.ceil((detail?.data?.msg_body?.length || 0) / 2);
     const firstColumn = detail?.data?.msg_body?.slice(0, midIndex);
     const secondColumn = detail?.data?.msg_body?.slice(midIndex);
@@ -102,72 +81,71 @@ const Reply = () => {
     const MessageCard = ({ msgBody, handleInputChange }) => {
         const { msg_type, data_text, msg_body_id } = msgBody;
 
-        const [inputValue, setInputValue] = useState("");
-        const [textareaValue, setTextareaValue] = useState("");
-        const [selectedValues, setSelectedValues] = useState({});
-        const [selectedValue, setSelectedValue] = useState("");
-        const [selectedFileName, setSelectedFileName] = useState("");
-        const [fileName, setFileName] = useState("");
-        // const parseReplyText = (text) => {
-        //     try {
-        //         return text ? JSON.parse(text) : {};
-        //     } catch (error) {
-        //         return {};
-        //     }
-        // };
+        const parseReplyText = (text) => {
+            try {
+                return text ? JSON.parse(text) : {};
+            } catch (error) {
+                return {};
+            }
+        };
 
         const renderInputField = () => {
+
             if (msg_type?.startsWith("OPTION")) {
+                const handleOptionChange = (selectedValue) => {
+                    const updatedData = { selected: { 0: selectedValue } };
+                    handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                    data_text.data_reply_text = JSON.stringify(updatedData);
+                };
+
                 return (
                     <div>
-                        <label className="fw-bolder">{data_text?.title}</label>
-                        <select
-                            value={selectedValue}
-                            onChange={e => {
-                                const newValue = e.target.value;
-                                setSelectedValue(newValue);
-                                const updatedData = { selected: { 0: newValue } };
-                                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-                            }}
-                            className="form-control">
+                        <label className="fw-bolder">{data_text.title}</label>
+                        <div className="form-control">
                             {data_text.options.map((option, idx) => (
-                                <option key={idx} value={option.option}>
-                                    {option.option}
-                                </option>
+                                <div key={idx} className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="option"
+                                        id={`option-${idx}`}
+                                        value={option.option}
+                                        onChange={(e) => handleOptionChange(e.target.value)}
+                                    />
+                                    <label className="form-check-label" htmlFor={`option-${idx}`}>
+                                        {option.option}
+                                    </label>
+                                </div>
                             ))}
-                        </select>
+                        </div>
                     </div>
                 );
             }
 
 
+            // Handling CHECKBOX type (checkbox selection)
             if (msg_type?.startsWith("CHECKBOX")) {
-                // Safely parse the reply text if it exists
-                const parsedReplyText = data_text?.data_reply_text
-                    ? JSON.parse(data_text.data_reply_text)
-                    : { selected: {} };
+                const parsedText = parseReplyText(data_text.data_reply_text);
+
+                const handleCheckboxChange = (idx, isChecked) => {
+                    const updatedSelected = { ...parsedText.selected, [idx]: isChecked };
+                    const updatedData = { selected: updatedSelected };
+                    handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                    data_text.data_reply_text = JSON.stringify(updatedData);
+                };
 
                 return (
                     <div>
                         <label className="fw-bolder">{data_text.title}</label>
                         {data_text.options.map((option, idx) => {
-                            const isChecked = selectedValues[idx] || false;
-
+                            const isChecked = parsedText.selected?.[idx] || false;
                             return (
                                 <div key={idx}>
                                     <input
                                         type="checkbox"
                                         id={`option-${idx}`}
                                         checked={isChecked}
-                                        onChange={e => {
-                                            const updatedSelectedValues = {
-                                                ...selectedValues,
-                                                [idx]: e.target.checked
-                                            };
-                                            setSelectedValues(updatedSelectedValues); // Update local state
-                                            const updatedData = { selected: updatedSelectedValues };
-                                            handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData)); // Pass the updated data
-                                        }}
+                                        onChange={e => handleCheckboxChange(idx, e.target.checked)}
                                     />
                                     <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
                                 </div>
@@ -176,16 +154,16 @@ const Reply = () => {
                     </div>
                 );
             }
-            if (msg_type?.startsWith("TEXTBOX")) {
-                // const parsedReplyText = data_text?.data_reply_text
-                //     ? JSON.parse(data_text.data_reply_text)
-                //     : { text: "" };
 
-                const handleChangeBox = (e) => {
-                    const newValue = e.target.value;
-                    setInputValue(newValue);
-                    const updatedData = { text: newValue };
+
+            // Handling TEXTBOX type (single-line input)
+            if (msg_type?.startsWith("TEXTBOX")) {
+                const parsedText = parseReplyText(data_text.data_reply_text);
+
+                const handleTextboxChange = (e) => {
+                    const updatedData = { text: e.target.value };
                     handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                    data_text.data_reply_text = JSON.stringify(updatedData);
                 };
 
                 return (
@@ -194,27 +172,22 @@ const Reply = () => {
                         <input
                             type="text"
                             className="form-control"
-                            value={inputValue}
-                            onChange={handleChangeBox}
-                            autoFocus
-                            onFocus={(e) => {
-                                e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
-                            }}
+                            value={parsedText.text || ""}
+                            onChange={handleTextboxChange}
                         />
                     </div>
                 );
             }
 
-            if (msg_type?.startsWith("TEXTAREA")) {
-                // const parsedReplyText = data_text?.data_reply_text
-                //     ? JSON.parse(data_text.data_reply_text)
-                //     : { text: "" };
 
-                const handleChange = (e) => {
-                    const newValue = e.target.value;
-                    setTextareaValue(newValue);
-                    const updatedData = { text: newValue };
+            // Handling TEXTAREA type (multi-line input)
+            if (msg_type?.startsWith("TEXTAREA")) {
+                const parsedText = parseReplyText(data_text.data_reply_text);
+
+                const handleTextareaChange = (e) => {
+                    const updatedData = { text: e.target.value };
                     handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                    data_text.data_reply_text = JSON.stringify(updatedData);
                 };
 
                 return (
@@ -222,125 +195,111 @@ const Reply = () => {
                         <label className="fw-bolder">{data_text.title}</label>
                         <textarea
                             className="form-control"
-                            value={textareaValue}
-                            onChange={handleChange}
-                            rows={4}
-                            autoFocus
-                            onFocus={(e) => {
-                                const textarea = e.target;
-                                textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
-                            }}
+                            value={parsedText.text || ""}
+                            onChange={handleTextareaChange}
                         />
                     </div>
                 );
             }
 
 
+
+            // Handling CAMERA type (file input for image capture)
             if (msg_type?.startsWith("CAMERA")) {
+                const handleCameraChange = async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            const formData = new FormData();
+                            formData.append("file", file); // The key "image" should match the API's expected field name
+
+                            const response = await axios.post(
+                                "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                                formData,
+                                {
+                                    headers: {
+                                        "Content-Type": "multipart/form-data",
+                                    },
+                                }
+                            );
+
+                            const imageLink = response?.data?.url; // Assuming API returns the link in `data.url`
+                            console.log(imageLink);
+                            handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
+                        } catch (error) {
+                            console.error("Error uploading file:", error);
+                            alert("Failed to upload the file. Please try again.");
+                        }
+                    }
+                };
+
                 return (
                     <div className="mt-3">
                         <label className="fw-bolder">{data_text.title || "Camera Input"}</label>
-
                         <input
                             type="file"
                             accept="image/*"
                             capture="camera"
                             className="form-control"
-                            onChange={async (e) => {
-                                const file = e.target.files ? e.target.files[0] : null;
-                                if (file) {
-                                    console.log("File selected:", file.name);
-                                    setSelectedFileName(file.name);
-
-                                    try {
-                                        interceptor();
-                                        const formData = new FormData();
-                                        formData.append("file", file);
-
-                                        const response = await callAPI.post(
-                                            "/v1/admin/imageUpload_Use/imageUpload",
-                                            formData,
-                                            {
-                                                headers: {
-                                                    "Content-Type": "multipart/form-data",
-                                                },
-                                            });
-
-                                        const imageLink = response?.data?.url;
-                                        if (imageLink) {
-                                            console.log("Image uploaded successfully:", imageLink);
-                                            handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
-                                        } else {
-                                            console.error("Failed to upload image: No URL returned");
-                                            alert("Failed to upload the image. Please try again.");
-                                        }
-                                    } catch (error) {
-                                        console.error("Error uploading file:", error);
-                                        alert("Failed to upload the file. Please try again.");
-                                    }
-                                } else {
-                                    console.log("No file selected.");
-                                    alert("Please select a file.");
-                                }
-                            }}
+                            onChange={handleCameraChange}
                         />
-                        {selectedFileName && (
-                            <div className="mt-2">
-                                <strong>Selected file:</strong> {selectedFileName}
-                            </div>
-                        )}
                     </div>
                 );
             }
 
+
+            // Handling FILE type (file upload)
             if (msg_type?.startsWith("FILE")) {
+                const handleFileChange = async (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        try {
+                            const formData = new FormData();
+                            formData.append("file", file); // The key "image" should match the API's expected field name
+
+                            const response = await axios.post(
+                                "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                                formData,
+                                {
+                                    headers: {
+                                        "Content-Type": "multipart/form-data",
+                                    },
+                                }
+                            );
+
+                            const fileLink = response?.data?.url; // Assuming API returns the link in `data.url`
+                            console.log(fileLink);
+                            handleInputChange(msg_body_id, msg_type, JSON.stringify({ fileURIsave: fileLink }));
+                        } catch (error) {
+                            console.error("Error uploading file:", error);
+                            alert("Failed to upload the file. Please try again.");
+                        }
+                    }
+                };
+
                 return (
                     <div className="mt-3">
                         <label className="fw-bolder">Upload File</label>
                         <input
                             type="file"
                             className="form-control"
-                            onChange={async (e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                    setFileName(file.name);
-
-                                    try {
-                                        interceptor();
-                                        const formData = new FormData();
-                                        formData.append("file", file);
-
-                                        const response = await callAPI.post(
-                                            "/v1/admin/imageUpload_Use/imageUpload",
-                                            formData,
-                                            {
-                                                headers: {
-                                                    "Content-Type": "multipart/form-data",
-                                                },
-                                            }
-                                        );
-
-                                        const imageLink = response?.data?.url;
-                                        console.log(imageLink);
-                                        handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
-                                    } catch (error) {
-                                        console.error("Error uploading file:", error);
-                                        alert("Failed to upload the file. Please try again.");
-                                    }
-                                }
-                            }}
+                            onChange={handleFileChange}
                         />
-                        {fileName && <div className="mt-2 text-muted">Selected file: {fileName}</div>}
                     </div>
                 );
             }
+
+
+            // For other message types, display content without input handling
             if (msg_type?.startsWith("YOUTUBE")) {
                 if (!data_text.link) {
+                    // If the link is blank, return a fallback message or UI
                     return <p className="text-muted">No YouTube link provided.</p>;
                 }
                 try {
                     const videoId = new URLSearchParams(new URL(data_text.link).search).get("v");
                     if (!videoId) {
+                        // If the link is invalid or doesn't contain a valid video ID
                         return <p className="text-muted">Invalid YouTube link.</p>;
                     }
                     const embedUrl = `https://www.youtube.com/embed/${videoId}`;
@@ -355,9 +314,12 @@ const Reply = () => {
                         ></iframe>
                     );
                 } catch (error) {
+                    // If the link is not a valid URL
                     return <p className="text-muted">Invalid YouTube link format.</p>;
                 }
             }
+
+
             if (msg_type?.startsWith("IMAGE")) {
                 return (
                     <img
@@ -365,8 +327,9 @@ const Reply = () => {
                         alt="Message Content"
                         className="img-fluid rounded-3 w-100"
                     />
-                )
+                );
             }
+
             return (
                 <>
                     {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
@@ -397,37 +360,48 @@ const Reply = () => {
                         </div>
                     )}
                 </>
-            )
+            );
         };
 
         return <>{renderInputField()}</>;
     };
 
+
+
+
+
+
+    // Handle reply submission
     const handleReply = async () => {
-        console.log("Button clicked");
         const payload = {
             msg_id: parseInt(msg_id),
-            mobile_no: parseInt(user?.mobile_no),
-            student_main_id: parseInt(user?.scholar_no),
+            mobile_no: parseInt(user?.mobile_no),  // You might want to capture this dynamically
+            student_main_id: parseInt(user?.scholar_no),  // Capture this dynamically if needed
             sended_msg_id: parseInt(sended_msg_id),
-            student_number: user?.scholar_no,
+            student_number: user?.scholar_no,  // Capture this dynamically if needed
             replyBodies: replyBodies,
         };
 
-        console.log("Payload:", payload);
-
         try {
-            const response = await callAPI.post(`/msg/insertRepliedMessageAndBodies`, payload);
-            console.log("API response:", response);
+            const response = await callAPI.post(
+                "http://206.189.130.102:3550/api/msg/insertRepliedMessageAndBodies",
+                payload
+            );
             if (response.data) {
                 alert("Reply sent successfully!");
                 fetchData();
             }
         } catch (error) {
-            console.error("Error sending reply:", error.response || error.message);
+            console.error("Error sending reply:", error.message);
             alert("Failed to send reply.");
         }
     };
+
+
+
+    console.log("reply", replyBodies)
+
+
 
     return (
         <>
@@ -464,14 +438,15 @@ const Reply = () => {
                                         <MessageCard msgBody={msgBody} handleInputChange={handleInputChange} />
                                     </div>
                                 ))}
-                                {detail?.data?.msg_detail?.is_reply_required_any == 1 ?
-                                    <button
-                                        className='btn border-0 bg-FF0000 text-white rounded-5'
-                                        onClick={handleReply}
 
-                                    >
-                                        {detail?.data?.is_reply_done == 1 ? "Send Reply" : "Send Reply"}
-                                    </button> : ''}
+                                <button
+                                    className='btn border-0 bg-FF0000 text-white rounded-5'
+                                    onClick={handleReply}
+
+
+                                >
+                                    Send Reply
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -480,6 +455,5 @@ const Reply = () => {
         </>
     );
 };
+
 export default Reply;
-
-
