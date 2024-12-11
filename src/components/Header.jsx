@@ -117,7 +117,8 @@ const Header = () => {
                 <div className="d-flex justify-content-center align-items-center">
                   <img src={profile} alt="Profile Icon" className="me-1" />
                   <h6 className="mb-0 me-3 lh-2 text-white fw-normal">
-                    {user?.student_name ? user?.student_name : ''}
+                    {/* {user?.student_name ? user?.student_name : ''} */}
+                    User
                     <br />
                     {user?.mobile_no ? user?.mobile_no : ''}
                   </h6>
@@ -127,7 +128,8 @@ const Header = () => {
               <ul className="dropdown-menu shadow-lg border-0">
                 <li>
                   <Link className="dropdown-item text-525252 text-decoration-none" to="">
-                    Welcome {user?.student_name ? user?.student_name : ''} !
+                    {/* Welcome {user?.student_name ? user?.student_name : ''} ! */}
+                    Welcome User !
                   </Link>
                 </li>
                 <hr className="m-0" />

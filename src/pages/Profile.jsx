@@ -155,7 +155,8 @@ const Profile = () => {
                                                                                 <h6 className='mb-0 text-010A48 fw-normal'>{val?.session_detail}</h6>
                                                                             </div>
                                                                             <div className='Pay-btn d-flex align-items-start'>
-                                                                                <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
+                                                                           { val?.outstandingfees==0?<button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Paid</button>:
+                                                                                <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>}
                                                                             </div>
                                                                         </div>
                                                                         <div className="card-body p-2 term">

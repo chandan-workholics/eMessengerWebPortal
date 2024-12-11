@@ -18,6 +18,8 @@ const Support = () => {
         const raw = JSON.stringify({
             parent_id: user.parents_id,
             description: description,
+            status: 1,
+            remark: ""
         });
 
         const requestOptions = {
