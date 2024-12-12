@@ -14,6 +14,8 @@ const Home = () => {
     const [results, setResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const token = sessionStorage.getItem("token");
+    const users = JSON.parse(sessionStorage.getItem("user"));
 
     const filteredMessages = message?.data?.filter((val) => {
         const studentName = val?.student?.student_name || "";
@@ -222,11 +224,10 @@ const Home = () => {
         }
         setIsLoading(true);
         try {
-            const response = await fetch(
-                `http://206.189.130.102:3550/api/msg/getSearchDetail?mobile=&searchquery=${encodeURIComponent(query)}`
+            const response = await callAPI.get(
+                `msg/getSearchDetail?mobile=${users?.mobile_no}&searchquery=${encodeURIComponent(query)}`
             );
-            const data = await response.json();
-            setResults(data.results); // Update this if your API returns a different structure
+            setResults(response.data); // Update this if your API returns a different structure
         } catch (error) {
             console.error("Error fetching search results:", error);
         } finally {
@@ -241,6 +242,7 @@ const Home = () => {
     useEffect(() => {
         debouncedFetchSearchResults(searchQuery);
     }, [searchQuery]);
+
 
     return (
         <>
@@ -329,21 +331,23 @@ const Home = () => {
                                         Starred
                                     </button>
                                 </li>
+                                <li className="nav-item" role="presentation">
+                                    <button
+                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        id="day-tab-5"
+                                        data-bs-toggle="tab"
+                                        data-bs-target="#day-tab-5-pane"
+                                        type="button"
+                                        role="tab"
+                                        aria-controls="day-tab-5-pane"
+                                        aria-selected="false"
+                                    >
+                                        Search
+                                    </button>
+                                </li>
                             </ul>
                         </div>
-                        <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
-                            <div className=" mb-3 position-relative">
-                                <input
-                                    type="search"
-                                    className="form-control bg-F4F4F4 border rounded"
-                                    placeholder="Search..."
-                                    aria-label="Search"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                                {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -684,6 +688,131 @@ const Home = () => {
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
                                     {starredmessage?.data?.map((val) => {
+
+                                        return (
+                                            <>
+                                                <div className="col-12 mb-4">
+                                                    <Link to={`/reply/${val?.msg_id}/${val?.sended_msg_id}`} className="text-decoration-none">
+                                                        <div className="msg-card card shadow-sm rounded-4 bg-F1F3FA">
+                                                            <div className="card-body">
+                                                                <div className="d-flex justify-content-between mb-2">
+                                                                    <h6 className="mb-1">
+                                                                        {" "}
+                                                                        <span
+                                                                            style={{ backgroundColor: val?.student?.color }}
+                                                                            className="text-white rounded-1 px-1 fw-semibold me-2 mb-2"
+                                                                        >
+                                                                            {val?.student?.student_number}
+                                                                        </span>
+
+                                                                        <span style={{ color: val?.student?.color || "#000000" }} className="fs-18 fw-semibold">
+                                                                            {val?.student?.student_name}
+                                                                        </span>
+                                                                    </h6>
+                                                                    <div className="date">
+                                                                        <p className="text-5F5F5F mb-1">
+                                                                            <i className="fa-regular fa-calendar text-FF79AE me-1"></i>
+                                                                            {format(new Date(val?.sended_date), "dd-MMM-yyyy")}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="">
+                                                                    <h6 className="text-010A48 fs-18 mb-1 lh-1 text-wrap">
+                                                                        {val?.msg_mst?.subject_text}
+                                                                    </h6>
+                                                                </div>
+                                                                <div className="show d-flex justify-content-between align-items-end">
+                                                                    <p className="text-5F5F5F mb-0">
+                                                                        Show Upto:  {val?.msg_mst?.show_upto ? format(new Date(val?.msg_mst?.show_upto), "dd-MMM-yyyy hh:mm a") : "N/A"}
+                                                                    </p>
+                                                                    <div className="d-flex align-items-center">
+
+                                                                        {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+                                                                        {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
+                                                                            <Link
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                className="me-2"
+                                                                            >
+                                                                                <img
+                                                                                    src="Images/chat-icon.png"
+                                                                                    alt="Chat Icon"
+                                                                                    className=""
+                                                                                />
+                                                                            </Link>
+                                                                        ) : null}
+
+                                                                        {[4, 5].includes(val?.msg_mst?.msg_priority) ? (
+                                                                            <Link className="star disabled">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 || val?.is_starred === 0
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-solid text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        ) : (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1 ? "fa-solid text-warning" : "fa-regular text-FFC068"}`}
+                                                                                    onClick={() => toggleStarStatus(val?.sended_msg_id, val?.is_starred)}
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )}
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+
+                            <div
+                                className="tab-pane fade"
+                                id="day-tab-5-pane"
+                                role="tabpane5"
+                                aria-labelledby="day-tab-5"
+                                tabIndex="0"
+                            >
+                                <h6 className="text-010A48 fw-semibold m-0">
+                                    Session 2024-2025
+                                </h6>
+                                <p className="text-5F5F5F mb-2">Intimation -</p>
+
+                                <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
+                                    <div className=" mb-3 position-relative">
+                                        <input
+                                            type="search"
+                                            className="form-control bg-F4F4F4 border rounded"
+                                            placeholder="Search..."
+                                            aria-label="Search"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                        />
+                                        {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    {results?.data?.map((val) => {
 
                                         return (
                                             <>
