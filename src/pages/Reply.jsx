@@ -13,6 +13,12 @@ const Reply = () => {
     const [replyBodies, setReplyBodies] = useState([]);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
+    const [filePreview, setFilePreview] = useState(null); // Store the file preview URL
+    const [uploadedFile, setUploadedFile] = useState(null); // Store the uploaded file link
+
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imageURL, setImageURL] = useState(null);
+
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -199,12 +205,22 @@ const Reply = () => {
 
         // Handling CAMERA type (file input for image capture)
         if (msg_type?.startsWith("CAMERA")) {
+
+
             const handleCameraChange = async (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     try {
+                        // Set the preview of the image immediately
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            setImagePreview(reader.result);
+                        };
+                        reader.readAsDataURL(file);
+
+                        // Prepare the form data for the image upload
                         const formData = new FormData();
-                        formData.append("file", file); // The key "image" should match the API's expected field name
+                        formData.append("file", file);
 
                         const response = await axios.post(
                             "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
@@ -216,8 +232,12 @@ const Reply = () => {
                             }
                         );
 
-                        const imageLink = response?.data?.url; // Assuming API returns the link in `data.url`
+                        const imageLink = response?.data?.url;
                         console.log(imageLink);
+
+                        // Save the uploaded image link to state
+                        setImageURL(imageLink);
+
                         handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: imageLink }));
                     } catch (error) {
                         console.error("Error uploading file:", error);
@@ -226,9 +246,18 @@ const Reply = () => {
                 }
             };
 
+            const handleRemoveImage = () => {
+                setImagePreview(null);
+                setImageURL(null);
+                handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: null }));
+            };
+
             return (
                 <div className="mt-3">
-                    <label className="fw-bolder">{data_text.title || "Camera Input"}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">
+                        {data_text.title || "Camera Input"}
+                        {is_reply_required == 1 ? <span className="text-danger">*</span> : ''}
+                    </label>
                     <div className="form-control p-3">
                         <div className="row">
                             <div className="col"></div>
@@ -242,17 +271,30 @@ const Reply = () => {
                                         onChange={handleCameraChange}
                                     />
                                     <span className="text-white">
-                                        <i class="fa-solid fa-camera me-2"></i>
+                                        <i className="fa-solid fa-camera me-2"></i>
                                         Add Image
                                     </span>
                                 </button>
-                                <br />
-                                <button className="btn bg-FF0000 position-relative rounded-3">
-                                    <span className="text-white">
-                                        <i class="fa-solid fa-trash me-2"></i>
-                                        Remove Image
-                                    </span>
-                                </button>
+
+                                {/* Preview the image if available */}
+                                {imagePreview && (
+                                    <div className="mt-3">
+                                        <img src={imagePreview} alt="Preview" style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                                    </div>
+                                )}
+
+                                {/* Remove Image Button */}
+                                {imagePreview && (
+                                    <button
+                                        className="btn bg-FF0000 position-relative rounded-3 mt-2"
+                                        onClick={handleRemoveImage}
+                                    >
+                                        <span className="text-white">
+                                            <i className="fa-solid fa-trash me-2"></i>
+                                            Remove Image
+                                        </span>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -263,12 +305,31 @@ const Reply = () => {
 
         // Handling FILE type (file upload)
         if (msg_type?.startsWith("FILE")) {
+            const getFileIcon = (fileName) => {
+                const extension = fileName.split('.').pop().toLowerCase();
+                switch (extension) {
+                    case 'pdf':
+                        return 'fa-file-pdf'; // PDF icon
+                    case 'doc':
+                    case 'docx':
+                        return 'fa-file-word'; // Word icon
+                    case 'xls':
+                    case 'xlsx':
+                        return 'fa-file-excel'; // Excel icon
+                    default:
+                        return 'fa-file'; // Default file icon for unknown file types
+                }
+            };
+
             const handleFileChange = async (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     try {
+                        // Set the file preview URL (or icon based on the file type)
+                        setFilePreview(URL.createObjectURL(file));
+
                         const formData = new FormData();
-                        formData.append("file", file); // The key "image" should match the API's expected field name
+                        formData.append("file", file); // The key "file" should match the API's expected field name
 
                         const response = await axios.post(
                             "http://206.189.130.102:3550/api/v1/admin/pdfUpload_Use/pdfUpload",
@@ -282,6 +343,7 @@ const Reply = () => {
 
                         const fileLink = response?.data?.url; // Assuming API returns the link in `data.url`
                         console.log(fileLink);
+                        setUploadedFile(fileLink); // Store the uploaded file URL
                         handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: fileLink }));
                     } catch (error) {
                         console.error("Error uploading file:", error);
@@ -290,12 +352,28 @@ const Reply = () => {
                 }
             };
 
+            const handleRemoveFile = () => {
+                setFilePreview(null); // Remove the file preview
+                setUploadedFile(null); // Reset the uploaded file link
+            };
+
             return (
                 <div className="mt-3">
-                    <label className="fw-bolder">Upload File{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">Upload File{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <div className="form-control p-3">
                         <div className="row">
-                            <div className="col-6"></div>
+                            <div className="col-6">
+                                {/* File preview: Show an icon or text based on file type */}
+                                {filePreview && (
+                                    <div className="file-preview text-center">
+                                        {filePreview && !filePreview.startsWith("data:image") ? (
+                                            <i className={`fa ${getFileIcon(filePreview)} fa-5x`}></i> // Document icon
+                                        ) : (
+                                            <img src={filePreview} alt="File preview" className="img-fluid" /> // Image preview
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                             <div className="col-6 text-end">
                                 <button className="btn bg-FF0000 position-relative rounded-3 mb-2">
                                     <input
@@ -304,17 +382,22 @@ const Reply = () => {
                                         onChange={handleFileChange}
                                     />
                                     <span className="text-white">
-                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        <i className="fa-solid fa-paperclip me-2"></i>
                                         Add File
                                     </span>
                                 </button>
                                 <br />
-                                <button className="btn bg-FF0000 position-relative rounded-3">
-                                    <span className="text-white">
-                                        <i class="fa-solid fa-trash me-2"></i>
-                                        Remove Image
-                                    </span>
-                                </button>
+                                {uploadedFile && (
+                                    <button
+                                        className="btn bg-FF0000 position-relative rounded-3 mt-2"
+                                        onClick={handleRemoveFile}
+                                    >
+                                        <span className="text-white">
+                                            <i className="fa-solid fa-trash me-2"></i>
+                                            Remove Image
+                                        </span>
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -421,6 +504,8 @@ const Reply = () => {
         }
     };
 
+
+    console.log(replyBodies)
     return (
         <>
             <Header />
@@ -431,7 +516,7 @@ const Reply = () => {
                             {detail?.data?.msg_detail?.subject_text}
                         </h6>
                         <h6 className="text-secondary fw-normal mb-0">
-                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy  hh:mm")}
+                            Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy  hh:mm a")}
                         </h6>
                     </div>
                 </div>
@@ -474,5 +559,6 @@ const Reply = () => {
         </>
     );
 };
+
 
 export default Reply;
