@@ -362,10 +362,6 @@ const Home = () => {
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
                                     {message?.data?.map((val) => {
-                                        const showUpto = val?.msg_mst?.show_upto;
-                                        const formattedDate = showUpto
-                                            ? format(new Date(showUpto), "dd-MMM-yyyy hh:mm")
-                                            : "N/A";
                                         return (
                                             <div className="col-12 mb-4" key={val?.msg_id}>
                                                 <Link
@@ -407,13 +403,14 @@ const Home = () => {
                                                             </div>
                                                             <div className="show d-flex justify-content-between align-items-end">
                                                                 <p className="text-5F5F5F mb-0">
-                                                                    Show Upto: {formattedDate}
+                                                                    Show Upto:  {val?.msg_mst?.show_upto ? format(new Date(val?.msg_mst?.show_upto), "dd-MMM-yyyy hh:mm a") : "N/A"}
                                                                 </p>
                                                                 <div className="d-flex align-items-center">
                                                                     {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                         <Link
                                                                             to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
+                                                                            state={{ title: val?.msg_mst?.subject_text }}
                                                                         >
                                                                             <img
                                                                                 src="Images/chat-icon.png"
@@ -426,6 +423,7 @@ const Home = () => {
                                                                         <Link
                                                                             to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
+                                                                            state={{ title: val?.msg_mst?.subject_text }}
                                                                         >
                                                                             <img
                                                                                 src="Images/chat-icon.png"
@@ -479,10 +477,7 @@ const Home = () => {
                                     ) : (
                                         <div className="">
                                             {lastdaymessage?.data?.map((val) => {
-                                                const showUpto = val?.msg_mst?.show_upto;
-                                                const formattedDate = showUpto
-                                                    ? format(new Date(showUpto), "dd-MMM-yyyy")
-                                                    : "N/A";
+
                                                 return (
                                                     <div className="col-12 mb-4" key={val?.msg_id}>
                                                         <Link
@@ -524,7 +519,7 @@ const Home = () => {
                                                                     </div>
                                                                     <div className="show d-flex justify-content-between align-items-end">
                                                                         <p className="text-5F5F5F mb-0">
-                                                                            Show Upto: {formattedDate}
+                                                                            Show Upto:  {val?.msg_mst?.show_upto ? format(new Date(val?.msg_mst?.show_upto), "dd-MMM-yyyy hh:mm a") : "N/A"}
                                                                         </p>
                                                                         <div className="d-flex align-items-center">
                                                                             {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
@@ -594,8 +589,7 @@ const Home = () => {
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
                                     {seenmessage?.data?.map((val) => {
-                                        const showUpto = val?.msg_mst?.show_upto;
-                                        const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
+
                                         return (
                                             <>
                                                 <div className="col-12 mb-4">
@@ -630,7 +624,7 @@ const Home = () => {
                                                                 </div>
                                                                 <div className="show d-flex justify-content-between align-items-end">
                                                                     <p className="text-5F5F5F mb-0">
-                                                                        Show Upto:  {formattedDate}
+                                                                        Show Upto:  {val?.msg_mst?.show_upto ? format(new Date(val?.msg_mst?.show_upto), "dd-MMM-yyyy hh:mm a") : "N/A"}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
                                                                         {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
@@ -690,8 +684,7 @@ const Home = () => {
                                 <p className="text-5F5F5F mb-2">Intimation -</p>
                                 <div className="row">
                                     {starredmessage?.data?.map((val) => {
-                                        const showUpto = val?.msg_mst?.show_upto;
-                                        const formattedDate = showUpto ? format(new Date(showUpto), "dd-MMM-yyyy") : "N/A";
+
                                         return (
                                             <>
                                                 <div className="col-12 mb-4">
@@ -726,7 +719,7 @@ const Home = () => {
                                                                 </div>
                                                                 <div className="show d-flex justify-content-between align-items-end">
                                                                     <p className="text-5F5F5F mb-0">
-                                                                        Show Upto:  {formattedDate}
+                                                                        Show Upto:  {val?.msg_mst?.show_upto ? format(new Date(val?.msg_mst?.show_upto), "dd-MMM-yyyy hh:mm a") : "N/A"}
                                                                     </p>
                                                                     <div className="d-flex align-items-center">
 
