@@ -28,6 +28,7 @@ const Home = () => {
                 item.id === id ? { ...item, is_starred: newStatus } : item
             );
             fetchMessage();
+            fetchSeenMessage();
             fetchStarredMessage();
         } catch (error) {
             console.error("Error updating star status:", error);
@@ -152,9 +153,9 @@ const Home = () => {
     useEffect(() => {
         fetchData(); // eslint-disable-next-line react-hooks/exhaustive-deps
         fetchMessage(); // eslint-disable-next-line react-hooks/exhaustive-deps
-        fetchlastDayMessage();
-        fetchSeenMessage();
-        fetchStarredMessage();
+        fetchlastDayMessage();// eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchSeenMessage();// eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchStarredMessage();// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Debounce function to limit API calls
@@ -192,7 +193,7 @@ const Home = () => {
 
     // Trigger API call when searchQuery changes
     useEffect(() => {
-        debouncedFetchSearchResults(searchQuery);
+        debouncedFetchSearchResults(searchQuery);// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchQuery]);
 
 
@@ -285,7 +286,7 @@ const Home = () => {
                                 </li>
                                 <li className="nav-item" role="presentation">
                                     <button
-                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto"
+                                        className="nav-link me-3 rounded-2 text-010A48 home-tab-btn mb-lg-0 mb-2 me-lg-0 me-auto d-flex align-items-center justify-content-center gap-2 px-3 py-2 border-0 bg-gray shadow-sm"
                                         id="day-tab-5"
                                         data-bs-toggle="tab"
                                         data-bs-target="#day-tab-5-pane"
@@ -294,8 +295,10 @@ const Home = () => {
                                         aria-controls="day-tab-5-pane"
                                         aria-selected="false"
                                     >
-                                        Search
+                                        <span>Search</span>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                     </button>
+
                                 </li>
                             </ul>
                         </div>
@@ -758,17 +761,21 @@ const Home = () => {
                                         <p className="text-5F5F5F mb-2">Intimation -</p>
                                     </div>
                                     <div className="col-12 col-lg-6 col-md-6 mt-2 mt-xl-0">
-                                        <div className=" mb-3 position-relative">
+                                        <div className="mb-3 position-relative">
                                             <input
                                                 type="search"
-                                                className="form-control bg-F4F4F4 border rounded"
+                                                className="form-control bg-F4F4F4 border rounded pe-5"
                                                 placeholder="Search..."
                                                 aria-label="Search"
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
                                             />
-                                            {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
+                                            <i
+                                                className="fa-solid fa-magnifying-glass text-797979 position-absolute"
+                                                style={{ top: "50%", right: "15px", transform: "translateY(-50%)" }}
+                                            ></i>
                                         </div>
+
                                     </div>
                                 </div>
                                 <div className="row">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
 import callAPI from "../Common_Method/api";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { format } from "date-fns";
 import axios from "axios";
 
@@ -43,7 +43,7 @@ const Reply = () => {
     };
 
     useEffect(() => {
-        fetchData();
+        fetchData();// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [msg_id, sended_msg_id]);
 
 
@@ -105,7 +105,7 @@ const Reply = () => {
 
             return (
                 <div>
-                    <label className="fw-bolder">{data_text.title} {is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <div className="form-control">
                         {data_text.options.map((option, idx) => (
                             <div key={idx} className="form-check">
@@ -140,7 +140,7 @@ const Reply = () => {
 
             return (
                 <div>
-                    <label className="fw-bolder">{data_text.title}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     {data_text.options.map((option, idx) => {
                         const isChecked = parsedText.selected?.[idx] || false;
                         return (
@@ -171,7 +171,7 @@ const Reply = () => {
 
             return (
                 <div>
-                    <label className="fw-bolder">{data_text.title}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <input
                         type="text"
                         className="form-control"
@@ -194,7 +194,7 @@ const Reply = () => {
 
             return (
                 <div>
-                    <label className="fw-bolder">{data_text.title}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <textarea
                         className="form-control"
                         value={parsedText.text || ""}
@@ -257,7 +257,7 @@ const Reply = () => {
                 <div className="mt-3">
                     <label className="fw-bolder">
                         {data_text.title || "Camera Input"}
-                        {is_reply_required == 1 ? <span className="text-danger">*</span> : ''}
+                        {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}
                     </label>
                     <div className="form-control p-3">
                         <div className="row">
@@ -395,7 +395,7 @@ const Reply = () => {
                                     >
                                         <span className="text-white">
                                             <i className="fa-solid fa-trash me-2"></i>
-                                            Remove Image
+                                            Remove File
                                         </span>
                                     </button>
                                 )}
@@ -421,14 +421,18 @@ const Reply = () => {
                 }
                 const embedUrl = `https://www.youtube.com/embed/${videoId}`;
                 return (
-                    <iframe
-                        src={embedUrl}
-                        title="YouTube Video"
-                        width="100%"
-                        height="300"
-                        style={{ border: "none" }}
-                        allowFullScreen
-                    ></iframe>
+                    <>
+                        {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
+                        <iframe
+                            src={embedUrl}
+                            title="YouTube Video"
+                            width="100%"
+                            height="300"
+                            style={{ border: "none" }}
+                            allowFullScreen
+                        ></iframe>
+                    </>
+
                 );
             } catch (error) {
                 // If the link is not a valid URL
@@ -439,11 +443,15 @@ const Reply = () => {
 
         if (msg_type?.startsWith("IMAGE")) {
             return (
-                <img
-                    src={data_text.link}
-                    alt="Message Content"
-                    className="img-fluid rounded-3 w-100"
-                />
+                <>
+                    {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
+                    <img
+                        src={data_text.link}
+                        alt="Message Content"
+                        className="img-fluid rounded-3 w-100"
+                    />
+                </>
+
             );
         }
 
@@ -453,7 +461,7 @@ const Reply = () => {
                 {data_text?.text && <p dangerouslySetInnerHTML={{ __html: data_text.text }}></p>}
                 {data_text?.link && (
                     <div className="">
-                        <label className="fw-bolder">Link Title</label>
+
                         <a
                             href={data_text.link}
                             target="_blank"
@@ -506,7 +514,7 @@ const Reply = () => {
     };
 
 
-
+console.log(imageURL)
     return (
         <>
             <Header />

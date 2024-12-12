@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
 import sendMsgBtn from "../sendMsg-btn.png";
 import { useParams, useLocation } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
@@ -13,8 +12,9 @@ const Individualchat = () => {
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
     const [fivemember, setFivemember] = useState([]);
+    const [fivenumber, setFivenumber] = useState([]);
     const [message, setMessage] = useState("");
-    const [receiverMobileNumbers, setreceiverMobileNumbers] = useState("");
+
     const [isScrolling, setIsScrolling] = useState(false);
     const [imageFile, setImageFile] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
@@ -24,7 +24,8 @@ const Individualchat = () => {
     const [selectedPdfs, setSelectedPdfs] = useState([]);
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
-
+    
+    console.log(loading, imageFile, pdfFile)
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -37,6 +38,7 @@ const Individualchat = () => {
             if (response.data) {
                 setDetail(response.data.messages);
                 setFivemember(response?.data?.messages[0]?.messageDetails?.five_mobile_number);
+                setFivenumber(response?.data?.five_numbers_Details);
             } else {
                 console.warn("No data received from API.");
                 setDetail([]);
@@ -114,12 +116,13 @@ const Individualchat = () => {
                 fetchData();
             }
         }, 2000);
-        return () => clearInterval(interval);
+        return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isScrolling]);
+
     useEffect(() => {
         if (!isScrolling && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        }
+        }// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [detail]);
 
     const handleKeyPress = (e) => {
@@ -187,7 +190,9 @@ const Individualchat = () => {
             <div className="container-fluid p-0 chat-page">
                 <div className="container">
                     <div className="row my-0 my-md-4">
+
                         {/* Chatbox */}
+
                         <div className="col-xl-9 col-lg-8 col-md-12 col-12 px-0 px-md-0 px-xl-auto">
                             <div className="card bg-FAFAFA mb-lg-0 h-87vh position-relative border-0">
                                 <div className="chatbox pt-0 h-100">
@@ -197,7 +202,7 @@ const Individualchat = () => {
                                     >
                                         <div className="chatbox-header py-2 px-0 d-flex justify-content-between">
                                             <div className="w-100">
-                                                <p className="mb-0 fw-semibold text-010A48 chat-head border-bottom w-100">
+                                                <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
                                                     {user?.scholar_no} - {user?.student_name}
                                                 </p>
                                                 {title ? <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
@@ -225,12 +230,12 @@ const Individualchat = () => {
                                                             >
                                                                 <p className="mb-0 text-010A48 fw-semibold">
                                                                     <i className="fa-solid fa-circle me-2 text-4CD964"></i>
-                                                                    Available Teacher
+                                                                    Available Teachers
                                                                 </p>
                                                             </div>
                                                             <div className="card-body p-1 pb-2">
                                                                 {/* Dynamic Teacher List */}
-                                                                {fivemember?.map((teacher) => (
+                                                                {fivenumber?.map((teacher) => (
                                                                     <p
                                                                         key={teacher.student_main_id}
                                                                         className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -240,8 +245,7 @@ const Individualchat = () => {
                                                                             alt=""
                                                                             className="me-2"
                                                                         />
-                                                                        {teacher.student_number} -{" "}
-                                                                        {teacher.student_name}
+                                                                        {teacher.student_number} - {teacher.student_name}
                                                                     </p>
                                                                 ))}
                                                             </div>
@@ -251,6 +255,9 @@ const Individualchat = () => {
                                             </div>
                                         </div>
                                     </div>
+
+
+
                                     <div
                                         className="card-body py-1 chatbox-messages"
                                         ref={chatBoxRef}
@@ -322,7 +329,11 @@ const Individualchat = () => {
                                                 </div>
                                             );
                                         })}
+
                                     </div>
+
+
+
                                     {/* Chatbox Input */}
                                     <div className="selected-files">
                                         {selectedImages.map((image, index) => (
@@ -386,6 +397,9 @@ const Individualchat = () => {
                                 </div>
                             </div>
                         </div>
+
+
+
                         {/* Available Teachers */}
                         <div className="col-xl-3 col-lg-4 col-md-4 col-12 d-none d-lg-block">
                             <div
@@ -403,7 +417,7 @@ const Individualchat = () => {
                                 </div>
                                 <div className="card-body">
                                     {/* Dynamic Teacher List */}
-                                    {fivemember?.map((teacher) => (
+                                    {fivenumber?.map((teacher) => (
                                         <p
                                             key={teacher.student_main_id}
                                             className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -419,6 +433,8 @@ const Individualchat = () => {
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>

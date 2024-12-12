@@ -15,8 +15,6 @@ const Chat = () => {
     const [fivemember, setFivemember] = useState([]);
     const [message, setMessage] = useState("");
     const [isScrolling, setIsScrolling] = useState(false);
-    const [imageFile, setImageFile] = useState(null);
-    const [pdfFile, setPdfFile] = useState(null);
     const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
     const [uploadedPdfUrl, setUploadedPdfUrl] = useState(null);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -180,6 +178,7 @@ const Chat = () => {
                 <div className="container">
                     <div className="row my-0 my-md-4">
                         {/* Chatbox */}
+
                         <div className="col-xl-9 col-lg-8 col-md-12 col-12 px-0 px-md-0 px-xl-auto">
                             <div className="card bg-FAFAFA mb-lg-0 h-87vh position-relative border-0">
                                 <div className="chatbox pt-0 h-100">
@@ -189,7 +188,7 @@ const Chat = () => {
                                     >
                                         <div className="chatbox-header py-2 px-0 d-flex justify-content-between">
                                             <div className="w-100">
-                                                <p className="mb-0 fw-semibold text-010A48 chat-head border-bottom w-100">
+                                                <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
                                                     {user?.scholar_no} - {user?.student_name}
                                                 </p>
                                                 {title ? <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
@@ -242,6 +241,9 @@ const Chat = () => {
                                             </div>
                                         </div>
                                     </div>
+
+
+
                                     <div
                                         className="card-body py-1 chatbox-messages"
                                         ref={chatBoxRef}
@@ -308,6 +310,8 @@ const Chat = () => {
                                             );
                                         })}
                                     </div>
+
+
                                     {/* Chatbox Input */}
                                     <div className="selected-files">
                                         {selectedImages.map((image, index) => (
@@ -332,6 +336,8 @@ const Chat = () => {
                                             </div>
                                         ))}
                                     </div>
+
+
                                     <div className="chatbox-input border rounded-bottom-3 d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                         <input
                                             type="text"
@@ -372,6 +378,8 @@ const Chat = () => {
                                 </div>
                             </div>
                         </div>
+
+
                         {/* Available Teachers */}
                         <div className="col-xl-3 col-lg-4 col-md-4 col-12 d-none d-lg-block">
                             <div
@@ -405,6 +413,8 @@ const Chat = () => {
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
             </div>

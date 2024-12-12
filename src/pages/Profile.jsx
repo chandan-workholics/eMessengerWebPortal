@@ -167,7 +167,7 @@ const Profile = () => {
                                                                             <table className="table table-borderless mb-0">
                                                                                 <tr>
                                                                                     <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>Outstanding Fees</h6></td>
-                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {!val?.outstandingfees==0?val?.outstandingfees:"Paid"}</h6></td>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {!val?.outstandingfees===0?val?.outstandingfees:"Paid"}</h6></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
@@ -206,7 +206,7 @@ const Profile = () => {
                                         {profile?.data?.map((val, index) => (
                                             <div
                                                 key={index}
-                                                className={`card border-0 rounded-3 shadow-sm mb-3 py-1 px-2 ${val?.tab_active_status == 1 ? "active" : ""
+                                                className={`card border-0 rounded-3 shadow-sm mb-3 py-1 px-2 ${val?.tab_active_status === 1 ? "active" : ""
                                                     }`}
                                                 style={{ cursor: "pointer" }}
                                                 onClick={() =>

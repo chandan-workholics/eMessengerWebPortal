@@ -56,7 +56,7 @@ const Header = () => {
               <ul class="dropdown-menu header-dropdown">
                 <li>
                   <Link className="dropdown-item text-525252 text-decoration-none" to="">
-                    Welcome {user?.student_name ? user?.student_name : ''} !
+                  Welcome User !
                   </Link>
                 </li>
                 <hr className="m-0" />
