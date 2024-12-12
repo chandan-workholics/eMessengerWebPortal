@@ -24,7 +24,7 @@ const Individualchat = () => {
     const [selectedPdfs, setSelectedPdfs] = useState([]);
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
-    
+
     console.log(loading, imageFile, pdfFile)
     const fetchData = async () => {
         try {
@@ -300,14 +300,14 @@ const Individualchat = () => {
                                                         >
                                                             {chat?.message}
                                                             {chat?.link &&
-                                                                (chat.link.includes(".pdf") ? (
+                                                                (chat.link.includes(".pdf") || chat.link.includes(".xlsx") || chat.link.includes(".xlsx")|| chat.link.includes(".doc")|| chat.link.includes(".xls")|| chat.link.includes(".docx")? (
                                                                     <a
                                                                         href={chat.link}
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
                                                                     >
                                                                         <button className="btn btn-primary">
-                                                                            View PDF
+                                                                            View Doc
                                                                         </button>
                                                                     </a>
                                                                 ) : (
@@ -321,6 +321,7 @@ const Individualchat = () => {
                                                                         className="me-2"
                                                                     />
                                                                 ))}
+
                                                         </p>
                                                         <p className="text-0D082C px-2 mb-0 info">
                                                             {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}
