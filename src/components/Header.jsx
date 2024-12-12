@@ -11,7 +11,7 @@ const Header = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
 
   useEffect(() => {
-    fetchData();
+    fetchData();// eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchData = async () => {

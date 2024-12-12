@@ -790,3 +790,19 @@ a:hover {
     background-color: #eaf4fc;
     /* Example active background */
 }
+
+.play-button {
+    font-size: 1.5rem;
+  
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    width: 40px;
+   
+    height: 40px;
+   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
