@@ -530,6 +530,7 @@ const Home = () => {
                                                                                 <Link
                                                                                     to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                     className="me-2"
+                                                                                    state={{ title: val?.msg_mst?.subject_text }}
                                                                                 >
                                                                                     <img
                                                                                         src="Images/chat-icon.png"
@@ -542,6 +543,7 @@ const Home = () => {
                                                                                 <Link
                                                                                     to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                     className="me-2"
+                                                                                    state={{ title: val?.msg_mst?.subject_text }}
                                                                                 >
                                                                                     <img
                                                                                         src="Images/chat-icon.png"
@@ -635,6 +637,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -647,6 +650,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -731,6 +735,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -743,6 +748,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -856,6 +862,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -868,6 +875,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
+                                                                                state={{ title: val?.msg_mst?.subject_text }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
