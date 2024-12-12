@@ -565,7 +565,15 @@
     }
 
     input[type="file"] {
-        display: none;
+        color: transparent;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
     }
 
     @media only screen and (max-width:767px) {

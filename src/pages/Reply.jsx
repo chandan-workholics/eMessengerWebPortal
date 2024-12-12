@@ -229,17 +229,30 @@ const Reply = () => {
             return (
                 <div className="mt-3">
                     <label className="fw-bolder">{data_text.title || "Camera Input"}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
-                    <div className="form-control">
+                    <div className="form-control p-3">
                         <div className="row">
-                            <div className="col-6"></div>
-                            <div className="col-6">
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    capture="camera"
-                                    className=""
-                                    onChange={handleCameraChange}
-                                />
+                            <div className="col"></div>
+                            <div className="col text-end">
+                                <button className="btn bg-FF0000 position-relative rounded-3 mb-2">
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        capture="camera"
+                                        className="form-control"
+                                        onChange={handleCameraChange}
+                                    />
+                                    <span className="text-white">
+                                        <i class="fa-solid fa-camera me-2"></i>
+                                        Add Image
+                                    </span>
+                                </button>
+                                <br />
+                                <button className="btn bg-FF0000 position-relative rounded-3">
+                                    <span className="text-white">
+                                        <i class="fa-solid fa-trash me-2"></i>
+                                        Remove Image
+                                    </span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -280,11 +293,31 @@ const Reply = () => {
             return (
                 <div className="mt-3">
                     <label className="fw-bolder">Upload File{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        onChange={handleFileChange}
-                    />
+                    <div className="form-control p-3">
+                        <div className="row">
+                            <div className="col-6"></div>
+                            <div className="col-6 text-end">
+                                <button className="btn bg-FF0000 position-relative rounded-3 mb-2">
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        onChange={handleFileChange}
+                                    />
+                                    <span className="text-white">
+                                        <i class="fa-solid fa-paperclip me-2"></i>
+                                        Add File
+                                    </span>
+                                </button>
+                                <br />
+                                <button className="btn bg-FF0000 position-relative rounded-3">
+                                    <span className="text-white">
+                                        <i class="fa-solid fa-trash me-2"></i>
+                                        Remove Image
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }
