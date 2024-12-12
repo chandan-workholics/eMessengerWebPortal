@@ -196,10 +196,15 @@ const Individualchat = () => {
                                         className="card-header bg-FAFAFA py-0"
                                         style={{ borderColor: "#EDEDED" }}
                                     >
-                                        <div className="chatbox-header py-2 px-1 d-flex justify-content-between">
-                                            <p className="mb-0 fw-semibold text-010A48 chat-head">
-                                                {user?.scholar_no} - {user?.student_name}
-                                            </p>
+                                        <div className="chatbox-header py-2 px-0 d-flex justify-content-between">
+                                            <div className="w-100">
+                                                <p className="mb-0 fw-semibold text-010A48 chat-head border-bottom w-100">
+                                                    {user?.scholar_no} - {user?.student_name}
+                                                </p>
+                                                {title ? <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
+                                                    {title}
+                                                </p> : ''}
+                                            </div>
                                             <div className="dropdown d-block d-lg-none">
                                                 <button
                                                     className="dropdown-toggle border-0 bg-transparent"
@@ -253,9 +258,6 @@ const Individualchat = () => {
                                         onScroll={handleScroll}
                                         style={{ overflowY: "scroll", height: "70vh" }}
                                     >
-                                        {title ? <p className="text-010A48 fw-semibold mb-0 teach">
-                                            {title}
-                                        </p> : ''}
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
