@@ -458,7 +458,8 @@ const Reply = () => {
 
                                 {detail?.data?.msg_detail?.is_reply_required_any === 1 ?
                                     <button
-                                        className='btn border-0 bg-FF0000 text-white rounded-5'
+                                        className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? 'bg-secondary' : 'bg-FF0000'
+                                            }`}
                                         onClick={handleReply}
                                         disabled={detail?.data?.is_reply_done === 1}
 
