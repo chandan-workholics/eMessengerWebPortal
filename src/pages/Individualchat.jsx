@@ -293,7 +293,6 @@ const Individualchat = () => {
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
                                                             {chat?.message}
-                                                            {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}
                                                             {chat?.link &&
                                                                 (chat.link.includes(".pdf") ? (
                                                                     <a
@@ -316,6 +315,9 @@ const Individualchat = () => {
                                                                         className="me-2"
                                                                     />
                                                                 ))}
+                                                        </p>
+                                                        <p className="text-0D082C px-2 mb-0 info">
+                                                            {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}
                                                         </p>
                                                     </div>
                                                 </div>
