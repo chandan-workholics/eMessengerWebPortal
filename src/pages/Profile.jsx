@@ -155,8 +155,8 @@ const Profile = () => {
                                                                                 <h6 className='mb-0 text-010A48 fw-normal'>{val?.session_detail}</h6>
                                                                             </div>
                                                                             <div className='Pay-btn d-flex align-items-start'>
-                                                                           { val?.outstandingfees==0?<button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Paid</button>:
-                                                                                <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>}
+                                                                                {val?.outstandingfees === 0 || val?.outstandingfees === null ? <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Paid</button> :
+                                                                                    <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>}
                                                                             </div>
                                                                         </div>
                                                                         <div className="card-body p-2 term">
@@ -168,7 +168,20 @@ const Profile = () => {
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
-                                                                                    <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>:  {format(new Date(val?.duedate), "dd-MMM-yyyy")}</h6></td>
+                                                                                    <td className='fw-normal'>
+                                                                                        <h6 className='fw-normal text-010A48 mb-0 p-0'>
+                                                                                            : {val?.duedate
+                                                                                                ? (() => {
+                                                                                                    const [day, month, year] = val.duedate.split("/");
+                                                                                                    const parsedDate = new Date(`${year}-${month}-${day}`);
+                                                                                                    return isNaN(parsedDate) ? "Invalid Date" : format(parsedDate, "dd-MMM-yyyy");
+                                                                                                })()
+                                                                                                : "N/A"}
+                                                                                        </h6>
+
+
+                                                                                    </td>
+
                                                                                 </tr>
                                                                             </table>
                                                                         </div>

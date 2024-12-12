@@ -2,11 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
 import { Link } from "react-router-dom";
 import sendMsgBtn from "../sendMsg-btn.png";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import callAPI, { interceptor } from "../Common_Method/api";
+import { format } from "date-fns";
 
 const Individualchat = () => {
     const { msg_id, sender_id } = useParams();
+    const location = useLocation();
+    const { title } = location.state
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
     const [fivemember, setFivemember] = useState([]);
@@ -33,9 +36,7 @@ const Individualchat = () => {
 
             if (response.data) {
                 setDetail(response.data.messages);
-                setFivemember(
-                    response?.data?.messages[0]?.messageDetails?.five_mobile_number
-                );
+                setFivemember(response?.data?.five_numbers_Details);
             } else {
                 console.warn("No data received from API.");
                 setDetail([]);
@@ -252,10 +253,9 @@ const Individualchat = () => {
                                         onScroll={handleScroll}
                                         style={{ overflowY: "scroll", height: "70vh" }}
                                     >
-                                        <p className="text-010A48 fw-semibold mb-0 teach">
-                                            Information regarding group chat duration for biology
-                                            subject
-                                        </p>
+                                        {title ? <p className="text-010A48 fw-semibold mb-0 teach">
+                                            {title}
+                                        </p> : ''}
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
@@ -290,7 +290,8 @@ const Individualchat = () => {
                                                                 : "bg-F3F0FF text-0D082C"
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
-                                                            {chat.message}
+                                                            {chat?.message}
+                                                            {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}
                                                             {chat?.link &&
                                                                 (chat.link.includes(".pdf") ? (
                                                                     <a
