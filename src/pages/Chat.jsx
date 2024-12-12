@@ -191,6 +191,9 @@ const Chat = () => {
                                             <p className="mb-0 fw-semibold text-010A48 chat-head">
                                                 {user?.scholar_no} - {user?.student_name}
                                             </p>
+                                            {title ? <p className="text-010A48 fw-semibold mb-0 teach">
+                                                {title}
+                                            </p> : ''}
 
                                             <div className="dropdown d-block d-lg-none">
                                                 <button
@@ -244,9 +247,6 @@ const Chat = () => {
                                         onScroll={handleScroll}
                                         style={{ overflowY: "scroll", height: "70vh" }}
                                     >
-                                        {title ? <p className="text-010A48 fw-semibold mb-0 teach">
-                                            {title}
-                                        </p> : ''}
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =

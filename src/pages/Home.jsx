@@ -14,54 +14,6 @@ const Home = () => {
     const [results, setResults] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const token = sessionStorage.getItem("token");
-    const users = JSON.parse(sessionStorage.getItem("user"));
-
-    const filteredMessages = message?.data?.filter((val) => {
-        const studentName = val?.student?.student_name || "";
-        const subjectText = val?.msg_mst?.subject_text || "";
-        const studentNumber = val?.mobile_no || "";
-        return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase()) ||
-            studentNumber.includes(searchQuery)
-        );
-    });
-
-    const filteredLastDayMessages = lastdaymessage?.data?.filter((val) => {
-        const studentName = val?.student?.student_name?.toLowerCase() || "";
-        const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || "";
-        return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase()) ||
-            studentNumber.includes(searchQuery)
-        );
-    });
-
-
-    const filteredSeenmessage = seenmessage?.data?.filter((val) => {
-        const studentName = val?.student?.student_name?.toLowerCase() || "";
-        const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || "";
-        return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase()) ||
-            studentNumber.includes(searchQuery)
-        );
-    });
-
-    const filteredStarredmessage = starredmessage?.data?.filter((val) => {
-        const studentName = val?.student?.student_name?.toLowerCase() || "";
-        const subjectText = val?.msg_mst?.subject_text?.toLowerCase() || "";
-        const studentNumber = val?.mobile_no || "";
-        return (
-            studentName.includes(searchQuery.toLowerCase()) ||
-            subjectText.includes(searchQuery.toLowerCase()) ||
-            studentNumber.includes(searchQuery)
-        );
-    });
-
     const user = JSON.parse(sessionStorage.getItem("user"));
 
     const toggleStarStatus = async (id, currentStatus) => {
@@ -225,7 +177,7 @@ const Home = () => {
         setIsLoading(true);
         try {
             const response = await callAPI.get(
-                `msg/getSearchDetail?mobile=${users?.mobile_no}&searchquery=${encodeURIComponent(query)}`
+                `msg/getSearchDetail?mobile=${user?.mobile_no}&searchquery=${encodeURIComponent(query)}`
             );
             setResults(response.data); // Update this if your API returns a different structure
         } catch (error) {
@@ -269,7 +221,7 @@ const Home = () => {
             <div className="container-fluid p-0 shadow-sm">
                 <div className="container pt-3">
                     <div className="row">
-                        <div className="col-xl-8 col-lg-12 mb-lg-2 pe-lg-4 pe-xl-5">
+                        <div className="col-12 col-lg-12 mb-lg-2 pe-lg-4 pe-xl-5">
                             <ul
                                 className="nav nav-tabs border-0 justify-content-between"
                                 id="myTab"
@@ -792,25 +744,27 @@ const Home = () => {
                                 aria-labelledby="day-tab-5"
                                 tabIndex="0"
                             >
-                                <h6 className="text-010A48 fw-semibold m-0">
-                                    Session 2024-2025
-                                </h6>
-                                <p className="text-5F5F5F mb-2">Intimation -</p>
-
-                                <div className="col-xl-4 col-lg-6 col-md-6 mt-2 mt-xl-0">
-                                    <div className=" mb-3 position-relative">
-                                        <input
-                                            type="search"
-                                            className="form-control bg-F4F4F4 border rounded"
-                                            placeholder="Search..."
-                                            aria-label="Search"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                        />
-                                        {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
+                                <div className="row">
+                                    <div className="col">
+                                        <h6 className="text-010A48 fw-semibold m-0">
+                                            Session 2024-2025
+                                        </h6>
+                                        <p className="text-5F5F5F mb-2">Intimation -</p>
+                                    </div>
+                                    <div className="col-12 col-lg-6 col-md-6 mt-2 mt-xl-0">
+                                        <div className=" mb-3 position-relative">
+                                            <input
+                                                type="search"
+                                                className="form-control bg-F4F4F4 border rounded"
+                                                placeholder="Search..."
+                                                aria-label="Search"
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                            />
+                                            {/* <i className="fa-solid fa-magnifying-glass text-797979 position-absolute end-0 top-0" style={{ marginTop: "11px", marginRight: '11px' }}></i> */}
+                                        </div>
                                     </div>
                                 </div>
-
                                 <div className="row">
                                     {results?.data?.map((val) => {
 
