@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
 import callAPI from "../Common_Method/api";
+import { ToastContainer, toast } from "react-toastify";
 import { format } from "date-fns";
 import axios from "axios";
 
@@ -495,17 +496,17 @@ const Reply = () => {
                 payload
             );
             if (response.data) {
-                alert("Reply sent successfully!");
+                toast.success("Reply sent successfully!");
                 fetchData();
             }
         } catch (error) {
             console.error("Error sending reply:", error.message);
-            alert("Failed to send reply.");
+            toast.error("Failed to send reply.");
         }
     };
 
 
-    console.log(replyBodies)
+
     return (
         <>
             <Header />

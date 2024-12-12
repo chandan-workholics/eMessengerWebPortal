@@ -36,7 +36,7 @@ const Individualchat = () => {
 
             if (response.data) {
                 setDetail(response.data.messages);
-                setFivemember(response?.data?.five_numbers_Details);
+                setFivemember(response?.data?.messages[0]?.messageDetails?.five_mobile_number);
             } else {
                 console.warn("No data received from API.");
                 setDetail([]);
@@ -76,7 +76,6 @@ const Individualchat = () => {
                 chat_type: "INDIVIDUALCHAT",
                 mobile_no: user?.mobile_no,
                 group_id: parseInt(msg_id),
-                receiver_id: null,
                 message: message.trim(),
                 receiverMobileNumbers: fivemember?.map((val) => ({
                     student_main_id: val.student_main_id,
