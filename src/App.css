@@ -564,6 +564,10 @@
         box-shadow: none !important;
     }
 
+    input[type="file"] {
+        display: none;
+    }
+
     @media only screen and (max-width:767px) {
         .card h6 {
             font-size: 14px;
@@ -773,6 +777,8 @@ a:hover {
 
 
 .card.active {
-    border: 2px solid #0a74da; /* Example active border */
-    background-color: #eaf4fc; /* Example active background */
+    border: 2px solid #0a74da;
+    /* Example active border */
+    background-color: #eaf4fc;
+    /* Example active background */
 }

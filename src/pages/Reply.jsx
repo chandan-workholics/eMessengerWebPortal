@@ -229,13 +229,20 @@ const Reply = () => {
             return (
                 <div className="mt-3">
                     <label className="fw-bolder">{data_text.title || "Camera Input"}{is_reply_required == 1 ? <span className="text-danger">*</span> : ''}</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        capture="camera"
-                        className="form-control"
-                        onChange={handleCameraChange}
-                    />
+                    <div className="form-control">
+                        <div className="row">
+                            <div className="col-6"></div>
+                            <div className="col-6">
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    capture="camera"
+                                    className=""
+                                    onChange={handleCameraChange}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             );
         }
