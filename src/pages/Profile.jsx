@@ -154,9 +154,12 @@ const Profile = () => {
                                                                                 <h6 className='mb-0 text-6B51E4 fw-medium'>{val?.student?.student_number} - {val?.student?.student_name}</h6>
                                                                                 <h6 className='mb-0 text-010A48 fw-normal'>{val?.session_detail}</h6>
                                                                             </div>
-                                                                            <div className='Pay-btn d-flex align-items-start'>
+                                                                            {/* <div className='Pay-btn d-flex align-items-start'>
                                                                                 {val?.outstandingfees === 0 || val?.outstandingfees === null ? <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Paid</button> :
                                                                                     <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>}
+                                                                            </div> */}
+                                                                            <div className='Pay-btn d-flex align-items-start'>
+                                                                                <button className='border-0 bg-E79C1D text-white rounded-2 px-2'>Pay Now</button>
                                                                             </div>
                                                                         </div>
                                                                         <div className="card-body p-2 term">
@@ -164,7 +167,7 @@ const Profile = () => {
                                                                             <table className="table table-borderless mb-0">
                                                                                 <tr>
                                                                                     <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>Outstanding Fees</h6></td>
-                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {val?.outstandingfees}</h6></td>
+                                                                                    <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {!val?.outstandingfees==0?val?.outstandingfees:"Paid"}</h6></td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
