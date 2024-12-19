@@ -19,7 +19,11 @@ const Support = () => {
             parent_id: user.parents_id,
             description: description,
             status: 1,
-            remark: ""
+            remark: "",
+            added_date: Date.now(),
+            added_user_id: user.parents_id,
+            edited_date: '',
+            edited_user_id: user.parents_id,
         });
 
         const requestOptions = {

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import callAPI from "../Common_Method/api";
 import { Link } from "react-router-dom";
 import { interceptor } from "../Common_Method/api";
-import eLogo from '../e-logo.png'
-import profile from '../profile.png'
+
+
 
 const Header = () => {
   const [appScrollNewsList, setAppScrollNewsList] = useState([]);
@@ -43,20 +43,20 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg bg-2B3848 p-0 navbar-page">
         <div className="container">
           <Link className="navbar-brand text-white fw-semibold text-decoration-none" to="/home">
-            <img src={eLogo} alt="eMessenger Logo" className="me-1" />
+            <img src={require("../Img/e-logo.png")} alt="eMessenger Logo" className="me-1" />
             eMessenger
           </Link>
           <ul className="d-lg-none d-block mb-0">
             <li className="nav-item dropdown-start py-2">
               <Link className="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='d-flex justify-content-center align-items-center'>
-                  <img src={profile} alt="Profile Icon" className="me-1" />
+                  <img src={require("../Img/profile1.png")} alt="Profile Icon" className="me-1" />
                 </div>
               </Link>
               <ul class="dropdown-menu header-dropdown">
                 <li>
                   <Link className="dropdown-item text-525252 text-decoration-none" to="">
-                  Welcome User !
+                    Welcome User !
                   </Link>
                 </li>
                 <hr className="m-0" />
@@ -115,7 +115,7 @@ const Header = () => {
                 aria-expanded="false"
               >
                 <div className="d-flex justify-content-center align-items-center">
-                  <img src={profile} alt="Profile Icon" className="me-1" />
+                  <img src={require("../Img/profile.png")} alt="Profile Icon" className="me-1" />
                   <h6 className="mb-0 me-3 lh-2 text-white fw-normal">
                     {/* {user?.student_name ? user?.student_name : ''} */}
                     User

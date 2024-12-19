@@ -11,6 +11,7 @@ import Chat from './pages/Chat';
 import WelcomeMsg from './pages/WelcomeMsg';
 import Individualchat from './pages/Individualchat';
 import Support from './pages/Support';
+import ProtectedRoute from './Common_Method/ProtectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -18,13 +19,13 @@ root.render(
     <Routes>
       <Route path="/" element={<App />}>
         <Route path='/' element={<SignIn />} />
-        <Route path='/welcome-message' element={<WelcomeMsg />} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/reply/:msg_id/:sended_msg_id' element={<Reply />} />
-        <Route path='/chat/GROUPCHAT/:msg_id/:sender_id' element={<Chat />} />
-        <Route path='/chat/INDIVIDUALCHAT/:msg_id/:sender_id' element={<Individualchat />} />
-        <Route path='/support' element={<Support />} />
+        <Route path='/welcome-message' element={<ProtectedRoute element={<WelcomeMsg />} />} />
+        <Route path='/home' element={<ProtectedRoute element={<Home />} />} />
+        <Route path='/profile' element={<ProtectedRoute element={<Profile />} />} />
+        <Route path='/reply/:msg_id/:sended_msg_id' element={<ProtectedRoute element={<Reply />} />} />
+        <Route path='/chat/GROUPCHAT/:msg_id/:sender_id' element={<ProtectedRoute element={<Chat />} />} />
+        <Route path='/chat/INDIVIDUALCHAT/:msg_id/:sender_id' element={<ProtectedRoute element={<Individualchat />} />} />
+        <Route path='/support' element={<ProtectedRoute element={<Support />} />} />
       </Route>
     </Routes>
   </BrowserRouter>

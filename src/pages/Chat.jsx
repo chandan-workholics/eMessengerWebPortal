@@ -15,6 +15,8 @@ const Chat = () => {
     const [fivemember, setFivemember] = useState([]);
     const [message, setMessage] = useState("");
     const [isScrolling, setIsScrolling] = useState(false);
+    const [imageFile, setImageFile] = useState(null);
+    const [pdfFile, setPdfFile] = useState(null);
     const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
     const [uploadedPdfUrl, setUploadedPdfUrl] = useState(null);
     const [selectedImages, setSelectedImages] = useState([]);
@@ -75,6 +77,10 @@ const Chat = () => {
         try {
             await callAPI.post("/chat/send_chat_msg1", payload);
             setMessage("");
+            setImageFile(null);
+            setPdfFile(null);
+            setUploadedImageUrl(null);
+            setUploadedPdfUrl(null);
             fetchData();
             setTimeout(() => {
                 if (chatBoxRef.current) {
@@ -287,20 +293,28 @@ const Chat = () => {
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
                                                             {chat?.message}
-                                                            {chat?.link && (
-                                                                chat.link.includes('.pdf') ? (
-                                                                    <a href={chat.link} target="_blank" rel="noopener noreferrer">
-                                                                        <button className="btn btn-primary">View PDF</button>
+                                                            {chat?.link &&
+                                                                (chat.link.includes(".pdf") || chat.link.includes(".xlsx") || chat.link.includes(".xlsx") || chat.link.includes(".doc") || chat.link.includes(".xls") || chat.link.includes(".docx") ? (
+                                                                    <a
+                                                                        href={chat.link}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                    >
+                                                                        <button className="btn btn-primary">
+                                                                            View Doc
+                                                                        </button>
                                                                     </a>
                                                                 ) : (
                                                                     <img
                                                                         src={chat.link}
                                                                         alt="Uploaded"
-                                                                        style={{ maxHeight: "100px", maxWidth: "100px" }}
+                                                                        style={{
+                                                                            maxHeight: "100px",
+                                                                            maxWidth: "100px",
+                                                                        }}
                                                                         className="me-2"
                                                                     />
-                                                                )
-                                                            )}
+                                                                ))}
                                                         </p>
                                                         <p className="text-0D082C px-2 mb-0 info">
                                                             {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}

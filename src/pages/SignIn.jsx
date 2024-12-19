@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SplashScreen from "./SplashScreen";
 
+
 const SignIn = () => {
 
   const [isLoadingSplash, setIsLoadingSplash] = useState(true);
@@ -151,11 +152,11 @@ const SignIn = () => {
                 </h3>
               </div>
               <div className="login-image d-flex justify-content-center align-items-center">
-                <img src="Images/login image.png" alt="Login Illustration" className="w-75" />
+                <img src={require("../Img/login image.png")} alt="Login Illustration" className="w-75" />
               </div>
               <div className="login-bottom d-flex justify-content-center mt-5">
-                <img src="Images/lb.png" alt="Img" className="me-4" />
-                <img src="Images/lb1.png" alt="Img" />
+                <img src={require("../Img/lb.png")} alt="Img" className="me-4" />
+                <img src={require("../Img/lb1.png")} alt="Img" />
               </div>
             </div>
           </div>
@@ -163,7 +164,7 @@ const SignIn = () => {
         <div className="col-lg-6 col-md-12 d-flex align-items-center justify-content-center">
           <div className="container px-xl-5">
             <div className="right py-4 row justify-content-center align-items-center">
-              <img src="Images/e-logo.png" alt="eMessenger Logo" />
+              <img src={require("../Img/e-logo.png")} alt="eMessenger Logo" />
               <h2 className="text-010A48 fw-semibold text-center">
                 Hi, Welcome 👋
               </h2>
@@ -242,8 +243,8 @@ const SignIn = () => {
           </div>
         </div>
         <div className="d-lg-none bg-273341 login-bottom d-flex justify-content-center py-3 px-2 position-absolute start-0 bottom-0">
-          <img src="Images/lb.png" alt="img" className="me-4" />
-          <img src="Images/lb1.png" alt="img" />
+          <img src={require("../Img/lb.png")} alt="img" className="me-4" />
+          <img src={require("../Img/lb1.png")} alt="img" />
         </div>
       </div>
 

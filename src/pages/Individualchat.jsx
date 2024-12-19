@@ -300,7 +300,7 @@ const Individualchat = () => {
                                                         >
                                                             {chat?.message}
                                                             {chat?.link &&
-                                                                (chat.link.includes(".pdf") || chat.link.includes(".xlsx") || chat.link.includes(".xlsx")|| chat.link.includes(".doc")|| chat.link.includes(".xls")|| chat.link.includes(".docx")? (
+                                                                (chat.link.includes(".pdf") || chat.link.includes(".xlsx") || chat.link.includes(".xlsx") || chat.link.includes(".doc") || chat.link.includes(".xls") || chat.link.includes(".docx") ? (
                                                                     <a
                                                                         href={chat.link}
                                                                         target="_blank"
