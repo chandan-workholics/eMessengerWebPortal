@@ -26,7 +26,7 @@ const Chat = () => {
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
-    
+
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -72,7 +72,7 @@ const Chat = () => {
                 color: student?.color
             },
             chat_type: "GROUPCHAT",
-            sent_at:Date.now(),
+            sent_at: Date.now(),
             msg_type: msgType,
             group_id: parseInt(msg_id),
             mobile_no: user?.mobile_no,
