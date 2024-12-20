@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
-import { Link } from "react-router-dom";
+import io from "socket.io-client";
 import sendMsgBtn from "../sendMsg-btn.png";
 import { useParams, useLocation } from "react-router-dom";
-import callAPI, { interceptor } from "../Common_Method/api";
+import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
+
+const socket = io("http://206.189.130.102:3550");
 
 const Chat = () => {
     const { msg_id, sender_id } = useParams();
     const location = useLocation();
-    const { title } = location.state
+    const { title, student } = location.state
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
     const [fivemember, setFivemember] = useState([]);
@@ -24,15 +26,11 @@ const Chat = () => {
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
+    
     const fetchData = async () => {
         try {
             setLoading(true);
-            interceptor();
-
-            const response = await callAPI.get(
-                `./chat/get_group_chat_message?groupId=${msg_id}&chat_type=GROUPCHAT`
-            );
-
+            const response = await callAPI.get(`./chat/get_group_chat_message?groupId=${msg_id}&chat_type=GROUPCHAT`);
             if (response.data) {
                 setDetail(response.data.data);
                 setFivemember(response.data.five_numbers_Details);
@@ -47,6 +45,8 @@ const Chat = () => {
             setLoading(false);
         }
     };
+
+
     const handleSendMessage = async () => {
         console.log("Button clicked, preparing to send message...");
         console.log(selectedPdfs, ">>>>>>>>>>>>>>>>>>>")
@@ -66,7 +66,13 @@ const Chat = () => {
         const payload = {
             msg_id: parseInt(msg_id),
             sender_id: parseInt(sender_id),
+            sender_detail: {
+                student_name: student?.student_name,
+                student_number: student?.student_number,
+                color: student?.color
+            },
             chat_type: "GROUPCHAT",
+            sent_at:Date.now(),
             msg_type: msgType,
             group_id: parseInt(msg_id),
             mobile_no: user?.mobile_no,
@@ -74,8 +80,14 @@ const Chat = () => {
             message: msgType === "TEXT" ? message.trim() : '',
             link: link,
         }
+        const payloadToSend = {
+            ...payload,
+            sender_detail: JSON.stringify(payload.sender_detail),
+        };
+
         try {
-            await callAPI.post("/chat/send_chat_msg1", payload);
+            await callAPI.post("/chat/send_chat_msg", payloadToSend);
+            socket.emit("send_message", payloadToSend);
             setMessage("");
             setImageFile(null);
             setPdfFile(null);
@@ -92,38 +104,80 @@ const Chat = () => {
         }
     };
 
-    const handleScroll = () => {
-        if (!chatBoxRef.current) return;
-
-        // Check if the user is at the top of the chatbox
-        const isAtTop = chatBoxRef.current.scrollTop === 0;
-        setIsScrolling(!isAtTop);
-    };
-
-    useEffect(() => {
-        fetchData(); // Fetch messages on component mount
-
-        const interval = setInterval(() => {
-            if (!isScrolling) {
-                fetchData(); // Fetch messages only if not manually scrolling
-            }
-        }, 2000);
-
-        return () => clearInterval(interval); // Cleanup on component unmount
-    }, [isScrolling]);
-
-    useEffect(() => {
-        // Scroll to the bottom when messages are loaded, only if not scrolling manually
-        if (!isScrolling && chatBoxRef.current) {
-            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        }
-    }, [detail]);
-
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
             handleSendMessage();
         }
     };
+
+
+
+
+    useEffect(() => {
+        console.log("Joining group with msg_id:", msg_id);
+        socket.emit("join_group", msg_id);  // Emit join_group event
+        console.log("Join group event emitted");
+
+        socket.on("receive_message", (newMessage) => {
+            console.log("New message received:", newMessage);
+            setDetail((prevDetails) => [...prevDetails, newMessage]);
+            scrollToBottom();
+            // handleScroll();
+        });
+
+        return () => {
+            console.log("Cleaning up listeners for msg_id:", msg_id);
+            socket.off("receive_message");
+        };
+    }, [msg_id, detail]);
+
+
+
+    const scrollToBottom = () => {
+        if (chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [detail]);
+
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+
+
+
+    const handleScroll = () => {
+        if (!chatBoxRef.current) return;
+        const isAtTop = chatBoxRef.current.scrollTop === 0;
+        setIsScrolling(!isAtTop);
+    };
+
+    // useEffect(() => {
+    //     fetchData();
+    //     const interval = setInterval(() => {
+    //         if (!isScrolling) {
+    //             fetchData();
+    //         }
+    //     }, 2000);
+    //     return () => clearInterval(interval);
+    // }, [isScrolling]);
+
+    useEffect(() => {
+        if (!isScrolling && chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }
+    }, [detail]);
+
+
+
+
+
+
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
         setSelectedImages((prev) => [...prev, ...files]);
@@ -277,15 +331,21 @@ const Chat = () => {
                                                         //     className="me-2"
                                                         // />
                                                         <span className="me-2 pt-3">
-                                                            <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: chat?.sender?.color }}></i>
+                                                            <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: JSON.parse(chat.sender_detail)?.color }}></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">
-                                                        {!isUserMessage && (
+                                                        {/* {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
                                                                 {chat.sender?.student_name}
                                                             </p>
+                                                        )} */}
+                                                        {!isUserMessage && (
+                                                            <p className="mb-0 text-010A48 info">
+                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}
+                                                            </p>
                                                         )}
+
                                                         <p
                                                             className={`${isUserMessage
                                                                 ? "bg-E79C1D text-white"
