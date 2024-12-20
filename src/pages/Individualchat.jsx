@@ -8,7 +8,7 @@ import { format } from "date-fns";
 const Individualchat = () => {
     const { msg_id, sender_id } = useParams();
     const location = useLocation();
-    const { title } = location.state
+    const { title, student } = location.state
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
     const [fivemember, setFivemember] = useState([]);
@@ -73,19 +73,28 @@ const Individualchat = () => {
             const payload = {
                 msg_id: parseInt(msg_id),
                 sender_id: parseInt(sender_id),
+                sender_detail: {
+                    student_name: student?.student_name,
+                    student_number: student?.student_number,
+                    color: student?.color
+                },
                 msg_type: msgType,
                 link: link || "",
                 chat_type: "INDIVIDUALCHAT",
                 mobile_no: user?.mobile_no,
                 group_id: parseInt(msg_id),
                 message: message.trim(),
-                receiverMobileNumbers: fivemember?.map((val) => ({
+                receiverMobileNumbers: fivenumber?.map((val) => ({
                     student_main_id: val.student_main_id,
-                    mobilenumber: val.mobile_no,
+                    mobilenumber: val.student_family_mobile_number,
                 })),
             };
             console.log("Sending payload:", payload);
-            const response = await callAPI.post("/chat/send_chat_msg_individual", payload);
+            const payloadToSend = {
+                ...payload,
+                sender_detail: JSON.stringify(payload.sender_detail),
+            };
+            const response = await callAPI.post("/chat/send_chat_msg_individual", payloadToSend);
             console.log("Message sent successfully:", response.data);
             setMessage("");
             setImageFile(null);
@@ -289,7 +298,7 @@ const Individualchat = () => {
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender?.student_name}
+                                                                {chat.senderDetails?.student_name}
                                                             </p>
                                                         )}
                                                         <p
