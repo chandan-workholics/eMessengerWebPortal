@@ -53,7 +53,7 @@ const Header = () => {
                   <img src={require("../Img/profile1.png")} alt="Profile Icon" className="me-1" />
                 </div>
               </Link>
-              <ul class="dropdown-menu header-dropdown">
+              <ul className="dropdown-menu header-dropdown">
                 <li>
                   <Link className="dropdown-item text-525252 text-decoration-none" to="">
                     Welcome User !

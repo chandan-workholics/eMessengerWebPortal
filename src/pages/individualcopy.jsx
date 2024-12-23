@@ -1,13 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
-import io from "socket.io-client";
 import sendMsgBtn from "../sendMsg-btn.png";
 import { useParams, useLocation } from "react-router-dom";
-import callAPI from "../Common_Method/api";
+import callAPI, { interceptor } from "../Common_Method/api";
 import { format } from "date-fns";
-
-
-const socket = io("http://206.189.130.102:3550");
 
 const Individualchat = () => {
     const { msg_id, sender_id } = useParams();
@@ -29,13 +25,15 @@ const Individualchat = () => {
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
 
-
+    console.log(loading, imageFile, pdfFile)
     const fetchData = async () => {
         try {
             setLoading(true);
+            interceptor();
 
-
-            const response = await callAPI.get(`./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
+            const response = await callAPI.get(
+                `./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`
+            );
 
             if (response.data) {
                 setDetail(response.data.messages);
@@ -83,7 +81,6 @@ const Individualchat = () => {
                 msg_type: msgType,
                 link: link || "",
                 chat_type: "INDIVIDUALCHAT",
-                sent_at: Date.now(),
                 mobile_no: user?.mobile_no,
                 group_id: parseInt(msg_id),
                 message: message.trim(),
@@ -97,9 +94,8 @@ const Individualchat = () => {
                 ...payload,
                 sender_detail: JSON.stringify(payload.sender_detail),
             };
-            const response = await callAPI.post("/chat/send_chat_msg_individuals", payloadToSend);
+            const response = await callAPI.post("/chat/send_chat_msg_individual", payloadToSend);
             console.log("Message sent successfully:", response.data);
-            socket.emit("send_individual_message", payloadToSend);
             setMessage("");
             setImageFile(null);
             setPdfFile(null);
@@ -117,64 +113,32 @@ const Individualchat = () => {
         }
     };
 
+    const handleScroll = () => {
+        if (!chatBoxRef.current) return;
+        const isAtTop = chatBoxRef.current.scrollTop === 0;
+        setIsScrolling(!isAtTop);
+    };
+    useEffect(() => {
+        fetchData();
+        const interval = setInterval(() => {
+            if (!isScrolling) {
+                fetchData();
+            }
+        }, 2000);
+        return () => clearInterval(interval);// eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isScrolling]);
 
+    useEffect(() => {
+        if (!isScrolling && chatBoxRef.current) {
+            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+        }// eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [detail]);
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
             handleSendMessage();
         }
     };
-
-    useEffect(() => {
-        console.log("Joining group with msg_id:", msg_id);
-        socket.emit("join_individual", msg_id);  // Emit join_group event
-        console.log("Join group event emitted");
-
-        socket.on("receive_individual_message", (newMessage) => {
-            console.log("New message received:", newMessage);
-            fetchData();
-            setDetail((prevDetails) => [...prevDetails, newMessage]);
-            scrollToBottom();
-        });
-
-        return () => {
-            console.log("Cleaning up listeners for msg_id:", msg_id);
-            socket.off("receive_individual_message");
-        };
-    }, [msg_id, detail]);
-
-
-
-    const scrollToBottom = () => {
-        if (chatBoxRef.current) {
-            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        }
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [detail]);
-
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const handleScroll = () => {
-        if (!chatBoxRef.current) return;
-        const isAtTop = chatBoxRef.current.scrollTop === 0;
-        setIsScrolling(!isAtTop);
-    };
-
-    useEffect(() => {
-        if (!isScrolling && chatBoxRef.current) {
-            chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        }
-    }, [detail]);
-
-
-
-
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
@@ -228,7 +192,6 @@ const Individualchat = () => {
             console.error("Error uploading PDF:", error);
         }
     };
-
 
     return (
         <>
@@ -326,13 +289,16 @@ const Individualchat = () => {
                                                 >
                                                     {!isUserMessage && (
                                                         <span className="me-2 pt-3">
-                                                            <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: JSON.parse(chat.sender_detail)?.color }}></i>
+                                                            <i
+                                                                className="fa-solid fa-circle-user fs-2 bg-white rounded-circle"
+                                                                style={{ color: chat?.senderDetails?.color }}
+                                                            ></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}
+                                                                {chat.senderDetails?.student_name}
                                                             </p>
                                                         )}
                                                         <p
