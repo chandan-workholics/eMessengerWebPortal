@@ -15,7 +15,7 @@ const TermsConditions = () => {
                 <div className="container mt-3 mt-lg-5">
                     <div className="row">
                         <div className="col-md-6 d-none d-lg-block">
-                            <h6>Have any issue? Send us a message</h6>
+                            <h6>Thank You for your interest our school.</h6>
                         </div>
                     </div>
                 </div>
