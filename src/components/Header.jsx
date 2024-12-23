@@ -71,7 +71,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item text-525252 text-decoration-none" to="#">
+                  <Link className="dropdown-item text-525252 text-decoration-none" to="/terms&conditions">
                     <i className="fa-solid fa-book me-1"></i>Terms & Conditions
                   </Link>
                 </li>
@@ -144,7 +144,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link className="dropdown-item text-525252 text-decoration-none" to="#">
+                  <Link className="dropdown-item text-525252 text-decoration-none" to="/terms&conditions">
                     <i className="fa-solid fa-book me-1"></i>Terms & Conditions
                   </Link>
                 </li>

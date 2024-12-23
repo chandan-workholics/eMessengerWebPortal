@@ -12,6 +12,7 @@ import WelcomeMsg from './pages/WelcomeMsg';
 import Individualchat from './pages/Individualchat';
 import Support from './pages/Support';
 import ProtectedRoute from './Common_Method/ProtectedRoute';
+import TermsConditions from './pages/Terms&Condition';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
         <Route path='/chat/GROUPCHAT/:msg_id/:sender_id' element={<ProtectedRoute element={<Chat />} />} />
         <Route path='/chat/INDIVIDUALCHAT/:msg_id/:sender_id' element={<ProtectedRoute element={<Individualchat />} />} />
         <Route path='/support' element={<ProtectedRoute element={<Support />} />} />
+        <Route path='/terms&conditions' element={<ProtectedRoute element={<TermsConditions />} />} />
       </Route>
     </Routes>
   </BrowserRouter>
