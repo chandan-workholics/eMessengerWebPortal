@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import { Link } from 'react-router-dom'
-import callAPI, { interceptor } from "../Common_Method/api";
+import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
 const Profile = () => {
     const user = JSON.parse(sessionStorage.getItem("user"));
     const [loading, setLoading] = useState(true);
-    const [appScrollNewsList, setAppScrollNewsList] = useState([]);
     const [profile, setProfile] = useState('');
+    const [school, setschool] = useState('');
     const [fees, setFees] = useState('');
 
     const getprofile = async () => {
@@ -18,6 +18,7 @@ const Profile = () => {
 
             if (response.data) {
                 setProfile(response.data || []);
+                setschool(response.data || []);
             } else {
                 console.warn("No data received from API.");
                 setProfile([]);
@@ -30,24 +31,6 @@ const Profile = () => {
         }
     }
 
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`);
-            if (response.data) {
-                setAppScrollNewsList(response.data || []);
-            } else {
-                console.warn("No data received from API.");
-                setAppScrollNewsList([]);
-            }
-        } catch (error) {
-            console.error("Error fetching scroller messages:", error.message);
-            setAppScrollNewsList([]);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const getfees = async () => {
         try {
@@ -71,7 +54,6 @@ const Profile = () => {
     useEffect(() => {
         getprofile(); // eslint-disable-next-line react-hooks/exhaustive-deps
         getfees(); // eslint-disable-next-line react-hooks/exhaustive-deps
-        fetchData();// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const logout = () => {
@@ -144,18 +126,27 @@ const Profile = () => {
                                 <div className="col-xl-4 mb-3">
                                     <div className="card border-0 shadow-sm rounded-3 p-3 pb-2 bg-FAFAFA mb-xl-0">
                                         <h6 className='text-010A48'>Profile</h6>
-                                        <div className="card border-0 rounded-3 shadow-sm mb-3">
-                                            <div className="card-body">
-                                                <div className="text-center">
-                                                    <img src={appScrollNewsList?.data?.schoolDetail?.logo_img} alt="" className="w-50 mb-3" />
-                                                </div>
-                                                <h6 className="fw-bolder">{appScrollNewsList?.data?.schoolDetail?.sch_nm}</h6>
-                                                <h6 className="">{appScrollNewsList?.data?.schoolDetail?.address}</h6>
-                                                <h6 className="">{appScrollNewsList?.data?.schoolDetail?.contact_no}</h6>
-                                                <h6 className="">{appScrollNewsList?.data?.schoolDetail?.website}</h6>
-                                                <h6 className="">{appScrollNewsList?.data?.schoolDetail?.email_id}</h6>
-                                            </div>
-                                        </div>
+
+                                        {school?.schools?.map((val, index) => {
+                                            return (
+                                                <>
+                                                    <div key={index} className="card border-0 rounded-3 shadow-sm mb-3">
+                                                        <div className="card-body">
+                                                            <div className="text-center">
+                                                                <img src={val?.logo_img} alt="" className="w-50 mb-3" />
+                                                            </div>
+                                                            <h6 className="fw-bolder">{val?.sch_nm}</h6>
+                                                            <h6 className="">{val?.address}</h6>
+                                                            <h6 className="">{val?.contact_no}</h6>
+                                                            <h6 className="">{val?.website}</h6>
+                                                            <h6 className="">{val?.email_id}</h6>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            )
+                                        })}
+
+
                                         {profile?.data?.map((val, index) => (
                                             <div key={index} className='card border-0 rounded-3 shadow-sm mb-3'>
                                                 <div className='d-flex justify-content-between align-items-center px-2 py-2'>
@@ -164,6 +155,8 @@ const Profile = () => {
                                                         <div className="">
                                                             <h6 className={`${val?.color} text-010A48 mb-0`}>{val?.student_number} </h6>
                                                             <h6 className='text-666666 fw-normal name mb-0'> {val?.student_family_mobile_number}</h6>
+                                                            <h6 className='text-666666 fw-normal name mb-0'> {val?.student_email}</h6>
+                                                            <h6 className='text-666666 fw-normal name mb-0'> {val?.sch_short_nm}</h6>
                                                         </div>
                                                     </div>
                                                     <div className='name'>
