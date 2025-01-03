@@ -149,7 +149,7 @@ const Reply = () => {
                                     type="checkbox"
                                     id={`option-${idx}`}
                                     checked={isChecked}
-                                    onChange={e => handleCheckboxChange(idx, e.target.value)}
+                                    onChange={e => handleCheckboxChange(idx, e.target.checked)}
                                 />
                                 <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
                             </div>
