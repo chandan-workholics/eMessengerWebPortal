@@ -18,6 +18,18 @@ export const interceptor = () => {
         },
         (error) => Promise.reject(error)
     );
+
+    axiosApiInstance.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            if (error.response?.status === 401) {
+                // Clear session storage and redirect to home page
+                sessionStorage.clear();
+                window.location.href = "/eMessengerWebPortal"; // Replace with your home or login page URL
+            }
+            return Promise.reject(error);
+        }
+    );
 };
 
 const callAPI = {

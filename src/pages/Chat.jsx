@@ -72,7 +72,7 @@ const Chat = () => {
                 color: student?.color
             },
             chat_type: "GROUPCHAT",
-            sent_at: Date.now(),
+            sent_at: new Date().toISOString(),
             msg_type: msgType,
             group_id: parseInt(msg_id),
             mobile_no: user?.mobile_no,

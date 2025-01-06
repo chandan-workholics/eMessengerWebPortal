@@ -83,7 +83,7 @@ const Individualchat = () => {
                 msg_type: msgType,
                 link: link || "",
                 chat_type: "INDIVIDUALCHAT",
-                sent_at: Date.now(),
+                sent_at: new Date().toISOString(),
                 mobile_no: user?.mobile_no,
                 group_id: parseInt(msg_id),
                 message: message.trim(),
