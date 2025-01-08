@@ -317,8 +317,8 @@ const Home = () => {
                                 aria-labelledby="day-tab-1"
                                 tabIndex="0"
                             >
-                                <h6 className="text-010A48 fw-semibold m-0">Session 2024-2025</h6>
-                                <p className="text-5F5F5F mb-2">Intimation -</p>
+                                <h6 className="text-010A48 fw-semibold m-0"></h6>
+                                <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
                                     {message?.data?.map((val) => {
                                         return (
@@ -428,8 +428,8 @@ const Home = () => {
                                 aria-labelledby="day-tab-2"
                                 tabIndex="0"
                             >
-                                <h6 className="text-010A48 fw-semibold m-0">Session 2025-2026</h6>
-                                <p className="text-5F5F5F mb-2">Intimation -</p>
+                                <h6 className="text-010A48 fw-semibold m-0"></h6>
+                                <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
                                     {isLoading ? (
                                         <h6 className="text-010A48 fw-normal mb-0">Loading message...</h6>
@@ -545,9 +545,9 @@ const Home = () => {
                                 tabIndex="0"
                             >
                                 <h6 className="text-010A48 fw-semibold m-0">
-                                    Session 2024-2025
+                                    
                                 </h6>
-                                <p className="text-5F5F5F mb-2">Intimation -</p>
+                                <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
                                     {seenmessage?.data?.map((val) => {
 
@@ -642,9 +642,9 @@ const Home = () => {
                                 tabIndex="0"
                             >
                                 <h6 className="text-010A48 fw-semibold m-0">
-                                    Session 2024-2025
+                                    
                                 </h6>
-                                <p className="text-5F5F5F mb-2">Intimation -</p>
+                                <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
                                     {starredmessage?.data?.map((val) => {
 
@@ -756,9 +756,9 @@ const Home = () => {
                                 <div className="row">
                                     <div className="col">
                                         <h6 className="text-010A48 fw-semibold m-0">
-                                            Session 2024-2025
+                                           
                                         </h6>
-                                        <p className="text-5F5F5F mb-2">Intimation -</p>
+                                        <p className="text-5F5F5F mb-2"></p>
                                     </div>
                                     <div className="col-12 col-lg-6 col-md-6 mt-2 mt-xl-0">
                                         <div className="mb-3 position-relative">

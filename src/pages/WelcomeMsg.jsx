@@ -12,12 +12,13 @@ const WelcomeMsg = () => {
     const [noticeBoardData, setNoticeBoardData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const user = JSON.parse(sessionStorage.getItem("user"));
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 interceptor();
-                const response = await callAPI.get("/notice/getNoticeBoardDetail");
+                const response = await callAPI.get(`/notice/getNoticeBoardDetails?mobilenumber=${user?.mobile_no}`);
                 setNoticeBoardData(response.data);
                 setLoading(false);
             } catch (err) {
