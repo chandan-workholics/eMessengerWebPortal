@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SplashScreen from "./SplashScreen";
+import mobileAppIcon from "../mobileApp-Icon.png";
 
 
 const SignIn = () => {
@@ -200,9 +201,12 @@ const SignIn = () => {
                     </button>
                   </div>
                   <div className="sign-up text-center">
-                    <Link to="/" className="text-DA251C fw-semibold fs-6">
+                    <Link className="text-DA251C fw-semibold fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
                       How to install App?
                     </Link>
+                    {/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Launch demo modal
+                    </button> */}
                   </div>
                 </div>
               </form>
@@ -257,6 +261,37 @@ const SignIn = () => {
       )}
 
       <ToastContainer />
+
+      {/* Modal */}
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content" style={{borderRadius:'16px'}}>
+            <div class="modal-body">
+              <div className="d-flex">
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <img src={mobileAppIcon} alt="Mobile App" class="app-image w-100 ps-4 pb-4" />
+                </div>
+                <div class="col-md-6 pe-4">
+                  <h2 class="fw-bold text-center">DOWNLOAD <br /> OUR APP</h2>
+                  <p>Get notifications of all our latest information straight to your phone. </p>
+                  <div class="app-buttons text-center">
+                    <Link to='/'>
+                      <img src={require("../Img/lb.png")} alt="img" className="mb-3" />
+                    </Link>
+                    <Link to='/'>
+                      <img src={require("../Img/lb1.png")} alt="img" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
