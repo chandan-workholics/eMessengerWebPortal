@@ -192,26 +192,32 @@ const Profile = () => {
                                                                 </div>
                                                             </div>
                                                             <div className="card-body p-2 term">
-                                                                <h6 className='text-010A48 fw-medium mb-1'>Term {val?.term}</h6>
+                                                            {val?.term==0?'': <h6 className='text-010A48 fw-medium mb-1'>Term {val?.term}</h6>}
+                                                               
                                                                 <table className="table table-borderless mb-0">
-                                                                    <tr>
-                                                                        <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>Outstanding Fees</h6></td>
-                                                                        <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {val?.outstandingfees === 0 ? "Paid" : val?.outstandingfees}</h6></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
-                                                                        <td className='fw-normal'>
-                                                                            <h6 className='fw-normal text-010A48 mb-0 p-0'>
-                                                                                : {val?.duedate
-                                                                                    ? (() => {
-                                                                                        const [day, month, year] = val.duedate.split("/");
-                                                                                        const parsedDate = new Date(`${year}-${month}-${day}`);
-                                                                                        return isNaN(parsedDate) ? "Invalid Date" : format(parsedDate, "dd-MMM-yyyy");
-                                                                                    })()
-                                                                                    : "N/A"}
-                                                                            </h6>
-                                                                        </td>
-                                                                    </tr>
+                                                                   {val?.term==0?'':
+                                                                   <tr>
+                                                                   <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>Outstanding Fees</h6></td>
+                                                                   <td className='fw-normal'><h6 className='fw-normal text-FF0000 mb-1 p-0'>: ₹ {val?.outstandingfees === 0 ? "Paid" : val?.outstandingfees}</h6></td>
+                                                               </tr>
+                                                                   }
+                                                                    {val?.term==0?'':
+                                                                     <tr>
+                                                                     <td className='fw-normal'><h6 className='fw-normal text-010A48 mb-0 p-0'>Due Date</h6></td>
+                                                                     <td className='fw-normal'>
+                                                                         <h6 className='fw-normal text-010A48 mb-0 p-0'>
+                                                                             : {val?.duedate
+                                                                                 ? (() => {
+                                                                                     const [day, month, year] = val.duedate.split("/");
+                                                                                     const parsedDate = new Date(`${year}-${month}-${day}`);
+                                                                                     return isNaN(parsedDate) ? "Invalid Date" : format(parsedDate, "dd-MMM-yyyy");
+                                                                                 })()
+                                                                                 : "N/A"}
+                                                                         </h6>
+                                                                     </td>
+                                                                 </tr>
+                                                                    }
+                                                                   
                                                                 </table>
                                                             </div>
                                                         </div>
