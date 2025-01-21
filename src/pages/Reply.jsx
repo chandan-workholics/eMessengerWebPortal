@@ -19,6 +19,15 @@ const Reply = () => {
 
     const [imagePreview, setImagePreview] = useState(null);
     const [imageURL, setImageURL] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
+
+    const handleImageClick = (imageUrl) => {
+        setPreviewImage(imageUrl); // Set the clicked image URL
+    };
+
+    const closePreview = () => {
+        setPreviewImage(null); // Close the preview
+    };
 
     const fetchData = async () => {
         try {
@@ -161,10 +170,10 @@ const Reply = () => {
 
         // if (msg_type?.startsWith("CHECKBOX")) {
         //     const parsedText = parseReplyText(data_text.data_reply_text);
-        
+
         //     const handleCheckboxChange = (idx, optionValue, isChecked) => {
         //         let updatedSelected = { ...parsedText.selected };
-        
+
         //         if (isChecked) {
         //             // Add the value if the checkbox is checked
         //             updatedSelected[idx] = optionValue;
@@ -172,12 +181,12 @@ const Reply = () => {
         //             // Remove the value if the checkbox is unchecked
         //             delete updatedSelected[idx];
         //         }
-        
+
         //         const updatedData = { selected: updatedSelected };
         //         handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
         //         data_text.data_reply_text = JSON.stringify(updatedData);
         //     };
-        
+
         //     return (
         //         <div>
         //             <label className="fw-bolder">
@@ -203,7 +212,7 @@ const Reply = () => {
         //         </div>
         //     );
         // }
-        
+
 
         // Handle TEXTBOX type (single-line input)
         if (msg_type?.startsWith("TEXTBOX")) {
@@ -495,9 +504,38 @@ const Reply = () => {
                         src={data_text.link}
                         alt="Message Content"
                         className="img-fluid rounded-3 w-100"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleImageClick(data_text.link)}
                     />
+                    {/* Modal for Image Preview */}
+                    {previewImage && (
+                        <div
+                            style={{
+                                position: "fixed",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                backgroundColor: "rgba(0, 0, 0, 0.8)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                zIndex: 1000,
+                            }}
+                            onClick={closePreview}
+                        >
+                            <img
+                                src={previewImage}
+                                alt="Full Preview"
+                                style={{
+                                    maxHeight: "90%",
+                                    maxWidth: "90%",
+                                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                                }}
+                            />
+                        </div>
+                    )}
                 </>
-
             );
         }
 
@@ -560,7 +598,7 @@ const Reply = () => {
     };
 
 
-console.log(imageURL)
+    console.log(imageURL)
     return (
         <>
             <Header />
@@ -601,7 +639,7 @@ console.log(imageURL)
                                         className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? 'bg-secondary' : 'bg-FF0000'
                                             }`}
                                         onClick={handleReply}
-                                        // disabled={detail?.data?.is_reply_done === 1}
+                                    // disabled={detail?.data?.is_reply_done === 1}
 
                                     >
                                         {detail?.data?.is_reply_done === 1 ? "Send Reply" : "Send Reply"}

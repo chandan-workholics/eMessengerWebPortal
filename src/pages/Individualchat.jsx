@@ -28,13 +28,20 @@ const Individualchat = () => {
     const [selectedPdfs, setSelectedPdfs] = useState([]);
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
+    const [previewImage, setPreviewImage] = useState(null);
+
+    const handleImageClick = (imageUrl) => {
+        setPreviewImage(imageUrl); // Set the clicked image URL
+    };
+
+    const closePreview = () => {
+        setPreviewImage(null); // Close the preview
+    };
 
 
     const fetchData = async () => {
         try {
             setLoading(true);
-
-
             const response = await callAPI.get(`./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
 
             if (response.data) {
@@ -341,17 +348,21 @@ const Individualchat = () => {
                                                                 : "bg-F3F0FF text-0D082C"
                                                                 } px-2 py-2 mb-0 info`}
                                                         >
-                                                            {chat?.message}
+                                                            <div className="">
+                                                                <p className="mb-1">{chat?.message}</p>
+                                                            </div>
                                                             {chat?.link &&
-                                                                (chat.link.includes(".pdf") || chat.link.includes(".xlsx") || chat.link.includes(".xlsx") || chat.link.includes(".doc") || chat.link.includes(".xls") || chat.link.includes(".docx") ? (
+                                                                (chat.link.includes(".pdf") ||
+                                                                    chat.link.includes(".xlsx") ||
+                                                                    chat.link.includes(".xls") ||
+                                                                    chat.link.includes(".doc") ||
+                                                                    chat.link.includes(".docx") ? (
                                                                     <a
                                                                         href={chat.link}
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
                                                                     >
-                                                                        <button className="btn btn-primary">
-                                                                            View Doc
-                                                                        </button>
+                                                                        <button className="btn btn-primary">View Doc</button>
                                                                     </a>
                                                                 ) : (
                                                                     <img
@@ -360,10 +371,40 @@ const Individualchat = () => {
                                                                         style={{
                                                                             maxHeight: "100px",
                                                                             maxWidth: "100px",
+                                                                            cursor: "pointer",
                                                                         }}
                                                                         className="me-2"
+                                                                        onClick={() => handleImageClick(chat.link)}
                                                                     />
                                                                 ))}
+                                                            {/* Modal for Image Preview */}
+                                                            {previewImage && (
+                                                                <div
+                                                                    style={{
+                                                                        position: "fixed",
+                                                                        top: 0,
+                                                                        left: 0,
+                                                                        width: "100%",
+                                                                        height: "100%",
+                                                                        backgroundColor: "rgba(0, 0, 0, 0.8)",
+                                                                        display: "flex",
+                                                                        justifyContent: "center",
+                                                                        alignItems: "center",
+                                                                        zIndex: 1000,
+                                                                    }}
+                                                                    onClick={closePreview}
+                                                                >
+                                                                    <img
+                                                                        src={previewImage}
+                                                                        alt="Full Preview"
+                                                                        style={{
+                                                                            maxHeight: "90%",
+                                                                            maxWidth: "90%",
+                                                                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            )}
 
                                                         </p>
                                                         <p className="text-0D082C px-2 mb-0 info">
