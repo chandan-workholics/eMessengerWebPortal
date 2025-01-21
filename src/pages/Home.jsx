@@ -369,7 +369,7 @@ const Home = () => {
                                                                         <Link
                                                                             to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
-                                                                            state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                            state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                         >
                                                                             <img
                                                                                 src="Images/chat-icon.png"
@@ -382,7 +382,7 @@ const Home = () => {
                                                                         <Link
                                                                             to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                             className="me-2"
-                                                                            state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                            state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                         >
                                                                             <img
                                                                                 src="Images/chat-icon.png"
@@ -392,7 +392,7 @@ const Home = () => {
                                                                         </Link>
                                                                     ) : null}
 
-                                                                    {[1, 2, 3].includes(val?.msg_mst?.msg_priority) ?
+                                                                    {/* {[1, 2, 3].includes(val?.msg_mst?.msg_priority) ?
                                                                         null : (
                                                                             <Link className="star">
                                                                                 <i
@@ -410,6 +410,55 @@ const Home = () => {
                                                                                 ></i>
                                                                             </Link>
                                                                         )}
+
+                                                                    {[4, 5].includes(val?.msg_mst?.msg_priority) ? (
+                                                                        <Link className="star">
+                                                                            <i
+                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-solid text-FFC068"
+                                                                                    }`}
+                                                                                onClick={() =>
+                                                                                    toggleStarStatus(
+                                                                                        val?.sended_msg_id,
+                                                                                        val?.is_starred
+                                                                                    )
+                                                                                }
+                                                                                style={{ cursor: "pointer" }}
+                                                                            ></i>
+                                                                        </Link>
+                                                                    ) : null} */}
+
+                                                                    {[4, 5].includes(val?.msg_mst?.msg_priority) ? (
+                                                                        <Link className="star">
+                                                                            <i
+                                                                                className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
+                                                                                        ? "fa-solid text-warning"
+                                                                                        : "fa-solid text-FFC068"
+                                                                                    }`}
+                                                                                onClick={() =>
+                                                                                    toggleStarStatus(val?.sended_msg_id, val?.is_starred)
+                                                                                }
+                                                                                style={{ cursor: "pointer" }}
+                                                                            ></i>
+                                                                        </Link>
+                                                                    ) : (
+                                                                        ![1, 2, 3].includes(val?.msg_mst?.msg_priority) && (
+                                                                            <Link className="star">
+                                                                                <i
+                                                                                    className={`fa-star fs-4 mt-1 ${val?.is_starred === 1
+                                                                                            ? "fa-solid text-warning"
+                                                                                            : "fa-regular text-FFC068"
+                                                                                        }`}
+                                                                                    onClick={() =>
+                                                                                        toggleStarStatus(val?.sended_msg_id, val?.is_starred)
+                                                                                    }
+                                                                                    style={{ cursor: "pointer" }}
+                                                                                ></i>
+                                                                            </Link>
+                                                                        )
+                                                                    )}
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -485,7 +534,7 @@ const Home = () => {
                                                                                 <Link
                                                                                     to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                     className="me-2"
-                                                                                    state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                    state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                                 >
                                                                                     <img
                                                                                         src="Images/chat-icon.png"
@@ -498,7 +547,7 @@ const Home = () => {
                                                                                 <Link
                                                                                     to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                     className="me-2"
-                                                                                    state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                    state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                                 >
                                                                                     <img
                                                                                         src="Images/chat-icon.png"
@@ -545,7 +594,7 @@ const Home = () => {
                                 tabIndex="0"
                             >
                                 <h6 className="text-010A48 fw-semibold m-0">
-                                    
+
                                 </h6>
                                 <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
@@ -592,7 +641,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -605,7 +654,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -642,7 +691,7 @@ const Home = () => {
                                 tabIndex="0"
                             >
                                 <h6 className="text-010A48 fw-semibold m-0">
-                                    
+
                                 </h6>
                                 <p className="text-5F5F5F mb-2"></p>
                                 <div className="row">
@@ -690,7 +739,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -703,7 +752,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -756,7 +805,7 @@ const Home = () => {
                                 <div className="row">
                                     <div className="col">
                                         <h6 className="text-010A48 fw-semibold m-0">
-                                           
+
                                         </h6>
                                         <p className="text-5F5F5F mb-2"></p>
                                     </div>
@@ -823,7 +872,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
@@ -836,7 +885,7 @@ const Home = () => {
                                                                             <Link
                                                                                 to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
                                                                                 className="me-2"
-                                                                                state={{ title: val?.msg_mst?.subject_text ,student:val?.student}}
+                                                                                state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
                                                                                 <img
                                                                                     src="Images/chat-icon.png"
