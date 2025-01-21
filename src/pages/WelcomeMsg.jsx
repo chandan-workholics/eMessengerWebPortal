@@ -13,6 +13,7 @@ const WelcomeMsg = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
+    const token = sessionStorage.getItem("token");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -118,9 +119,11 @@ const WelcomeMsg = () => {
 
 
                 <div className="position-absolute top-0 end-0 w-100 d-flex justify-content-end">
-                    <Link to="/home" className="btn bg-E79C1D rounded-pill me-4 mt-4 px-4">
-                        Next
-                    </Link>
+                    {user?.parents_id==0?
+                    '': <Link to="/home" className="btn bg-E79C1D rounded-pill me-4 mt-4 px-4">
+                    Next
+                </Link>}
+                   
                 </div>
             </div>
         </div>
