@@ -137,51 +137,11 @@ const Reply = () => {
         }
 
         // Handle CHECKBOX type (checkbox selection)
-        if (msg_type?.startsWith("CHECKBOX")) {
-            const parsedText = parseReplyText(data_text.data_reply_text);
-
-            const handleCheckboxChange = (idx, isChecked) => {
-                const updatedSelected = { ...parsedText.selected, [idx]: isChecked };
-                const updatedData = { selected: updatedSelected };
-                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-                data_text.data_reply_text = JSON.stringify(updatedData);
-            };
-
-            return (
-                <div>
-                    <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
-                    {data_text.options.map((option, idx) => {
-                        const isChecked = parsedText.selected?.[idx] || false;
-                        return (
-                            <div key={idx}>
-                                <input
-                                    type="checkbox"
-                                    id={`option-${idx}`}
-                                    checked={isChecked}
-                                    onChange={e => handleCheckboxChange(idx, e.target.checked)}
-                                />
-                                <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
-                            </div>
-                        );
-                    })}
-                </div>
-            );
-        }
-
         // if (msg_type?.startsWith("CHECKBOX")) {
         //     const parsedText = parseReplyText(data_text.data_reply_text);
 
-        //     const handleCheckboxChange = (idx, optionValue, isChecked) => {
-        //         let updatedSelected = { ...parsedText.selected };
-
-        //         if (isChecked) {
-        //             // Add the value if the checkbox is checked
-        //             updatedSelected[idx] = optionValue;
-        //         } else {
-        //             // Remove the value if the checkbox is unchecked
-        //             delete updatedSelected[idx];
-        //         }
-
+        //     const handleCheckboxChange = (idx, isChecked) => {
+        //         const updatedSelected = { ...parsedText.selected, [idx]: isChecked };
         //         const updatedData = { selected: updatedSelected };
         //         handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
         //         data_text.data_reply_text = JSON.stringify(updatedData);
@@ -189,29 +149,69 @@ const Reply = () => {
 
         //     return (
         //         <div>
-        //             <label className="fw-bolder">
-        //                 {data_text.title}
-        //                 {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}
-        //             </label>
+        //             <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
         //             {data_text.options.map((option, idx) => {
-        //                 const isChecked = parsedText.selected?.[idx] !== undefined;
+        //                 const isChecked = parsedText.selected?.[idx] || false;
         //                 return (
         //                     <div key={idx}>
         //                         <input
         //                             type="checkbox"
         //                             id={`option-${idx}`}
         //                             checked={isChecked}
-        //                             onChange={e => handleCheckboxChange(idx, option.option, e.target.checked)}
+        //                             onChange={e => handleCheckboxChange(idx, e.target.checked)}
         //                         />
-        //                         <label htmlFor={`option-${idx}`} className="ms-2">
-        //                             {option.option}
-        //                         </label>
+        //                         <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
         //                     </div>
         //                 );
         //             })}
         //         </div>
         //     );
         // }
+
+        if (msg_type?.startsWith("CHECKBOX")) {
+            const parsedText = parseReplyText(data_text.data_reply_text);
+
+            const handleCheckboxChange = (idx, optionValue, isChecked) => {
+                let updatedSelected = { ...parsedText.selected };
+
+                if (isChecked) {
+                    // Add the value if the checkbox is checked
+                    updatedSelected[idx] = optionValue;
+                } else {
+                    // Remove the value if the checkbox is unchecked
+                    delete updatedSelected[idx];
+                }
+
+                const updatedData = { selected: updatedSelected };
+                handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
+                data_text.data_reply_text = JSON.stringify(updatedData);
+            };
+
+            return (
+                <div>
+                    <label className="fw-bolder">
+                        {data_text.title}
+                        {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}
+                    </label>
+                    {data_text.options.map((option, idx) => {
+                        const isChecked = parsedText.selected?.[idx] !== undefined;
+                        return (
+                            <div key={idx}>
+                                <input
+                                    type="checkbox"
+                                    id={`option-${idx}`}
+                                    checked={isChecked}
+                                    onChange={e => handleCheckboxChange(idx, option.option, e.target.checked)}
+                                />
+                                <label htmlFor={`option-${idx}`} className="ms-2">
+                                    {option.option}
+                                </label>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
 
 
         // Handle TEXTBOX type (single-line input)
