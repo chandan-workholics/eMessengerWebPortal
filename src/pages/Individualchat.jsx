@@ -137,21 +137,21 @@ const Individualchat = () => {
         const textBeforeCursor = message.substring(0, cursorPosition);
         const textAfterCursor = message.substring(cursorPosition);
         const updatedMessage = `${textBeforeCursor}${student_name} ${textAfterCursor}`;
-        
+
         const studentMainId = student_main_id && !isNaN(student_main_id)
             ? `${textBeforeCursor}${Number(student_main_id)}${textAfterCursor}`
             : `${textBeforeCursor}Invalid ID${textAfterCursor}`;
-    
+
         // Update state
         setMessage(updatedMessage);
         setSelectedUserId(studentMainId);
         setShowSuggestions(false);
         setSelectedUser({ student_name, student_main_id });
-    
+
         console.log("Selected user:", student_name);
         console.log("Selected user ID:", studentMainId);
         console.log("Updated message:", updatedMessage);
-    
+
         // Ensure inputRef is valid before accessing it
         setTimeout(() => {
             if (inputRef.current) {
@@ -164,7 +164,7 @@ const Individualchat = () => {
             }
         }, 0);
     };
-    
+
 
     const handleSendMessage = async () => {
         console.log("Button clicked, preparing to send message...");
@@ -188,14 +188,14 @@ const Individualchat = () => {
 
             console.log("Message content before sending:", message);
 
-        const isMentionMessage = selectedUser !== null;
+            const isMentionMessage = selectedUser !== null;
 
-        const receiverDetails = isMentionMessage
-            ? [{ student_main_id: selectedUser.student_main_id, mobilenumber: selectedUser.student_family_mobile_number }]
-            : fivenumber?.map((val) => ({
-                student_main_id: val.student_main_id,
-                mobilenumber: val.student_family_mobile_number,
-            }));
+            const receiverDetails = isMentionMessage
+                ? [{ student_main_id: selectedUser.student_main_id, mobilenumber: selectedUser.student_family_mobile_number }]
+                : fivenumber?.map((val) => ({
+                    student_main_id: val.student_main_id,
+                    mobilenumber: val.student_family_mobile_number,
+                }));
 
             const payload = {
                 msg_id: parseInt(msg_id),
@@ -226,7 +226,7 @@ const Individualchat = () => {
             };
             const response = await callAPI.post("/chat/send_chat_msg_individuals", payloadToSend);
             console.log("Message sent successfully:", response.data);
- // Ensure response.data.groupMember exists
+            // Ensure response.data.groupMember exists
             if (response.data && response.data.groupMember && Array.isArray(response.data.groupMember)) {
                 payload.sender_detail.student_main_id = response.data.groupMember.map(member => member.student_main_id);
             } else {
@@ -320,9 +320,11 @@ const Individualchat = () => {
             uploadImage(files[0]);
         }
     };
+
     const removeImage = (index) => {
         setSelectedImages((prev) => prev.filter((_, i) => i !== index));
     };
+
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -339,6 +341,7 @@ const Individualchat = () => {
             console.error("Error uploading image:", error);
         }
     };
+
     const handlePdfUpload = (e) => {
         const files = Array.from(e.target.files);
         setSelectedPdfs((prev) => [...prev, ...files]);
@@ -346,9 +349,11 @@ const Individualchat = () => {
             uploadPdf(files[0]);
         }
     };
+
     const removePdf = (index) => {
         setSelectedPdfs((prev) => prev.filter((_, i) => i !== index));
     };
+
     const uploadPdf = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -582,8 +587,8 @@ const Individualchat = () => {
                                             onChange={handleInputChange}
                                             onKeyPress={handleKeyPress}
                                         />
-                                         {/* Suggestions List (Bootstrap Dropdown) */}
-                                         {showSuggestions && suggestions.length > 0 && (
+                                        {/* Suggestions List (Bootstrap Dropdown) */}
+                                        {showSuggestions && suggestions.length > 0 && (
                                             <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050 }}>
                                                 <ul className="list-group">
                                                     {suggestions.map((user, student_main_id) => (
