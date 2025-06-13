@@ -6,7 +6,7 @@ import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
-const socket = io("http://206.189.130.102:3550");
+const socket = io("https://apps.actindore.com");
 
 const Chat = () => {
     const { msg_id, sender_id } = useParams();

@@ -55,7 +55,7 @@ const SignIn = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://206.189.130.102:3550/api/parents/otp",
+        "https://apps.actindore.com/api/parents/otp",
         { mobile_no: mobile }
       );
 
@@ -99,7 +99,7 @@ const SignIn = () => {
       try {
         // Send the OTP to the verification endpoint
         const response = await axios.post(
-          "http://206.189.130.102:3550/api/parents/otp-verify",
+          "https://apps.actindore.com/api/parents/otp-verify",
           { mobile_no: mobile, otp: otp },
           {
             headers: {

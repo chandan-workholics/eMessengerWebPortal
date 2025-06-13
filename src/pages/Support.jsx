@@ -36,7 +36,7 @@ const Support = () => {
 
         try {
             const response = await fetch(
-                "http://206.189.130.102:3550/api/supports/add_support",
+                "https://apps.actindore.com/api/supports/add_support",
                 requestOptions
             );
 

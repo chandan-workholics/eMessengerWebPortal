@@ -279,7 +279,7 @@ const Reply = () => {
                         formData.append("file", file);
 
                         const response = await axios.post(
-                            "http://206.189.130.102:3550/api/v1/admin/imageUpload_Use/imageUpload",
+                            "https://apps.actindore.com/api/v1/admin/imageUpload_Use/imageUpload",
                             formData,
                             {
                                 headers: {
@@ -388,7 +388,7 @@ const Reply = () => {
                         formData.append("file", file); // The key "file" should match the API's expected field name
 
                         const response = await axios.post(
-                            "http://206.189.130.102:3550/api/v1/admin/pdfUpload_Use/pdfUpload",
+                            "https://apps.actindore.com/api/v1/admin/pdfUpload_Use/pdfUpload",
                             formData,
                             {
                                 headers: {
@@ -584,7 +584,7 @@ const Reply = () => {
 
         try {
             const response = await callAPI.post(
-                "http://206.189.130.102:3550/api/msg/insertRepliedMessageAndBodies",
+                "https://apps.actindore.com/api/msg/insertRepliedMessageAndBodies",
                 payload
             );
             if (response.data) {

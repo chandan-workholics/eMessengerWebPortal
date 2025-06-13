@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/eMessengerWebPortal/static/css/main.bb5e374c.css",
+    "main.js": "/eMessengerWebPortal/static/js/main.19664e37.js",
+    "static/media/login-right.png": "/eMessengerWebPortal/static/media/login-right.335a2771eb9b8c057202.png",
+    "static/media/splashScreen-bg.png": "/eMessengerWebPortal/static/media/splashScreen-bg.af8db9864d2f1e35c689.png",
+    "static/media/welcome-bg--img.png": "/eMessengerWebPortal/static/media/welcome-bg--img.34a640eb23823f8d63fa.png",
+    "static/media/login image.png": "/eMessengerWebPortal/static/media/login image.4ac04a1c68b357645165.png",
+    "static/media/mobileApp-Icon.png": "/eMessengerWebPortal/static/media/mobileApp-Icon.2d54f69f46edd73a428c.png",
+    "static/media/profile-head.png": "/eMessengerWebPortal/static/media/profile-head.a67cd96a49f952a3e4e4.png",
+    "static/media/e-logo.png": "/eMessengerWebPortal/static/media/e-logo.d6ba2cf6822f33d2f250.png",
+    "index.html": "/eMessengerWebPortal/index.html",
+    "main.bb5e374c.css.map": "/eMessengerWebPortal/static/css/main.bb5e374c.css.map",
+    "main.19664e37.js.map": "/eMessengerWebPortal/static/js/main.19664e37.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bb5e374c.css",
+    "static/js/main.19664e37.js"
+  ]
+}
