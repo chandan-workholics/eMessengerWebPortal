@@ -25,7 +25,7 @@ export const interceptor = () => {
             if (error.response?.status === 401) {
                 // Clear session storage and redirect to home page
                 sessionStorage.clear();
-                window.location.href = "/eMessengerWebPortal"; // Replace with your home or login page URL
+                window.location.href = "/"; // Replace with your home or login page URL
             }
             return Promise.reject(error);
         }

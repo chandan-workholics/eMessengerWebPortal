@@ -72,7 +72,7 @@ const SignIn = () => {
           setShowOtpInput(false);
           setFormVisible(true);
           // toast.error("OTP expired. Please try again.");
-        }, 8000);
+        }, 30000);
       } else {
         toast.error(response.data.message || "Failed to send OTP.");
       }
@@ -229,11 +229,11 @@ const SignIn = () => {
                     maxLength={4}
                     required
                   />
-                  {receivedOtp && (
+                  {/*  {receivedOtp && (
                     <p className="text-success mt-2">
                       <strong>Received OTP (for testing):</strong> {receivedOtp}
                     </p>
-                  )}
+                  )}*/}
                   <button
                     type="button"
                     className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-3 mt-3"
@@ -265,7 +265,7 @@ const SignIn = () => {
       {/* Modal */}
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content" style={{borderRadius:'16px'}}>
+          <div class="modal-content" style={{ borderRadius: '16px' }}>
             <div class="modal-body">
               <div className="d-flex">
                 <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
