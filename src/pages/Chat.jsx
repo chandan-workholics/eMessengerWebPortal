@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../components/Header";
-import io from "socket.io-client";
+
 import sendMsgBtn from "../sendMsg-btn.png";
 import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
+import io  from "socket.io-client";
+
 const socket = io("https://apps.actindore.com", {
   withCredentials: true,
-  transports: ["polling", "websocket"], // fallback if websocket fails
+  transports: ["websocket", "polling"], // prioritize websocket
+  
 });
+
 
 
 

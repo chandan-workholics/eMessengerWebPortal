@@ -48,7 +48,7 @@ const Header = () => {
           </Link>
           <ul className="d-lg-none d-flex mb-0 gap-3">
             <li className="nav-item d-flex align-items-center">
-              <button className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</button>
+              <button className="btn text-white" style={{ background: '#e79c1d' }}>Fee payment</button>
             </li>
             <li className="nav-item dropdown-start py-2">
               <Link className="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -110,7 +110,7 @@ const Header = () => {
 
           <ul className="navbar-nav d-lg-flex d-none gap-3">
             <li className="nav-item d-flex align-items-center">
-              <Link to="/profile" className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</Link>
+              <Link to="/profile" className="btn text-white" style={{ background: '#e79c1d' }}>Fee payment</Link>
             </li>
             <li className="nav-item dropdown bg-273341 py-2">
               <Link

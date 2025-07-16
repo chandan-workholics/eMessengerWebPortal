@@ -178,7 +178,7 @@ const Profile = () => {
                                                                         className='border-0 bg-E79C1D text-white rounded-2 px-2'
                                                                         onClick={() => handlePayNow(val?.student?.student_number, val?.student?.student_dob, val?.student?.student_email)}
                                                                     >
-                                                                        Pay Now
+                                                                       Pay Now
                                                                     </button>
                                                                 </div>
                                                             </div>
