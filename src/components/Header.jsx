@@ -46,7 +46,10 @@ const Header = () => {
             <img src={require("../Img/e-logo.png")} alt="eMessenger Logo" className="me-1" />
             eMessenger
           </Link>
-          <ul className="d-lg-none d-block mb-0">
+          <ul className="d-lg-none d-flex mb-0 gap-3">
+            <li className="nav-item d-flex align-items-center">
+              <button className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</button>
+            </li>
             <li className="nav-item dropdown-start py-2">
               <Link className="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <div className='d-flex justify-content-center align-items-center'>
@@ -83,7 +86,7 @@ const Header = () => {
               </ul>
             </li>
           </ul>
-          <ul className="navbar-nav w-100">
+          <ul className="navbar-nav w-lg-50">
             <li className="nav-item d-flex align-items-center mx-lg-5 mx-0 mx-md-4 my-lg-0 my-2 w-100">
               {loading ? (
                 <marquee className="py-1 text-white bg-364659 rounded-3 fw-normal">
@@ -105,9 +108,11 @@ const Header = () => {
             </li>
           </ul>
 
-          <ul className="navbar-nav d-lg-block d-none">
+          <ul className="navbar-nav d-lg-flex d-none gap-3">
+            <li className="nav-item d-flex align-items-center">
+              <button className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</button>
+            </li>
             <li className="nav-item dropdown bg-273341 py-2">
-              
               <Link
                 className="nav-link dropdown-toggle text-white text-decoration-none"
                 to="#"
