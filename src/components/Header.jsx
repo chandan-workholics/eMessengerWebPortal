@@ -110,7 +110,7 @@ const Header = () => {
 
           <ul className="navbar-nav d-lg-flex d-none gap-3">
             <li className="nav-item d-flex align-items-center">
-              <button className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</button>
+              <Link to="/profile" className="btn text-white" style={{ background: '#e79c1d' }}>Pay now</Link>
             </li>
             <li className="nav-item dropdown bg-273341 py-2">
               <Link
