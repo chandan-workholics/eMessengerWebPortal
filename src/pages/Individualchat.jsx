@@ -7,7 +7,12 @@ import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
 
-const socket = io("https://apps.actindore.com");
+const socket = io("https://apps.actindore.com", {
+  withCredentials: true,
+  transports: ["polling", "websocket"], // fallback if websocket fails
+});
+
+
 
 const Individualchat = () => {
     const { msg_id, sender_id } = useParams();
@@ -82,7 +87,6 @@ const Individualchat = () => {
                 setMsgId(firstMessage.msg_id);
                 setSenderId(firstMessage.sender_id);
                 const groupMemberIds = response.data.groupMember.map(member => member.student_main_id);
-                console.log("Group Member Student IDs:", groupMemberIds);
                 setSelectedUserId(groupMemberIds);
             }
         } catch (error) {
@@ -100,8 +104,7 @@ const Individualchat = () => {
             } else {
                 setGroupMembers([]);
             }
-            console.log(response);
-            console.log("setGroupMembers==", setGroupMembers);
+          
         } catch (error) {
             console.error("Error fetching group members:", error.message);
         }
@@ -118,7 +121,7 @@ const Individualchat = () => {
     }, [msgId, senderId]);
 
     const handleInputChange = (e) => {
-        console.log("handle input change")
+       
         const value = e.target.value;
         setMessage(value);
 
@@ -129,7 +132,7 @@ const Individualchat = () => {
         } else {
             setShowSuggestions(false);
         }
-        console.log(setShowSuggestions, "setSj")
+       
         setCursorPosition(e.target.selectionStart);
     };
 
@@ -148,9 +151,7 @@ const Individualchat = () => {
         setShowSuggestions(false);
         setSelectedUser({ student_name, student_main_id });
 
-        console.log("Selected user:", student_name);
-        console.log("Selected user ID:", studentMainId);
-        console.log("Updated message:", updatedMessage);
+       
 
         // Ensure inputRef is valid before accessing it
         setTimeout(() => {
@@ -167,8 +168,7 @@ const Individualchat = () => {
 
 
     const handleSendMessage = async () => {
-        console.log("Button clicked, preparing to send message...");
-        console.log(selectedPdfs, ">>>>>>>>>>>>>>>>>>>")
+       
         let msgType = "TEXT";
         let link = null;
         try {
@@ -186,7 +186,7 @@ const Individualchat = () => {
                 return;
             }
 
-            console.log("Message content before sending:", message);
+           
 
             const isMentionMessage = selectedUser !== null;
 
@@ -225,7 +225,7 @@ const Individualchat = () => {
                 sender_detail: JSON.stringify(payload.sender_detail),
             };
             const response = await callAPI.post("/chat/send_chat_msg_individuals", payloadToSend);
-            console.log("Message sent successfully:", response.data);
+          
             // Ensure response.data.groupMember exists
             if (response.data && response.data.groupMember && Array.isArray(response.data.groupMember)) {
                 payload.sender_detail.student_main_id = response.data.groupMember.map(member => member.student_main_id);
@@ -263,10 +263,9 @@ const Individualchat = () => {
     };
 
     useEffect(() => {
-        console.log("Joining group with msg_id:", msg_id);
+       
         socket.emit("join_individual", msg_id);  // Emit join_group event
-        console.log("Join group event emitted");
-
+       
         socket.on("receive_individual_message", (newMessage) => {
             console.log("New message received:", newMessage);
             fetchData();
@@ -275,7 +274,7 @@ const Individualchat = () => {
         });
 
         return () => {
-            console.log("Cleaning up listeners for msg_id:", msg_id);
+            
             socket.off("receive_individual_message");
         };
     }, [msg_id, detail]);

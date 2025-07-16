@@ -43,7 +43,6 @@ const Reply = () => {
                 setError("No data available.");
             }
         } catch (error) {
-            console.error("Error fetching message details:", error.message);
             setDetail(null);
             setError("An error occurred while fetching data.");
         } finally {
@@ -136,37 +135,6 @@ const Reply = () => {
             );
         }
 
-        // Handle CHECKBOX type (checkbox selection)
-        // if (msg_type?.startsWith("CHECKBOX")) {
-        //     const parsedText = parseReplyText(data_text.data_reply_text);
-
-        //     const handleCheckboxChange = (idx, isChecked) => {
-        //         const updatedSelected = { ...parsedText.selected, [idx]: isChecked };
-        //         const updatedData = { selected: updatedSelected };
-        //         handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-        //         data_text.data_reply_text = JSON.stringify(updatedData);
-        //     };
-
-        //     return (
-        //         <div>
-        //             <label className="fw-bolder">{data_text.title}{is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
-        //             {data_text.options.map((option, idx) => {
-        //                 const isChecked = parsedText.selected?.[idx] || false;
-        //                 return (
-        //                     <div key={idx}>
-        //                         <input
-        //                             type="checkbox"
-        //                             id={`option-${idx}`}
-        //                             checked={isChecked}
-        //                             onChange={e => handleCheckboxChange(idx, e.target.checked)}
-        //                         />
-        //                         <label htmlFor={`option-${idx}`} className="ms-2">{option.option}</label>
-        //                     </div>
-        //                 );
-        //             })}
-        //         </div>
-        //     );
-        // }
 
         if (msg_type?.startsWith("CHECKBOX")) {
             const parsedText = parseReplyText(data_text.data_reply_text);
@@ -289,7 +257,7 @@ const Reply = () => {
                         );
 
                         const imageLink = response?.data?.url;
-                        console.log(imageLink);
+                       
 
                         // Save the uploaded image link to state
                         setImageURL(imageLink);
@@ -398,7 +366,7 @@ const Reply = () => {
                         );
 
                         const fileLink = response?.data?.url; // Assuming API returns the link in `data.url`
-                        console.log(fileLink);
+                       
                         setUploadedFile(fileLink); // Store the uploaded file URL
                         handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: fileLink }));
                     } catch (error) {
@@ -598,7 +566,6 @@ const Reply = () => {
     };
 
 
-    console.log(imageURL)
     return (
         <>
             <Header />

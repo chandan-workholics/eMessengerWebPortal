@@ -6,7 +6,12 @@ import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
-const socket = io("https://apps.actindore.com");
+const socket = io("https://apps.actindore.com", {
+  withCredentials: true,
+  transports: ["polling", "websocket"], // fallback if websocket fails
+});
+
+
 
 const Chat = () => {
     const { msg_id, sender_id } = useParams();
@@ -44,7 +49,7 @@ const Chat = () => {
                 setDetail(response.data.data);
                 setFivemember(response.data.five_numbers_Details);
             } else {
-                console.warn("No data received from API.");
+               
                 setDetail([]);
             }
         } catch (error) {
@@ -57,8 +62,7 @@ const Chat = () => {
 
 
     const handleSendMessage = async () => {
-        console.log("Button clicked, preparing to send message...");
-        console.log(selectedPdfs, ">>>>>>>>>>>>>>>>>>>")
+       
         let msgType = "TEXT";
         let link = null;
 
@@ -123,19 +127,19 @@ const Chat = () => {
 
 
     useEffect(() => {
-        console.log("Joining group with msg_id:", msg_id);
+       
         socket.emit("join_group", msg_id);  // Emit join_group event
-        console.log("Join group event emitted");
+      
 
         socket.on("receive_message", (newMessage) => {
-            console.log("New message received:", newMessage);
+          
             setDetail((prevDetails) => [...prevDetails, newMessage]);
             scrollToBottom();
             // handleScroll();
         });
 
         return () => {
-            console.log("Cleaning up listeners for msg_id:", msg_id);
+            
             socket.off("receive_message");
         };
     }, [msg_id, detail]);
@@ -166,15 +170,7 @@ const Chat = () => {
         setIsScrolling(!isAtTop);
     };
 
-    // useEffect(() => {
-    //     fetchData();
-    //     const interval = setInterval(() => {
-    //         if (!isScrolling) {
-    //             fetchData();
-    //         }
-    //     }, 2000);
-    //     return () => clearInterval(interval);
-    // }, [isScrolling]);
+   
 
     useEffect(() => {
         if (!isScrolling && chatBoxRef.current) {

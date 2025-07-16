@@ -19,7 +19,7 @@ const SignIn = () => {
 
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
-  const [receivedOtp, setReceivedOtp] = useState("");
+  // const [receivedOtp, setReceivedOtp] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,19 +60,15 @@ const SignIn = () => {
       );
 
       if (response.status === 200 && response.data.status) {
-        setReceivedOtp(response.data.otp);
+
         setShowOtpInput(true);
         setFormVisible(false);
-
-        // Store the token in sessionStorage
-        const { token } = response.data;
-        sessionStorage.setItem('token', token);
 
         otpTimeout = setTimeout(() => {
           setShowOtpInput(false);
           setFormVisible(true);
-          // toast.error("OTP expired. Please try again.");
-        }, 30000);
+
+        }, 90000);
       } else {
         toast.error(response.data.message || "Failed to send OTP.");
       }
@@ -84,54 +80,35 @@ const SignIn = () => {
   };
 
   const handleOtpSubmit = async () => {
-    const token = sessionStorage.getItem('token'); // Get the token from sessionStorage
 
-    if (!token) {
-      toast.error("No token provided. Please log in again.");
-      navigate("/login");
-      return;
-    }
 
-    if (otp === receivedOtp) {
-      toast.success("OTP verified successfully!");
-      setLoading(true);
+    try {
+      // Send the OTP to the verification endpoint
+      const response = await axios.post(
+        "https://apps.actindore.com/api/parents/otp-verify", { mobile_no: mobile, otp: otp });
 
-      try {
-        // Send the OTP to the verification endpoint
-        const response = await axios.post(
-          "https://apps.actindore.com/api/parents/otp-verify",
-          { mobile_no: mobile, otp: otp },
-          {
-            headers: {
-              Authorization: `Bearer ${token}` // Add token to Authorization header
-            }
-          }
-        );
-
-        // Handle the response and store token in sessionStorage
-        if (response.status === 200 && response.data.status) {
-          const { token: newToken } = response.data;
-          sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
-          sessionStorage.setItem('user', JSON.stringify(response.data.user));
-          // Redirect to home page after successful verification
-          setTimeout(() => {
-            setLoading(false);
-            navigate("/welcome-message");
-          }, 2000);
-        } else {
-          toast.error(response.data.message || "Failed to verify OTP.");
+      // Handle the response and store token in sessionStorage
+      if (response.status === 200 && response.data.status) {
+        const { token: newToken } = response.data;
+        sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        // Redirect to home page after successful verification
+        setTimeout(() => {
           setLoading(false);
-        }
-      } catch (error) {
-        toast.error("Error during OTP verification. Please try again.");
+          navigate("/welcome-message");
+        }, 2000);
+      } else {
+        toast.error(response.data.message || "Failed to verify OTP.");
+        setOtp("");
+        setShowOtpInput(false);
+        setFormVisible(true);
         setLoading(false);
       }
-    } else {
-      toast.error("Invalid OTP. Please try again.");
-      setOtp("");
-      setShowOtpInput(false);
-      setFormVisible(true);
+    } catch (error) {
+      toast.error("Error during OTP verification. Please try again.");
+      setLoading(false);
     }
+
   };
 
   useEffect(() => {
