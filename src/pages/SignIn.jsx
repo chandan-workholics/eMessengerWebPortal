@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,8 @@ import mobileAppIcon from "../mobileApp-Icon.png";
 const SignIn = () => {
 
   const [isLoadingSplash, setIsLoadingSplash] = useState(true);
+  const [otpLoading, setOtpLoading] = useState(false);
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -19,7 +21,6 @@ const SignIn = () => {
 
   const [mobile, setMobile] = useState("");
   const [otp, setOtp] = useState("");
-  // const [receivedOtp, setReceivedOtp] = useState("");
   const [showOtpInput, setShowOtpInput] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -79,37 +80,38 @@ const SignIn = () => {
     }
   };
 
-  const handleOtpSubmit = async () => {
+  const handleOtpSubmit = async (e) => {
+    if (e) e.preventDefault(); // for form submission or keydown
 
-
+    setOtpLoading(true);
     try {
-      // Send the OTP to the verification endpoint
       const response = await axios.post(
-        "https://apps.actindore.com/api/parents/otp-verify", { mobile_no: mobile, otp: otp });
+        "https://apps.actindore.com/api/parents/otp-verify",
+        { mobile_no: mobile, otp: otp }
+      );
 
-      // Handle the response and store token in sessionStorage
       if (response.status === 200 && response.data.status) {
         const { token: newToken } = response.data;
-        sessionStorage.setItem('token', newToken);  // Store the new token if it's returned
-        sessionStorage.setItem('user', JSON.stringify(response.data.user));
-        // Redirect to home page after successful verification
+        sessionStorage.setItem("token", newToken);
+        sessionStorage.setItem("user", JSON.stringify(response.data.user));
+
         setTimeout(() => {
-          setLoading(false);
+          setOtpLoading(false);
           navigate("/welcome-message");
-        }, 2000);
+        }, 1000);
       } else {
         toast.error(response.data.message || "Failed to verify OTP.");
         setOtp("");
         setShowOtpInput(false);
         setFormVisible(true);
-        setLoading(false);
       }
     } catch (error) {
       toast.error("Error during OTP verification. Please try again.");
-      setLoading(false);
+    } finally {
+      setOtpLoading(false);
     }
-
   };
+
 
   useEffect(() => {
     return () => clearTimeout(otpTimeout); // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,6 +152,7 @@ const SignIn = () => {
                 Agrawal Groups Communication App
               </p>
             </div>
+
             {formVisible && (
               <form onSubmit={handleMobileSubmit}>
                 <div className="row d-flex justify-content-center px-xl-5">
@@ -181,46 +184,54 @@ const SignIn = () => {
                     <Link className="text-DA251C fw-semibold fs-6" data-bs-toggle="modal" data-bs-target="#exampleModal">
                       How to install App?
                     </Link>
-                    {/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                      Launch demo modal
-                    </button> */}
                   </div>
                 </div>
               </form>
             )}
+
             {showOtpInput && (
-              <div className="row d-flex justify-content-center px-xl-5">
-                <div className="mb-4 col-12 px-4">
-                  <label htmlFor="otp" className="form-label">
-                    Enter OTP
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control text-8E8E8E py-3 fw-light rounded-3"
-                    id="otp"
-                    placeholder="Enter OTP"
-                    value={otp}
-                    onChange={(e) => {
-                      if (/^\d*$/.test(e.target.value)) setOtp(e.target.value);
-                    }}
-                    maxLength={4}
-                    required
-                  />
-                  {/*  {receivedOtp && (
-                    <p className="text-success mt-2">
-                      <strong>Received OTP (for testing):</strong> {receivedOtp}
-                    </p>
-                  )}*/}
-                  <button
-                    type="button"
-                    className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-3 mt-3"
-                    onClick={handleOtpSubmit}
-                  >
-                    Verify OTP
-                  </button>
+              <form onSubmit={handleOtpSubmit}>
+                <div className="row d-flex justify-content-center px-xl-5">
+                  <div className="mb-4 col-12 px-4">
+                    <label htmlFor="otp" className="form-label">Enter OTP</label>
+                    <input
+                      type="text"
+                      className="form-control text-8E8E8E py-3 fw-light rounded-3"
+                      id="otp"
+                      placeholder="Enter OTP"
+                      value={otp}
+                      onChange={(e) => {
+                        if (/^\d*$/.test(e.target.value)) setOtp(e.target.value);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleOtpSubmit(e);
+                        }
+                      }}
+                      maxLength={4}
+                      required
+                    />
+
+                    <button
+                      type="submit"
+                      className="btn log-btn w-100 bg-E79C1D border-0 fw-semibold text-white py-3 rounded-3 mt-3"
+                      disabled={otpLoading}
+                    >
+                      {otpLoading ? (
+                        <div className="spinner-border spinner-border-sm text-light" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      ) : (
+                        "Verify OTP"
+                      )}
+                    </button>
+
+                  </div>
                 </div>
-              </div>
+              </form>
             )}
+
           </div>
         </div>
         <div className="d-lg-none bg-273341 login-bottom d-flex justify-content-center py-3 px-2 position-absolute start-0 bottom-0">
