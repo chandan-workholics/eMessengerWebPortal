@@ -7,12 +7,12 @@ import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
 
-import  io  from "socket.io-client";
+import io from "socket.io-client";
 
 const socket = io("https://apps.actindore.com", {
-  withCredentials: true,
-  transports: ["websocket", "polling"], // prioritize websocket
- 
+    withCredentials: true,
+    transports: ["websocket", "polling"], // prioritize websocket
+
 });
 
 
@@ -107,7 +107,7 @@ const Individualchat = () => {
             } else {
                 setGroupMembers([]);
             }
-          
+
         } catch (error) {
             console.error("Error fetching group members:", error.message);
         }
@@ -124,18 +124,18 @@ const Individualchat = () => {
     }, [msgId, senderId]);
 
     const handleInputChange = (e) => {
-       
+
         const value = e.target.value;
         setMessage(value);
 
         const lastChar = value.slice(-1);
-        if (lastChar === "@") {
+        if (lastChar === "@" && groupMembers.length > 0) {
             setSuggestions(groupMembers);
             setShowSuggestions(true);
         } else {
             setShowSuggestions(false);
         }
-       
+
         setCursorPosition(e.target.selectionStart);
     };
 
@@ -154,7 +154,7 @@ const Individualchat = () => {
         setShowSuggestions(false);
         setSelectedUser({ student_name, student_main_id });
 
-       
+
 
         // Ensure inputRef is valid before accessing it
         setTimeout(() => {
@@ -171,7 +171,7 @@ const Individualchat = () => {
 
 
     const handleSendMessage = async () => {
-       
+
         let msgType = "TEXT";
         let link = null;
         try {
@@ -189,7 +189,7 @@ const Individualchat = () => {
                 return;
             }
 
-           
+
 
             const isMentionMessage = selectedUser !== null;
 
@@ -228,7 +228,7 @@ const Individualchat = () => {
                 sender_detail: JSON.stringify(payload.sender_detail),
             };
             const response = await callAPI.post("/chat/send_chat_msg_individuals", payloadToSend);
-          
+
             // Ensure response.data.groupMember exists
             if (response.data && response.data.groupMember && Array.isArray(response.data.groupMember)) {
                 payload.sender_detail.student_main_id = response.data.groupMember.map(member => member.student_main_id);
@@ -265,22 +265,42 @@ const Individualchat = () => {
         }
     };
 
+    // useEffect(() => {
+
+    //     socket.emit("join_individual", msg_id);  // Emit join_group event
+
+    //     socket.on("receive_individual_message", (newMessage) => {
+    //         console.log("New message received:", newMessage);
+    //         fetchData();
+    //         setDetail((prevDetails) => [...prevDetails, newMessage]);
+    //         scrollToBottom();
+    //     });
+
+    //     return () => {
+
+    //         socket.off("receive_individual_message");
+    //     };
+    // }, [msg_id, detail]);
+
+
     useEffect(() => {
-       
-        socket.emit("join_individual", msg_id);  // Emit join_group event
-       
-        socket.on("receive_individual_message", (newMessage) => {
+        socket.emit("join_individual", msg_id); // Join the chat room
+
+        const handleNewMessage = (newMessage) => {
             console.log("New message received:", newMessage);
-            fetchData();
-            setDetail((prevDetails) => [...prevDetails, newMessage]);
-            scrollToBottom();
-        });
+
+            // Don't manually add the message to UI; just refetch from backend
+            fetchData(); // This will show only allowed messages
+            scrollToBottom(); // Optionally delay this if needed
+        };
+
+        socket.on("receive_individual_message", handleNewMessage);
 
         return () => {
-            
-            socket.off("receive_individual_message");
+            socket.off("receive_individual_message", handleNewMessage);
         };
-    }, [msg_id, detail]);
+    }, [msg_id]); // <-- Only depend on msg_id, not detail
+
 
 
 
