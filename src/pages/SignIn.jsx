@@ -149,7 +149,7 @@ const SignIn = () => {
                 Hi, Welcome 👋
               </h2>
               <p className="text-78828A text-center">
-                Agrawal Groups Communication App
+                Agrawal Group's Communication App
               </p>
             </div>
 
