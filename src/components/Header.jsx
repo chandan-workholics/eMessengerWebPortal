@@ -46,7 +46,7 @@ const Header = () => {
             <img src={require("../Img/e-logo.png")} alt="eMessenger Logo" className="me-1" />
             eMessenger
           </Link>
-          <ul className="d-lg-none d-flex mb-0 gap-3">
+          <ul className="d-lg-none d-flex mb-0 gap-3 p-0">
             <li className="nav-item d-flex align-items-center">
               <button className="btn text-white" style={{ background: '#e79c1d' }}>Fee payment</button>
             </li>
@@ -110,7 +110,7 @@ const Header = () => {
 
           <ul className="navbar-nav d-lg-flex d-none gap-3">
             <li className="nav-item d-flex align-items-center">
-              <Link to="/profile" className="btn text-white" style={{ background: '#e79c1d' }}>Fee payment</Link>
+              <Link to="/profile" className="btn text-white" style={{ background: '#e79c1d',width:'130px' }}>Fee payment</Link>
             </li>
             <li className="nav-item dropdown bg-273341 py-2">
               <Link

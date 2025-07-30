@@ -233,7 +233,7 @@ const Individualchat = () => {
             if (response.data && response.data.groupMember && Array.isArray(response.data.groupMember)) {
                 payload.sender_detail.student_main_id = response.data.groupMember.map(member => member.student_main_id);
             } else {
-                console.warn("groupMember is missing or not an array", response.data);
+                // console.warn("groupMember is missing or not an array", response.data);
                 payload.sender_detail.student_main_id = []; // Default empty array
             }
             socket.emit("send_individual_message", payloadToSend);
@@ -609,7 +609,7 @@ const Individualchat = () => {
                                         />
                                         {/* Suggestions List (Bootstrap Dropdown) */}
                                         {showSuggestions && suggestions.length > 0 && (
-                                            <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050 }}>
+                                            <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050,bottom:"60px" }}>
                                                 <ul className="list-group">
                                                     {suggestions.map((user, student_main_id) => (
                                                         <li
