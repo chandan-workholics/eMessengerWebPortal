@@ -222,7 +222,7 @@ const Individualchat = () => {
                     mobilenumber: val.student_family_mobile_number,
                 })),
             };
-            console.log("Sending payload:", payload);
+
             const payloadToSend = {
                 ...payload,
                 sender_detail: JSON.stringify(payload.sender_detail),
