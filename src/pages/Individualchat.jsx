@@ -287,8 +287,6 @@ const Individualchat = () => {
         socket.emit("join_individual", msg_id); // Join the chat room
 
         const handleNewMessage = (newMessage) => {
-            console.log("New message received:", newMessage);
-
             // Don't manually add the message to UI; just refetch from backend
             fetchData(); // This will show only allowed messages
             scrollToBottom(); // Optionally delay this if needed
