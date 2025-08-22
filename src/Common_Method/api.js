@@ -40,7 +40,7 @@ export const interceptor = () => {
 
             config.headers = {
                 Accept: "application/json",
-                Authorization: token ? `Bearer ${token}` : "", // ✅ always send
+                Authorization: token ? `Bearer ${token}` : `Bearer ${''}`, // ✅ always send
             };
 
             return config;
@@ -54,7 +54,7 @@ export const interceptor = () => {
             if (error.response?.status === 401) {
                 // Clear session storage and redirect to home page
                 sessionStorage.clear();
-                window.location.href = "/"; 
+                window.location.href = "/";
             }
             return Promise.reject(error);
         }
