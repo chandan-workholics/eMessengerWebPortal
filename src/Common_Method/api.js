@@ -4,6 +4,35 @@ const apiURL = "https://apps.actindore.com/api/";
 
 const axiosApiInstance = axios.create({ baseURL: apiURL });
 
+// export const interceptor = () => {
+//     axiosApiInstance.interceptors.request.use(
+//         async (config) => {
+//             const token = sessionStorage.getItem("token");
+
+//             config.headers = {
+//                 Accept: "application/json",
+//                 ...(token && { Authorization: `Bearer ${token}` }),
+//             };
+
+//             return config;
+//         },
+//         (error) => Promise.reject(error)
+//     );
+
+//     axiosApiInstance.interceptors.response.use(
+//         (response) => response,
+//         (error) => {
+//             if (error.response?.status === 401) {
+//                 // Clear session storage and redirect to home page
+//                 sessionStorage.clear();
+//                 window.location.href = "/"; // Replace with your home or login page URL
+//             }
+//             return Promise.reject(error);
+//         }
+//     );
+// };
+
+
 export const interceptor = () => {
     axiosApiInstance.interceptors.request.use(
         async (config) => {
@@ -11,7 +40,7 @@ export const interceptor = () => {
 
             config.headers = {
                 Accept: "application/json",
-                ...(token && { Authorization: `Bearer ${token}` }),
+                Authorization: token ? `Bearer ${token}` : "", // ✅ always send
             };
 
             return config;
@@ -25,12 +54,13 @@ export const interceptor = () => {
             if (error.response?.status === 401) {
                 // Clear session storage and redirect to home page
                 sessionStorage.clear();
-                window.location.href = "/"; // Replace with your home or login page URL
+                window.location.href = "/"; 
             }
             return Promise.reject(error);
         }
     );
 };
+
 
 const callAPI = {
     get: async (url, data) => {
