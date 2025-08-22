@@ -257,7 +257,7 @@ const Reply = () => {
                         );
 
                         const imageLink = response?.data?.url;
-                       
+
 
                         // Save the uploaded image link to state
                         setImageURL(imageLink);
@@ -366,7 +366,7 @@ const Reply = () => {
                         );
 
                         const fileLink = response?.data?.url; // Assuming API returns the link in `data.url`
-                       
+
                         setUploadedFile(fileLink); // Store the uploaded file URL
                         handleInputChange(msg_body_id, msg_type, JSON.stringify({ imageURIsave: fileLink }));
                     } catch (error) {
@@ -601,16 +601,19 @@ const Reply = () => {
                                     </div>
                                 ))}
 
-                                {detail?.data?.msg_detail?.is_reply_required_any === 1 ?
+                                {detail?.data?.msg_detail?.is_reply_required_any === 1 ? (
                                     <button
-                                        className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? 'bg-secondary' : 'bg-FF0000'
+                                        className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
                                             }`}
-                                        onClick={handleReply}
-                                    // disabled={detail?.data?.is_reply_done === 1}
-
+                                        onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply} // ✅ only attach if not done
+                                        disabled={detail?.data?.is_reply_done === 1} // ✅ block clicking
                                     >
-                                        {detail?.data?.is_reply_done === 1 ? "Send Reply" : "Send Reply"}
-                                    </button> : ''}
+                                        {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
+                                    </button>
+                                ) : (
+                                    ""
+                                )}
+
                             </div>
                         </div>
                     </div>
