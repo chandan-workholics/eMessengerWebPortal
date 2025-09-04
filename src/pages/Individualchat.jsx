@@ -81,21 +81,31 @@ const Individualchat = () => {
         }
     };
 
+    
     const fetchChatDetails = async () => {
         try {
-            const response = await callAPI.get(`./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
+            const response = await callAPI.get(
+                `/chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`
+            );
 
-            if (response.data && response.data.messages.length > 0) {
-                const firstMessage = response.data.messages[0]; // Get first message dynamically
-                setMsgId(firstMessage.msg_id);
-                setSenderId(firstMessage.sender_id);
-                const groupMemberIds = response.data.groupMember.map(member => member.student_main_id);
-                setSelectedUserId(groupMemberIds);
+            if (response.data) {
+                if (response.data.messages.length > 0) {
+                    const firstMessage = response.data.messages[0];
+                    setMsgId(firstMessage.msg_id);
+                    setSenderId(firstMessage.sender_id);
+                }
+
+                if (response.data.groupMember) {
+                    setGroupMembers(response.data.groupMember);   // ✅ load all group members immediately
+                    const groupMemberIds = response.data.groupMember.map(m => m.student_main_id);
+                    setSelectedUserId(groupMemberIds);
+                }
             }
         } catch (error) {
             console.error("Error fetching chat details:", error.message);
         }
     };
+
 
     const fetchGroupMembers = async () => {
         if (!msgId || !senderId) return;
@@ -189,8 +199,6 @@ const Individualchat = () => {
                 return;
             }
 
-
-
             const isMentionMessage = selectedUser !== null;
 
             const receiverDetails = isMentionMessage
@@ -237,6 +245,24 @@ const Individualchat = () => {
                 payload.sender_detail.student_main_id = []; // Default empty array
             }
             socket.emit("send_individual_message", payloadToSend);
+
+            // Refresh messages
+            fetchData();
+
+            // ✅ Manually add sender into groupMembers if not already there
+            setGroupMembers((prev) => {
+                const exists = prev.some(m => m.student_main_id === student?.student_main_id);
+                if (!exists) {
+                    return [...prev, {
+                        student_name: student?.student_name,
+                        student_main_id: student?.student_main_id,
+                        color: student?.color
+                    }];
+                }
+                return prev;
+            });
+
+
             setMessage("");
             setImageFile(null);
             setPdfFile(null);
@@ -265,24 +291,6 @@ const Individualchat = () => {
         }
     };
 
-    // useEffect(() => {
-
-    //     socket.emit("join_individual", msg_id);  // Emit join_group event
-
-    //     socket.on("receive_individual_message", (newMessage) => {
-    //         console.log("New message received:", newMessage);
-    //         fetchData();
-    //         setDetail((prevDetails) => [...prevDetails, newMessage]);
-    //         scrollToBottom();
-    //     });
-
-    //     return () => {
-
-    //         socket.off("receive_individual_message");
-    //     };
-    // }, [msg_id, detail]);
-
-
     useEffect(() => {
         socket.emit("join_individual", msg_id); // Join the chat room
 
@@ -298,8 +306,6 @@ const Individualchat = () => {
             socket.off("receive_individual_message", handleNewMessage);
         };
     }, [msg_id]); // <-- Only depend on msg_id, not detail
-
-
 
 
     const scrollToBottom = () => {
@@ -328,9 +334,6 @@ const Individualchat = () => {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         }
     }, [detail]);
-
-
-
 
 
     const handleImageUpload = (e) => {
@@ -411,7 +414,7 @@ const Individualchat = () => {
                                         <div className="chatbox-header py-2 px-0 d-flex justify-content-between">
                                             <div className="w-100">
                                                 <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
-                                                    {user?.scholar_no} - {user?.student_name}
+                                                    {student?.student_number} - {student?.student_name}
                                                 </p>
                                                 {title ? <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
                                                     {title}
@@ -476,7 +479,7 @@ const Individualchat = () => {
                                         {detail.map((chat) => {
                                             const isUserMessage =
                                                 chat?.senderDetails?.student_number ===
-                                                parseInt(user?.scholar_no);
+                                                parseInt(student?.student_number);
 
                                             return (
                                                 <div
@@ -609,7 +612,7 @@ const Individualchat = () => {
                                         />
                                         {/* Suggestions List (Bootstrap Dropdown) */}
                                         {showSuggestions && suggestions.length > 0 && (
-                                            <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050,bottom:"60px" }}>
+                                            <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050, bottom: "60px" }}>
                                                 <ul className="list-group">
                                                     {suggestions.map((user, student_main_id) => (
                                                         <li

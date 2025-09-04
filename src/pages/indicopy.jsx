@@ -6,25 +6,27 @@ import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
-import io  from "socket.io-client";
+
+import io from "socket.io-client";
 
 const socket = io("https://apps.actindore.com", {
-  withCredentials: true,
-  transports: ["websocket", "polling"], // prioritize websocket
-  
+    withCredentials: true,
+    transports: ["websocket", "polling"], // prioritize websocket
+
 });
 
 
 
-
-const Chat = () => {
+const Individualchat = () => {
     const { msg_id, sender_id } = useParams();
     const location = useLocation();
     const { title, student } = location.state
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState([]);
     const [fivemember, setFivemember] = useState([]);
+    const [fivenumber, setFivenumber] = useState([]);
     const [message, setMessage] = useState("");
+
     const [isScrolling, setIsScrolling] = useState(false);
     const [imageFile, setImageFile] = useState(null);
     const [pdfFile, setPdfFile] = useState(null);
@@ -35,6 +37,18 @@ const Chat = () => {
     const chatBoxRef = useRef(null);
     const user = JSON.parse(sessionStorage.getItem("user"));
     const [previewImage, setPreviewImage] = useState(null);
+
+    const [groupMembers, setGroupMembers] = useState([]);
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [cursorPosition, setCursorPosition] = useState(0);
+    const [msgId, setMsgId] = useState(null);
+    const [senderId, setSenderId] = useState(null);
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const inputRef = useRef(null);
+
 
     const handleImageClick = (imageUrl) => {
         setPreviewImage(imageUrl); // Set the clicked image URL
@@ -48,12 +62,15 @@ const Chat = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const response = await callAPI.get(`./chat/get_group_chat_message?groupId=${msg_id}&chat_type=GROUPCHAT`);
+            const response = await callAPI.get(`./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
+
             if (response.data) {
-                setDetail(response.data.data);
-                setFivemember(response.data.five_numbers_Details);
+                setDetail(response.data.messages);
+                setFivemember(response?.data?.messages[0]?.messageDetails?.five_mobile_number);
+                setFivenumber(response?.data?.five_numbers_Details);
+                setSelectedUserId(response?.data?.groupMember?.student_main_id);
             } else {
-               
+                console.warn("No data received from API.");
                 setDetail([]);
             }
         } catch (error) {
@@ -64,62 +81,183 @@ const Chat = () => {
         }
     };
 
+    const fetchChatDetails = async () => {
+        try {
+            const response = await callAPI.get(`./chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
 
-    const handleSendMessage = async () => {
-       
-        let msgType = "TEXT";
-        let link = null;
-
-        if (uploadedImageUrl) {
-            msgType = "IMAGE";
-            link = uploadedImageUrl;
-        } else if (uploadedPdfUrl) {
-            msgType = "PDF";
-            link = uploadedPdfUrl;
+            if (response.data && response.data.messages.length > 0) {
+                const firstMessage = response.data.messages[0]; // Get first message dynamically
+                setMsgId(firstMessage.msg_id);
+                setSenderId(firstMessage.sender_id);
+                const groupMemberIds = response.data.groupMember.map(member => member.student_main_id);
+                setSelectedUserId(groupMemberIds);
+            }
+        } catch (error) {
+            console.error("Error fetching chat details:", error.message);
         }
+    };
 
-        if (!message.trim() && !link) return;
-
-        const payload = {
-            msg_id: parseInt(msg_id),
-            sender_id: parseInt(sender_id),
-            sender_detail: {
-                student_name: student?.student_name,
-                student_number: student?.student_number,
-                color: student?.color
-            },
-            chat_type: "GROUPCHAT",
-            sent_at: new Date().toISOString(),
-            msg_type: msgType,
-            group_id: parseInt(msg_id),
-            mobile_no: user?.mobile_no,
-            receiver_id: null,
-            message: msgType === "TEXT" ? message.trim() : '',
-            link: link,
-        }
-        const payloadToSend = {
-            ...payload,
-            sender_detail: JSON.stringify(payload.sender_detail),
-        };
+    const fetchGroupMembers = async () => {
+        if (!msgId || !senderId) return;
 
         try {
-            await callAPI.post("/chat/send_chat_msg", payloadToSend);
-            socket.emit("send_message", payloadToSend);
+            const response = await callAPI.get(`/chat/get_individual_chat_messages?msg_id=${msgId}&student_main_id=${senderId}`);
+            if (response.data && response.data.groupMember) {
+                setGroupMembers(response.data.groupMember);
+            } else {
+                setGroupMembers([]);
+            }
+
+        } catch (error) {
+            console.error("Error fetching group members:", error.message);
+        }
+    };
+
+    useEffect(() => {
+        fetchChatDetails();
+    }, []);
+
+    useEffect(() => {
+        if (msgId && senderId) {
+            fetchGroupMembers();
+        }
+    }, [msgId, senderId]);
+
+    const handleInputChange = (e) => {
+
+        const value = e.target.value;
+        setMessage(value);
+
+        const lastChar = value.slice(-1);
+        if (lastChar === "@" && groupMembers.length > 0) {
+            setSuggestions(groupMembers);
+            setShowSuggestions(true);
+        } else {
+            setShowSuggestions(false);
+        }
+
+        setCursorPosition(e.target.selectionStart);
+    };
+
+    const handleSelectUser = (student_name, student_main_id) => {
+        const textBeforeCursor = message.substring(0, cursorPosition);
+        const textAfterCursor = message.substring(cursorPosition);
+        const updatedMessage = `${textBeforeCursor}${student_name} ${textAfterCursor}`;
+
+        const studentMainId = student_main_id && !isNaN(student_main_id)
+            ? `${textBeforeCursor}${Number(student_main_id)}${textAfterCursor}`
+            : `${textBeforeCursor}Invalid ID${textAfterCursor}`;
+
+        // Update state
+        setMessage(updatedMessage);
+        setSelectedUserId(studentMainId);
+        setShowSuggestions(false);
+        setSelectedUser({ student_name, student_main_id });
+
+
+
+        // Ensure inputRef is valid before accessing it
+        setTimeout(() => {
+            if (inputRef.current) {
+                const cursorPos = textBeforeCursor.length + student_name.length + 1;
+                inputRef.current.selectionStart = cursorPos;
+                inputRef.current.selectionEnd = cursorPos;
+                inputRef.current.focus();
+            } else {
+                console.warn("Input field is not available.");
+            }
+        }, 0);
+    };
+
+
+    const handleSendMessage = async () => {
+
+        let msgType = "TEXT";
+        let link = null;
+        try {
+            if (uploadedImageUrl) {
+                console.log("Uploading image file...");
+                msgType = "IMAGE";
+                link = uploadedImageUrl;
+            } else if (uploadedPdfUrl) {
+                console.log("Uploading PDF file...");
+                msgType = "PDF";
+                link = uploadedPdfUrl;
+            }
+            if (!message.trim() && !link) {
+                console.warn("No message or file to send");
+                return;
+            }
+
+
+
+            const isMentionMessage = selectedUser !== null;
+
+            const receiverDetails = isMentionMessage
+                ? [{ student_main_id: selectedUser.student_main_id, mobilenumber: selectedUser.student_family_mobile_number }]
+                : fivenumber?.map((val) => ({
+                    student_main_id: val.student_main_id,
+                    mobilenumber: val.student_family_mobile_number,
+                }));
+
+            const payload = {
+                msg_id: parseInt(msg_id),
+                sender_id: parseInt(sender_id),
+                sender_detail: {
+                    student_name: student?.student_name,
+                    student_number: student?.student_number,
+                    student_main_id: student?.student_main_id || null,
+                    color: student?.color
+                },
+                msg_type: msgType,
+                link: link || "",
+                chat_type: "INDIVIDUALCHAT",
+                sent_at: new Date().toISOString(),
+                mobile_no: user?.mobile_no,
+                group_id: parseInt(msg_id),
+                message: message.trim(),
+                private_message: isMentionMessage ? selectedUser.student_main_id : null,
+                receiverMobileNumbers: fivenumber?.map((val) => ({
+                    student_main_id: val.student_main_id,
+                    mobilenumber: val.student_family_mobile_number,
+                })),
+            };
+
+            const payloadToSend = {
+                ...payload,
+                sender_detail: JSON.stringify(payload.sender_detail),
+            };
+            const response = await callAPI.post("/chat/send_chat_msg_individuals", payloadToSend);
+
+            // Ensure response.data.groupMember exists
+            if (response.data && response.data.groupMember && Array.isArray(response.data.groupMember)) {
+                payload.sender_detail.student_main_id = response.data.groupMember.map(member => member.student_main_id);
+            } else {
+                // console.warn("groupMember is missing or not an array", response.data);
+                payload.sender_detail.student_main_id = []; // Default empty array
+            }
+            socket.emit("send_individual_message", payloadToSend);
             setMessage("");
             setImageFile(null);
             setPdfFile(null);
             setUploadedImageUrl(null);
             setUploadedPdfUrl(null);
             fetchData();
+            if (isMentionMessage) {
+                setSelectedUser(null);
+            }
             setTimeout(() => {
                 if (chatBoxRef.current) {
                     chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
                 }
             }, 100);
+
         } catch (error) {
             console.error("Error sending message:", error.message);
         }
     };
+
+
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
@@ -127,26 +265,40 @@ const Chat = () => {
         }
     };
 
+    // useEffect(() => {
 
+    //     socket.emit("join_individual", msg_id);  // Emit join_group event
+
+    //     socket.on("receive_individual_message", (newMessage) => {
+    //         console.log("New message received:", newMessage);
+    //         fetchData();
+    //         setDetail((prevDetails) => [...prevDetails, newMessage]);
+    //         scrollToBottom();
+    //     });
+
+    //     return () => {
+
+    //         socket.off("receive_individual_message");
+    //     };
+    // }, [msg_id, detail]);
 
 
     useEffect(() => {
-       
-        socket.emit("join_group", msg_id);  // Emit join_group event
-      
+        socket.emit("join_individual", msg_id); // Join the chat room
 
-        socket.on("receive_message", (newMessage) => {
-          
-            setDetail((prevDetails) => [...prevDetails, newMessage]);
-            scrollToBottom();
-            // handleScroll();
-        });
+        const handleNewMessage = (newMessage) => {
+            // Don't manually add the message to UI; just refetch from backend
+            fetchData(); // This will show only allowed messages
+            scrollToBottom(); // Optionally delay this if needed
+        };
+
+        socket.on("receive_individual_message", handleNewMessage);
 
         return () => {
-            
-            socket.off("receive_message");
+            socket.off("receive_individual_message", handleNewMessage);
         };
-    }, [msg_id, detail]);
+    }, [msg_id]); // <-- Only depend on msg_id, not detail
+
 
 
 
@@ -165,23 +317,17 @@ const Chat = () => {
         fetchData();
     }, []);
 
-
-
-
     const handleScroll = () => {
         if (!chatBoxRef.current) return;
         const isAtTop = chatBoxRef.current.scrollTop === 0;
         setIsScrolling(!isAtTop);
     };
 
-   
-
     useEffect(() => {
         if (!isScrolling && chatBoxRef.current) {
             chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
         }
     }, [detail]);
-
 
 
 
@@ -194,9 +340,11 @@ const Chat = () => {
             uploadImage(files[0]);
         }
     };
+
     const removeImage = (index) => {
         setSelectedImages((prev) => prev.filter((_, i) => i !== index));
     };
+
     const uploadImage = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -213,6 +361,7 @@ const Chat = () => {
             console.error("Error uploading image:", error);
         }
     };
+
     const handlePdfUpload = (e) => {
         const files = Array.from(e.target.files);
         setSelectedPdfs((prev) => [...prev, ...files]);
@@ -220,9 +369,11 @@ const Chat = () => {
             uploadPdf(files[0]);
         }
     };
+
     const removePdf = (index) => {
         setSelectedPdfs((prev) => prev.filter((_, i) => i !== index));
     };
+
     const uploadPdf = async (file) => {
         const formData = new FormData();
         formData.append("file", file);
@@ -240,12 +391,15 @@ const Chat = () => {
         }
     };
 
+
+ 
     return (
         <>
             <Header />
             <div className="container-fluid p-0 chat-page">
                 <div className="container">
                     <div className="row my-0 my-md-4">
+
                         {/* Chatbox */}
 
                         <div className="col-xl-9 col-lg-8 col-md-12 col-12 px-0 px-md-0 px-xl-auto">
@@ -258,7 +412,7 @@ const Chat = () => {
                                         <div className="chatbox-header py-2 px-0 d-flex justify-content-between">
                                             <div className="w-100">
                                                 <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
-                                                    {student?.student_number} - {student?.student_name}
+                                                    {user?.scholar_no} - {user?.student_name}
                                                 </p>
                                                 {title ? <p className="text-010A48 fw-semibold mt-1 mb-0 teach">
                                                     {title}
@@ -285,12 +439,12 @@ const Chat = () => {
                                                             >
                                                                 <p className="mb-0 text-010A48 fw-semibold">
                                                                     <i className="fa-solid fa-circle me-2 text-4CD964"></i>
-                                                                    Available Teacher
+                                                                    Available Teachers
                                                                 </p>
                                                             </div>
                                                             <div className="card-body p-1 pb-2">
                                                                 {/* Dynamic Teacher List */}
-                                                                {fivemember?.map((teacher) => (
+                                                                {fivenumber?.map((teacher) => (
                                                                     <p
                                                                         key={teacher.student_main_id}
                                                                         className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -322,8 +476,8 @@ const Chat = () => {
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
-                                                chat.sender?.student_number ===
-                                                parseInt(student?.student_number);
+                                                chat?.senderDetails?.student_number ===
+                                                parseInt(user?.scholar_no);
 
                                             return (
                                                 <div
@@ -331,22 +485,19 @@ const Chat = () => {
                                                     className={`message ${isUserMessage
                                                         ? "outgoing align-self-end text-end"
                                                         : "incoming d-flex align-items-center align-self-start"
-                                                        } mb-1`}
+                                                        } mb-3`}
                                                 >
                                                     {!isUserMessage && (
-                                                      
                                                         <span className="me-2 pt-3">
                                                             <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: JSON.parse(chat.sender_detail)?.color }}></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">
-                                                       
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
                                                                 {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}
                                                             </p>
                                                         )}
-
                                                         <p
                                                             className={`${isUserMessage
                                                                 ? "bg-E79C1D text-white"
@@ -410,6 +561,7 @@ const Chat = () => {
                                                                     />
                                                                 </div>
                                                             )}
+
                                                         </p>
                                                         <p className="text-0D082C px-2 mb-0 info">
                                                             {chat?.sent_at ? format(new Date(chat.sent_at), "hh:mm a") : "N/A"}
@@ -418,7 +570,9 @@ const Chat = () => {
                                                 </div>
                                             );
                                         })}
+
                                     </div>
+
 
 
                                     {/* Chatbox Input */}
@@ -432,7 +586,8 @@ const Chat = () => {
                                                 />
                                                 <button type="button" onClick={() => removeImage(index)} className="cancel-btn">
                                                     <i className="fa-solid fa-times-circle"></i>
-                                                </button>  </div>))}
+                                                </button>
+                                            </div>))}
                                         {selectedPdfs.map((pdf, index) => (
                                             <div key={index} className="file-preview">
                                                 <button
@@ -442,40 +597,53 @@ const Chat = () => {
                                                     {pdf.name}
                                                     <i className="fa-solid fa-times-circle cancel-btn"></i>
                                                 </button>
-                                            </div>
-                                        ))}
+                                            </div>))}
                                     </div>
-
-
                                     <div className="chatbox-input border rounded-bottom-3 d-flex align-items-center position-absolute w-100 bg-FAFAFA">
                                         <input
                                             type="text"
                                             placeholder="Reply..."
                                             className="me-3 p-2 rounded-3"
                                             value={message}
-                                            onChange={(e) => setMessage(e.target.value)}
+                                            onChange={handleInputChange}
                                             onKeyPress={handleKeyPress}
                                         />
+                                        {/* Suggestions List (Bootstrap Dropdown) */}
+                                        {showSuggestions && suggestions.length > 0 && (
+                                            <div className="position-absolute w-50 bg-white border rounded shadow mt-5" style={{ zIndex: 1050,bottom:"60px" }}>
+                                                <ul className="list-group">
+                                                    {suggestions.map((user, student_main_id) => (
+                                                        <li
+                                                            key={student_main_id}
+                                                            className="list-group-item list-group-item-action"
+                                                            onClick={() => handleSelectUser(user.student_name, user.student_main_id)}
+                                                            style={{ cursor: "pointer" }}
+                                                        >
+                                                            {user.student_name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
                                         <input
                                             type="file"
-                                            className="d-none"
-                                            id="imageUpload"
-                                            accept="image/*"
-                                            onChange={handleImageUpload}
-                                        />
-                                        <label htmlFor="imageUpload">
-                                            <i className="fa-solid fa-image text-969599 pe-2"></i>
-                                        </label>
-
-                                        <input
-                                            type="file"
-                                            className="d-none"
-                                            id="pdfUpload"
                                             accept="application/pdf"
+                                            className="d-none"
+                                            id="pdf-upload"
                                             onChange={handlePdfUpload}
                                         />
-                                        <label htmlFor="pdfUpload">
+                                        <label htmlFor="pdf-upload">
                                             <i className="fa-solid fa-file-pdf pe-2"></i>
+                                        </label>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="d-none"
+                                            id="image-upload"
+                                            onChange={handleImageUpload}
+                                        />
+                                        <label htmlFor="image-upload">
+                                            <i className="fa-solid fa-image pe-2"></i>
                                         </label>
                                         <button
                                             className="send-message-btn bg-FF0000 rounded-circle px-2 py-2 d-flex justify-content-center align-items-center"
@@ -487,6 +655,7 @@ const Chat = () => {
                                 </div>
                             </div>
                         </div>
+
 
 
                         {/* Available Teachers */}
@@ -506,7 +675,7 @@ const Chat = () => {
                                 </div>
                                 <div className="card-body">
                                     {/* Dynamic Teacher List */}
-                                    {fivemember?.map((teacher) => (
+                                    {fivenumber?.map((teacher) => (
                                         <p
                                             key={teacher.student_main_id}
                                             className="mb-0 my-2 text-010A48 fw-normal teach"
@@ -531,5 +700,7 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default Individualchat;
+
+
 
