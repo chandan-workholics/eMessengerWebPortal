@@ -81,57 +81,86 @@ const Individualchat = () => {
         }
     };
 
-    
+
+    // const fetchChatDetails = async () => {
+    //     try {
+    //         const response = await callAPI.get(
+    //             `/chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`
+    //         );
+
+    //         if (response.data) {
+    //             if (response.data.messages.length > 0) {
+    //                 const firstMessage = response.data.messages[0];
+    //                 setMsgId(firstMessage.msg_id);
+    //                 setSenderId(firstMessage.sender_id);
+    //             }
+
+    //             if (response.data.groupMember) {
+    //                 setGroupMembers(response.data.groupMember);   // ✅ load all group members immediately
+    //                 const groupMemberIds = response.data.groupMember.map(m => m.student_main_id);
+    //                 setSelectedUserId(groupMemberIds);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching chat details:", error.message);
+    //     }
+    // };
+
+
+    // const fetchGroupMembers = async () => {
+    //     if (!msgId || !senderId) return;
+
+    //     try {
+    //         const response = await callAPI.get(`/chat/get_individual_chat_messages?msg_id=${msgId}&student_main_id=${senderId}`);
+    //         if (response.data && response.data.groupMember) {
+    //             setGroupMembers(response.data.groupMember);
+    //         } else {
+    //             setGroupMembers([]);
+    //         }
+
+    //     } catch (error) {
+    //         console.error("Error fetching group members:", error.message);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchChatDetails();
+    // }, []);
+
+    // useEffect(() => {
+    //     if (msgId && senderId) {
+    //         fetchGroupMembers();
+    //     }
+    // }, [msgId, senderId]);
+
+
     const fetchChatDetails = async () => {
         try {
-            const response = await callAPI.get(
-                `/chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`
-            );
-
-            if (response.data) {
-                if (response.data.messages.length > 0) {
-                    const firstMessage = response.data.messages[0];
-                    setMsgId(firstMessage.msg_id);
-                    setSenderId(firstMessage.sender_id);
-                }
-
-                if (response.data.groupMember) {
-                    setGroupMembers(response.data.groupMember);   // ✅ load all group members immediately
-                    const groupMemberIds = response.data.groupMember.map(m => m.student_main_id);
-                    setSelectedUserId(groupMemberIds);
-                }
+            const response = await callAPI.get(`/chat/get_individual_chat_messages?msg_id=${msg_id}&student_main_id=${sender_id}`);
+            if (response.data?.messages.length > 0) {
+                const firstMessage = response.data.messages[0];
+                setMsgId(firstMessage.msg_id);
+                setSenderId(firstMessage.sender_id); // update state only if needed
+                setDetail(response.data.messages);
+                setFivemember(firstMessage.messageDetails?.five_mobile_number);
+                setFivenumber(response.data.five_numbers_Details);
             }
-        } catch (error) {
-            console.error("Error fetching chat details:", error.message);
-        }
-    };
 
-
-    const fetchGroupMembers = async () => {
-        if (!msgId || !senderId) return;
-
-        try {
-            const response = await callAPI.get(`/chat/get_individual_chat_messages?msg_id=${msgId}&student_main_id=${senderId}`);
-            if (response.data && response.data.groupMember) {
+            if (response.data?.groupMember) {
                 setGroupMembers(response.data.groupMember);
-            } else {
-                setGroupMembers([]);
+                setSelectedUserId(response.data.groupMember.map(m => m.student_main_id));
             }
-
         } catch (error) {
-            console.error("Error fetching group members:", error.message);
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
+
 
     useEffect(() => {
         fetchChatDetails();
     }, []);
-
-    useEffect(() => {
-        if (msgId && senderId) {
-            fetchGroupMembers();
-        }
-    }, [msgId, senderId]);
 
     const handleInputChange = (e) => {
 
