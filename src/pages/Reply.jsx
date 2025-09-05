@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
@@ -8,12 +8,14 @@ import axios from "axios";
 
 const Reply = () => {
     const { msg_id, sended_msg_id } = useParams();
+    const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState(null);
+    const [myresponse, setMyresponse] = useState(null);
     const [error, setError] = useState(null);
     const [replyBodies, setReplyBodies] = useState([]);
     const user = JSON.parse(sessionStorage.getItem("user"));
-
+    const { title, student } = location.state
     const [filePreview, setFilePreview] = useState(null); // Store the file preview URL
     const [uploadedFile, setUploadedFile] = useState(null); // Store the uploaded file link
 
@@ -50,8 +52,30 @@ const Reply = () => {
         }
     };
 
+    const fetchDataMyresponse = async () => {
+        try {
+            setLoading(true);
+            const response = await callAPI.get(
+                `./msg/reply-messages?msg_id=${msg_id}&sended_msg_id=${sended_msg_id}`
+            );
+            if (response.data) {
+                setMyresponse(response.data);
+                setError(null);
+            } else {
+                setMyresponse(null);
+                setError("No data available.");
+            }
+        } catch (error) {
+            setMyresponse(null);
+            setError("An error occurred while fetching data.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchData();// eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchDataMyresponse();// eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [msg_id, sended_msg_id]);
 
 
@@ -544,9 +568,9 @@ const Reply = () => {
         const payload = {
             msg_id: parseInt(msg_id),
             mobile_no: parseInt(user?.mobile_no),
-            student_main_id: parseInt(user?.scholar_no),
+            student_main_id: parseInt(student?.student_number),
             sended_msg_id: parseInt(sended_msg_id),
-            student_number: user?.scholar_no,
+            student_number: student?.student_number,
             replyBodies: replyBodies,
         };
 
@@ -566,6 +590,14 @@ const Reply = () => {
     };
 
 
+
+    const getResponseForMsgBody = (msgBodyId) => {
+        return myresponse?.data?.replyBodies?.find(
+            (resp) => resp.msg_body_id === msgBodyId
+        );
+    };
+
+
     return (
         <>
             <Header />
@@ -580,9 +612,11 @@ const Reply = () => {
                         </h6>
                     </div>
                 </div>
+
                 <div className="container my-3">
-                    <div className="row">
-                        {/* First Column */}
+
+                    {/* <div className="row">
+                      
                         <div className="col-xl-6 col-lg-6 col-12">
                             <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
                                 {firstColumn?.map((msgBody, index) => (
@@ -592,7 +626,7 @@ const Reply = () => {
                                 ))}
                             </div>
                         </div>
-                        {/* Second Column */}
+                      
                         <div className="col-xl-6 col-lg-6 col-12">
                             <div className="card px-3 py-4 rounded-4 border-0 mb-xl-0 mb-4">
                                 {secondColumn?.map((msgBody, index) => (
@@ -605,8 +639,8 @@ const Reply = () => {
                                     <button
                                         className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
                                             }`}
-                                        onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply} // ✅ only attach if not done
-                                        disabled={detail?.data?.is_reply_done === 1} // ✅ block clicking
+                                        onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply} 
+                                        disabled={detail?.data?.is_reply_done === 1} 
                                     >
                                         {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
                                     </button>
@@ -616,7 +650,152 @@ const Reply = () => {
 
                             </div>
                         </div>
+                    </div> */}
+
+                    <div className="row">
+                        {detail?.data?.msg_body?.map((msgBody, index) => {
+                            const response = getResponseForMsgBody(msgBody.msg_body_id);
+                            let parsedData = {};
+                            try {
+                                parsedData = response ? JSON.parse(response.data_reply_text) : {};
+                            } catch (e) { }
+
+                            return (
+                                <div key={index} className="col-xl-6 col-lg-6 col-12 mb-3">
+                                    <div className="card px-3 py-4 border-0 rounded-4 shadow-sm">
+                                        {/* Input Title */}
+                                        <h6 className="fw-bold mb-2">{msgBody.label}</h6>
+                                        {renderInputField(msgBody)}
+
+                                        {/* Show Response (if exists) */}
+                                        {response && (
+                                            <div className="mt-3 border-top pt-2">
+                                                <h6 className="fw-semibold text-primary">My Response</h6>
+
+                                                {response?.msg_type === "OPTION-INPUT" && (
+                                                    <p>Selected: {Object.values(parsedData?.selected || {}).join(", ")}</p>
+                                                )}
+
+                                                {response?.msg_type === "CHECKBOX-INPUT" && (
+                                                    <p>Checked: {Object.values(parsedData?.selected || {}).join(", ")}</p>
+                                                )}
+
+                                                {response?.msg_type === "TEXTBOX-INPUT" && <p>{parsedData?.text}</p>}
+
+                                                {response?.msg_type === "TEXTAREA-INPUT" && <p>{parsedData?.text}</p>}
+
+                                                {response?.msg_type === "CAMERA-INPUT" && parsedData?.imageURIsave && (
+                                                    <img
+                                                        src={parsedData.imageURIsave}
+                                                        alt="User response"
+                                                        className="img-fluid rounded"
+                                                        style={{ maxWidth: "200px" }}
+                                                    />
+                                                )}
+
+                                                {response?.msg_type === "FILE-INPUT" && parsedData?.imageURIsave && (
+                                                    <a
+                                                        href={parsedData.imageURIsave}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="btn btn-outline-primary btn-sm"
+                                                    >
+                                                        Download File
+                                                    </a>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                        {/* ✅ Submit Button Row */}
+                        <div className="col-12 mt-3">
+                            {detail?.data?.msg_detail?.is_reply_required_any === 1 && (
+                                <button
+                                    className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
+                                        }`}
+                                    onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply}
+                                    disabled={detail?.data?.is_reply_done === 1}
+                                >
+                                    {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
+                                </button>
+                            )}
+                        </div>
                     </div>
+
+
+
+                    {/* <div className="row">
+                        <div className="col-xl-6 col-lg-6 col-12">
+                            <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
+                                <h5 className="text-010A48 fw-bold mb-4">My Response</h5>
+                                {myresponse?.data?.replyBodies?.map((value, index) => {
+                                    let parsedData;
+                                    try {
+                                        parsedData = JSON.parse(value?.data_reply_text);
+                                    } catch (e) {
+                                        parsedData = {};
+                                    }
+
+                                    return (
+                                        <div key={index} className="mb-3">
+                                            <p className="fw-semibold mb-1">{value?.msg_type}</p>
+
+                                            
+                                            {value?.msg_type === "OPTION-INPUT" && (
+                                                <p className="text-5F5F5F">
+                                                    Selected: {Object.values(parsedData?.selected || {}).join(", ")}
+                                                </p>
+                                            )}
+
+                                          
+                                            {value?.msg_type === "CHECKBOX-INPUT" && (
+                                                <p className="text-5F5F5F">
+                                                    Checked: {Object.values(parsedData?.selected || {}).join(", ")}
+                                                </p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "TEXTBOX-INPUT" && (
+                                                <p className="text-010A48">{parsedData?.text}</p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "TEXTAREA-INPUT" && (
+                                                <p className="text-010A48">{parsedData?.text}</p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "CAMERA-INPUT" && parsedData?.imageURIsave && (
+                                                <img
+                                                    src={parsedData.imageURIsave}
+                                                    alt="User response"
+                                                    className="img-fluid rounded shadow-sm"
+                                                    style={{ maxWidth: "200px" }}
+                                                />
+                                            )}
+
+                                           
+                                            {value?.msg_type === "FILE-INPUT" && parsedData?.imageURIsave && (
+                                                <a
+                                                    href={parsedData.imageURIsave}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="btn btn-outline-primary btn-sm"
+                                                >
+                                                    Download File
+                                                </a>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div> */}
+
+
                 </div>
             </div>
         </>
