@@ -127,86 +127,37 @@ const Reply = () => {
     const renderInputField = (msgBody) => {
         const { msg_type, data_text, msg_body_id, is_reply_required } = msgBody;
 
-        // Handle OPTION type (radio buttons)
-        // if (msg_type?.startsWith("OPTION")) {
-        //     const handleOptionChange = (selectedValue) => {
-        //         const updatedData = { selected: { 0: selectedValue } };
-        //         handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-        //         data_text.data_reply_text = JSON.stringify(updatedData);
-        //     };
-
-        //     return (
-        //         <div>
-        //             <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
-        //             <div className="form-control">
-        //                 {data_text.options.map((option, idx) => (
-        //                     <div key={idx} className="form-check">
-        //                         <input
-        //                             className="form-check-input"
-        //                             type="radio"
-        //                             name="option"
-        //                             id={`option-${idx}`}
-        //                             value={option.option}
-        //                             onChange={(e) => handleOptionChange(e.target.value)}
-        //                         />
-        //                         <label className="form-check-label" htmlFor={`option-${idx}`}>
-        //                             {option.option}
-        //                         </label>
-        //                     </div>
-        //                 ))}
-        //             </div>
-        //         </div>
-        //     );
-        // }
-
 
         if (msg_type?.startsWith("OPTION")) {
-            const parsedText = parseReplyText(data_text.data_reply_text); // get current selection
-
-            const handleOptionChange = (idx, optionValue, isChecked) => {
-                const updatedSelected = { ...parsedText.selected };
-
-                if (isChecked) {
-                    // Add selected option
-                    updatedSelected[idx] = optionValue;
-                } else {
-                    // Remove unselected option
-                    delete updatedSelected[idx];
-                }
-
-                const updatedData = { selected: updatedSelected };
+            const handleOptionChange = (selectedValue) => {
+                const updatedData = { selected: { 0: selectedValue } };
                 handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
                 data_text.data_reply_text = JSON.stringify(updatedData);
             };
 
             return (
                 <div>
-                    <label className="fw-bolder">
-                        {data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}
-                    </label>
+                    <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <div className="form-control">
-                        {data_text.options.map((option, idx) => {
-                            const isChecked = parsedText.selected?.[idx] !== undefined;
-                            return (
-                                <div key={idx} className="form-check">
-                                    <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        id={`option-${idx}`}
-                                        checked={isChecked}
-                                        onChange={(e) => handleOptionChange(idx, option.option, e.target.checked)}
-                                    />
-                                    <label className="form-check-label" htmlFor={`option-${idx}`}>
-                                        {option.option}
-                                    </label>
-                                </div>
-                            );
-                        })}
+                        {data_text.options.map((option, idx) => (
+                            <div key={idx} className="form-check">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="option"
+                                    id={`option-${idx}`}
+                                    value={option.option}
+                                    onChange={(e) => handleOptionChange(e.target.value)}
+                                />
+                                <label className="form-check-label" htmlFor={`option-${idx}`}>
+                                    {option.option}
+                                </label>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
         }
-
 
 
         if (msg_type?.startsWith("CHECKBOX")) {
@@ -786,19 +737,6 @@ const Reply = () => {
                                     {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
                                 </button>
                             )}
-
-
-
-
-                            {/* <button
-                                className="btn border-0 text-white rounded-5 bg-FF0000"
-
-                                onClick={handleReply}
-
-                            >
-                                Send Reply
-                            </button> */}
-
                         </div>
                     </div>
 
