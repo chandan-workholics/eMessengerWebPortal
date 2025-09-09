@@ -107,9 +107,9 @@ const Reply = () => {
         return <div className="text-center text-danger">{error}</div>;
     }
 
-    // if (!detail) {
-    //     return <div className="text-center">No data available.</div>;
-    // }
+    if (!detail) {
+        return <div className="text-center">No data available.</div>;
+    }
 
     // Divide the msg_body into two equal arrays for rendering
     const midIndex = Math.ceil((detail?.data?.msg_body?.length || 0) / 2);
@@ -128,85 +128,36 @@ const Reply = () => {
         const { msg_type, data_text, msg_body_id, is_reply_required } = msgBody;
 
         // Handle OPTION type (radio buttons)
-        // if (msg_type?.startsWith("OPTION")) {
-        //     const handleOptionChange = (selectedValue) => {
-        //         const updatedData = { selected: { 0: selectedValue } };
-        //         handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
-        //         data_text.data_reply_text = JSON.stringify(updatedData);
-        //     };
-
-        //     return (
-        //         <div>
-        //             <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
-        //             <div className="form-control">
-        //                 {data_text.options.map((option, idx) => (
-        //                     <div key={idx} className="form-check">
-        //                         <input
-        //                             className="form-check-input"
-        //                             type="radio"
-        //                             name="option"
-        //                             id={`option-${idx}`}
-        //                             value={option.option}
-        //                             onChange={(e) => handleOptionChange(e.target.value)}
-        //                         />
-        //                         <label className="form-check-label" htmlFor={`option-${idx}`}>
-        //                             {option.option}
-        //                         </label>
-        //                     </div>
-        //                 ))}
-        //             </div>
-        //         </div>
-        //     );
-        // }
-
-
         if (msg_type?.startsWith("OPTION")) {
-            const parsedText = parseReplyText(data_text.data_reply_text); // get current selection
-
-            const handleOptionChange = (idx, optionValue, isChecked) => {
-                const updatedSelected = { ...parsedText.selected };
-
-                if (isChecked) {
-                    // Add selected option
-                    updatedSelected[idx] = optionValue;
-                } else {
-                    // Remove unselected option
-                    delete updatedSelected[idx];
-                }
-
-                const updatedData = { selected: updatedSelected };
+            const handleOptionChange = (selectedValue) => {
+                const updatedData = { selected: { 0: selectedValue } };
                 handleInputChange(msg_body_id, msg_type, JSON.stringify(updatedData));
                 data_text.data_reply_text = JSON.stringify(updatedData);
             };
 
             return (
                 <div>
-                    <label className="fw-bolder">
-                        {data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}
-                    </label>
+                    <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
                     <div className="form-control">
-                        {data_text.options.map((option, idx) => {
-                            const isChecked = parsedText.selected?.[idx] !== undefined;
-                            return (
-                                <div key={idx} className="form-check">
-                                    <input
-                                        type="checkbox"
-                                        className="form-check-input"
-                                        id={`option-${idx}`}
-                                        checked={isChecked}
-                                        onChange={(e) => handleOptionChange(idx, option.option, e.target.checked)}
-                                    />
-                                    <label className="form-check-label" htmlFor={`option-${idx}`}>
-                                        {option.option}
-                                    </label>
-                                </div>
-                            );
-                        })}
+                        {data_text.options.map((option, idx) => (
+                            <div key={idx} className="form-check">
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="option"
+                                    id={`option-${idx}`}
+                                    value={option.option}
+                                    onChange={(e) => handleOptionChange(e.target.value)}
+                                />
+                                <label className="form-check-label" htmlFor={`option-${idx}`}>
+                                    {option.option}
+                                </label>
+                            </div>
+                        ))}
                     </div>
                 </div>
             );
         }
-
 
 
         if (msg_type?.startsWith("CHECKBOX")) {
@@ -614,56 +565,6 @@ const Reply = () => {
     };
 
     const handleReply = async () => {
-        // Check required fields
-        const missingFields = [];
-
-        detail?.data?.msg_body?.forEach((msgBody) => {
-            if (msgBody.is_reply_required === 1) {
-                const response = replyBodies.find(rb => rb.msg_body_id === msgBody.msg_body_id);
-                if (!response) {
-                    missingFields.push(msgBody.label);
-                    return;
-                }
-
-                // Check based on type
-                const data = parseReplyText(response.data_reply_text);
-
-                if (
-                    (msgBody.msg_type.startsWith("TEXTBOX") || msgBody.msg_type.startsWith("TEXTAREA")) &&
-                    (!data.text || data.text.trim() === "")
-                ) {
-                    missingFields.push(msgBody.label);
-                }
-
-                if (
-                    msgBody.msg_type.startsWith("OPTION") &&
-                    (!data.selected || Object.keys(data.selected).length === 0)
-                ) {
-                    missingFields.push(msgBody.label);
-                }
-
-                if (
-                    msgBody.msg_type.startsWith("CHECKBOX") &&
-                    (!data.selected || Object.keys(data.selected).length === 0)
-                ) {
-                    missingFields.push(msgBody.label);
-                }
-
-                if (
-                    (msgBody.msg_type.startsWith("CAMERA") || msgBody.msg_type.startsWith("FILE")) &&
-                    (!data.imageURIsave || data.imageURIsave === null)
-                ) {
-                    missingFields.push(msgBody.label);
-                }
-            }
-        });
-
-        if (missingFields.length > 0) {
-            alert(`Please fill/select required fields: ${missingFields.join(", ")}`);
-            return; // Stop submission
-        }
-
-        // Proceed if all required fields are filled
         const payload = {
             msg_id: parseInt(msg_id),
             mobile_no: parseInt(user?.mobile_no),
@@ -714,6 +615,42 @@ const Reply = () => {
 
                 <div className="container my-3">
 
+                    {/* <div className="row">
+                      
+                        <div className="col-xl-6 col-lg-6 col-12">
+                            <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
+                                {firstColumn?.map((msgBody, index) => (
+                                    <div key={index} className="mb-3">
+                                        {renderInputField(msgBody)}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                      
+                        <div className="col-xl-6 col-lg-6 col-12">
+                            <div className="card px-3 py-4 rounded-4 border-0 mb-xl-0 mb-4">
+                                {secondColumn?.map((msgBody, index) => (
+                                    <div key={index} className="mb-3">
+                                        {renderInputField(msgBody)}
+                                    </div>
+                                ))}
+
+                                {detail?.data?.msg_detail?.is_reply_required_any === 1 ? (
+                                    <button
+                                        className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
+                                            }`}
+                                        onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply} 
+                                        disabled={detail?.data?.is_reply_done === 1} 
+                                    >
+                                        {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
+                                    </button>
+                                ) : (
+                                    ""
+                                )}
+
+                            </div>
+                        </div>
+                    </div> */}
 
                     <div className="row">
                         {detail?.data?.msg_body?.map((msgBody, index) => {
@@ -775,7 +712,6 @@ const Reply = () => {
 
                         {/* ✅ Submit Button Row */}
                         <div className="col-12 mt-3">
-
                             {detail?.data?.msg_detail?.is_reply_required_any === 1 && (
                                 <button
                                     className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
@@ -786,21 +722,79 @@ const Reply = () => {
                                     {detail?.data?.is_reply_done === 1 ? "Reply Sent" : "Send Reply"}
                                 </button>
                             )}
-
-
-
-
-                            {/* <button
-                                className="btn border-0 text-white rounded-5 bg-FF0000"
-
-                                onClick={handleReply}
-
-                            >
-                                Send Reply
-                            </button> */}
-
                         </div>
                     </div>
+
+
+
+                    {/* <div className="row">
+                        <div className="col-xl-6 col-lg-6 col-12">
+                            <div className="card px-3 py-4 border-0 rounded-4 mb-xl-0 mb-4">
+                                <h5 className="text-010A48 fw-bold mb-4">My Response</h5>
+                                {myresponse?.data?.replyBodies?.map((value, index) => {
+                                    let parsedData;
+                                    try {
+                                        parsedData = JSON.parse(value?.data_reply_text);
+                                    } catch (e) {
+                                        parsedData = {};
+                                    }
+
+                                    return (
+                                        <div key={index} className="mb-3">
+                                            <p className="fw-semibold mb-1">{value?.msg_type}</p>
+
+                                            
+                                            {value?.msg_type === "OPTION-INPUT" && (
+                                                <p className="text-5F5F5F">
+                                                    Selected: {Object.values(parsedData?.selected || {}).join(", ")}
+                                                </p>
+                                            )}
+
+                                          
+                                            {value?.msg_type === "CHECKBOX-INPUT" && (
+                                                <p className="text-5F5F5F">
+                                                    Checked: {Object.values(parsedData?.selected || {}).join(", ")}
+                                                </p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "TEXTBOX-INPUT" && (
+                                                <p className="text-010A48">{parsedData?.text}</p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "TEXTAREA-INPUT" && (
+                                                <p className="text-010A48">{parsedData?.text}</p>
+                                            )}
+
+                                           
+                                            {value?.msg_type === "CAMERA-INPUT" && parsedData?.imageURIsave && (
+                                                <img
+                                                    src={parsedData.imageURIsave}
+                                                    alt="User response"
+                                                    className="img-fluid rounded shadow-sm"
+                                                    style={{ maxWidth: "200px" }}
+                                                />
+                                            )}
+
+                                           
+                                            {value?.msg_type === "FILE-INPUT" && parsedData?.imageURIsave && (
+                                                <a
+                                                    href={parsedData.imageURIsave}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="btn btn-outline-primary btn-sm"
+                                                >
+                                                    Download File
+                                                </a>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div> */}
+
 
                 </div>
             </div>
