@@ -632,6 +632,7 @@ const Reply = () => {
             if (response.data) {
                 toast.success("Reply sent successfully!");
                 fetchData();
+                fetchDataMyresponse();
             }
         } catch (error) {
             console.error("Error sending reply:", error.message);
