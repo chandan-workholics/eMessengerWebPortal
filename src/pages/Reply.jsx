@@ -658,8 +658,14 @@ const Reply = () => {
                         <h6 className="text-1F2C37 fw-bolder mb-0">
                             {detail?.data?.msg_detail?.subject_text}
                         </h6>
-                        <h6 className="text-secondary fw-normal mb-0">
+                        {/* <h6 className="text-secondary fw-normal mb-0">
                             Show Up to : {format(new Date(detail?.data?.msg_detail?.show_upto), "dd-MMM-yyyy  hh:mm a")}
+                        </h6> */}
+                        <h6 className="text-secondary fw-normal mb-0">
+                            Show Up to :{" "}
+                            {detail?.data?.msg_detail?.show_upto
+                                ? format(new Date(detail.data.msg_detail.show_upto), "dd-MMM-yyyy hh:mm a")
+                                : "N/A"}
                         </h6>
                     </div>
                 </div>
