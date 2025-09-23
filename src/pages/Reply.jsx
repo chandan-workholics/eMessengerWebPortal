@@ -63,7 +63,7 @@ const Reply = () => {
                 setError(null);
             } else {
                 setMyresponse(null);
-                setError("No data available.");
+
             }
         } catch (error) {
             setMyresponse(null);
@@ -107,10 +107,6 @@ const Reply = () => {
         return <div className="text-center text-danger">{error}</div>;
     }
 
-    // if (!detail) {
-    //     return <div className="text-center">No data available.</div>;
-    // }
-
     // Divide the msg_body into two equal arrays for rendering
     const midIndex = Math.ceil((detail?.data?.msg_body?.length || 0) / 2);
     const firstColumn = detail?.data?.msg_body?.slice(0, midIndex);
@@ -137,19 +133,21 @@ const Reply = () => {
 
             return (
                 <div>
-                    <label className="fw-bolder">{data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ''}</label>
+                    <label className="fw-bolder">
+                        {data_text.title} {is_reply_required === 1 ? <span className="text-danger">*</span> : ""}
+                    </label>
                     <div className="form-control">
                         {data_text.options.map((option, idx) => (
                             <div key={idx} className="form-check">
                                 <input
                                     className="form-check-input"
                                     type="radio"
-                                    name="option"
-                                    id={`option-${idx}`}
+                                    name={`option-${msg_body_id}`}
+                                    id={`option-${msg_body_id}-${idx}`}
                                     value={option.option}
                                     onChange={(e) => handleOptionChange(e.target.value)}
                                 />
-                                <label className="form-check-label" htmlFor={`option-${idx}`}>
+                                <label className="form-check-label" htmlFor={`option-${msg_body_id}-${idx}`}>
                                     {option.option}
                                 </label>
                             </div>
@@ -160,6 +158,7 @@ const Reply = () => {
         }
 
 
+
         if (msg_type?.startsWith("CHECKBOX")) {
             const parsedText = parseReplyText(data_text.data_reply_text);
 
@@ -167,10 +166,8 @@ const Reply = () => {
                 let updatedSelected = { ...parsedText.selected };
 
                 if (isChecked) {
-                    // Add the value if the checkbox is checked
                     updatedSelected[idx] = optionValue;
                 } else {
-                    // Remove the value if the checkbox is unchecked
                     delete updatedSelected[idx];
                 }
 
@@ -188,22 +185,22 @@ const Reply = () => {
                     {data_text.options.map((option, idx) => {
                         const isChecked = parsedText.selected?.[idx] !== undefined;
                         return (
-                            <div key={idx}>
+                            <div key={idx} className="d-flex align-items-center">
                                 <input
                                     type="checkbox"
                                     id={`option-${idx}`}
                                     checked={isChecked}
                                     onChange={e => handleCheckboxChange(idx, option.option, e.target.checked)}
                                 />
-                                <label htmlFor={`option-${idx}`} className="ms-2">
-                                    {option.option}
-                                </label>
+                                {/* Label is now just a span, not clickable */}
+                                <span className="ms-2">{option.option}</span>
                             </div>
                         );
                     })}
                 </div>
             );
         }
+
 
 
         // Handle TEXTBOX type (single-line input)
@@ -677,35 +674,38 @@ const Reply = () => {
                         {detail?.data?.msg_body?.map((msgBody, index) => {
                             const response = getResponseForMsgBody(msgBody.msg_body_id);
                             let parsedData = {};
+
                             try {
                                 parsedData = response ? JSON.parse(response.data_reply_text) : {};
-                            } catch (e) { }
+                            } catch (e) {
+                                console.error("JSON parse error for response:", response, e);
+                            }
+
+                            const renderSelected = (selected) => {
+                                if (!selected) return "No selection";
+                                return Object.values(selected).join(", ");
+                            };
 
                             return (
                                 <div key={index} className="col-xl-6 col-lg-6 col-12 mb-3">
                                     <div className="card px-3 py-4 border-0 rounded-4 shadow-sm">
-                                        {/* Input Title */}
                                         <h6 className="fw-bold mb-2">{msgBody.label}</h6>
                                         {renderInputField(msgBody)}
 
-                                        {/* Show Response (if exists) */}
                                         {response && (
                                             <div className="mt-3 border-top pt-2">
                                                 <h6 className="fw-semibold text-primary">My Response</h6>
 
-                                                {response?.msg_type === "OPTION-INPUT" && (
-                                                    <p>Selected: {Object.values(parsedData?.selected || {}).join(", ")}</p>
-                                                )}
+                                                {/* Option / Checkbox */}
+                                                {response.msg_type.includes("OPTION") && <p>{renderSelected(parsedData?.selected)}</p>}
+                                                {response.msg_type.includes("CHECKBOX") && <p>{renderSelected(parsedData?.selected)}</p>}
 
-                                                {response?.msg_type === "CHECKBOX-INPUT" && (
-                                                    <p>Checked: {Object.values(parsedData?.selected || {}).join(", ")}</p>
-                                                )}
+                                                {/* Textbox / Textarea */}
+                                                {response.msg_type.includes("TEXTBOX") && <p>{parsedData?.text || "No text entered"}</p>}
+                                                {response.msg_type.includes("TEXTAREA") && <p>{parsedData?.text || "No text entered"}</p>}
 
-                                                {response?.msg_type === "TEXTBOX-INPUT" && <p>{parsedData?.text}</p>}
-
-                                                {response?.msg_type === "TEXTAREA-INPUT" && <p>{parsedData?.text}</p>}
-
-                                                {response?.msg_type === "CAMERA-INPUT" && parsedData?.imageURIsave && (
+                                                {/* Camera */}
+                                                {response.msg_type.includes("CAMERA") && parsedData?.imageURIsave && (
                                                     <img
                                                         src={parsedData.imageURIsave}
                                                         alt="User response"
@@ -714,7 +714,8 @@ const Reply = () => {
                                                     />
                                                 )}
 
-                                                {response?.msg_type === "FILE-INPUT" && parsedData?.imageURIsave && (
+                                                {/* File */}
+                                                {response.msg_type.includes("FILE") && parsedData?.imageURIsave && (
                                                     <a
                                                         href={parsedData.imageURIsave}
                                                         target="_blank"
@@ -724,6 +725,11 @@ const Reply = () => {
                                                         Download File
                                                     </a>
                                                 )}
+
+                                                {/* Generic fallback */}
+                                                {!["OPTION", "CHECKBOX", "TEXTBOX", "TEXTAREA", "CAMERA", "FILE"].some(type => response.msg_type.includes(type)) && (
+                                                    <p>{renderSelected(parsedData?.selected) || parsedData?.text || "No response"}</p>
+                                                )}
                                             </div>
                                         )}
                                     </div>
@@ -731,13 +737,10 @@ const Reply = () => {
                             );
                         })}
 
-                        {/* ✅ Submit Button Row */}
                         <div className="col-12 mt-3">
-
                             {detail?.data?.msg_detail?.is_reply_required_any === 1 && (
                                 <button
-                                    className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"
-                                        }`}
+                                    className={`btn border-0 text-white rounded-5 ${detail?.data?.is_reply_done === 1 ? "bg-secondary" : "bg-FF0000"}`}
                                     onClick={detail?.data?.is_reply_done === 1 ? undefined : handleReply}
                                     disabled={detail?.data?.is_reply_done === 1}
                                 >
@@ -746,6 +749,7 @@ const Reply = () => {
                             )}
                         </div>
                     </div>
+
 
                 </div>
             </div>
