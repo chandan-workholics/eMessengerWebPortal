@@ -322,7 +322,7 @@ const Chat = () => {
                                         {/* Render Messages Dynamically */}
                                         {detail.map((chat) => {
                                             const isUserMessage =
-                                                chat.sender?.student_number ===
+                                                chat.senderDetails?.student_number ===
                                                 parseInt(student?.student_number);
 
                                             return (

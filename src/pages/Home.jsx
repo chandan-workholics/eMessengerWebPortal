@@ -372,7 +372,7 @@ const Home = () => {
                                                                                 {/* Chat Links */}
                                                                                 {val.msg_mst?.msg_chat_type === "GROUPCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -382,7 +382,7 @@ const Home = () => {
 
                                                                                 {val.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -495,7 +495,7 @@ const Home = () => {
                                                                                 <div className="d-flex align-items-center">
                                                                                     {val.msg_mst?.msg_chat_type === "GROUPCHAT" && (
                                                                                         <Link
-                                                                                            to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                            to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                             className="me-2"
                                                                                             state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                         >
@@ -505,7 +505,7 @@ const Home = () => {
 
                                                                                     {val.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" && (
                                                                                         <Link
-                                                                                            to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                            to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                             className="me-2"
                                                                                             state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                         >
@@ -601,7 +601,7 @@ const Home = () => {
                                                                             <div className="d-flex align-items-center">
                                                                                 {val.msg_mst?.msg_chat_type === "GROUPCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -611,7 +611,7 @@ const Home = () => {
 
                                                                                 {val.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -705,7 +705,7 @@ const Home = () => {
                                                                                 {/* Chat Links */}
                                                                                 {val.msg_mst?.msg_chat_type === "GROUPCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/GROUPCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -715,7 +715,7 @@ const Home = () => {
 
                                                                                 {val.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" && (
                                                                                     <Link
-                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_main_id}`}
+                                                                                        to={`/chat/INDIVIDUALCHAT/${val.msg_id}/${val.student?.student_number}`}
                                                                                         className="me-2"
                                                                                         state={{ title: val.msg_mst.subject_text, student: val.student }}
                                                                                     >
@@ -831,7 +831,7 @@ const Home = () => {
 
                                                                         {val?.msg_mst?.msg_chat_type === "GROUPCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/GROUPCHAT/${val?.msg_id}/${val?.student?.student_number}`}
                                                                                 className="me-2"
                                                                                 state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
@@ -844,7 +844,7 @@ const Home = () => {
                                                                         ) : null}
                                                                         {val?.msg_mst?.msg_chat_type === "INDIVIDUALCHAT" ? (
                                                                             <Link
-                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_main_id}`}
+                                                                                to={`/chat/INDIVIDUALCHAT/${val?.msg_id}/${val?.student?.student_number}`}
                                                                                 className="me-2"
                                                                                 state={{ title: val?.msg_mst?.subject_text, student: val?.student }}
                                                                             >
