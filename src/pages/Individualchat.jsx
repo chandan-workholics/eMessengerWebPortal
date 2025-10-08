@@ -650,7 +650,7 @@ const Individualchat = () => {
                                                             onClick={() => handleSelectUser(user.student_name, user.student_main_id)}
                                                             style={{ cursor: "pointer" }}
                                                         >
-                                                            {user.student_name}
+                                                            {user?.student_name}-{user?.student_number}
                                                         </li>
                                                     ))}
                                                 </ul>
