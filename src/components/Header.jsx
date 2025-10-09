@@ -19,7 +19,7 @@ const Header = () => {
       setLoading(true);
       interceptor();
 
-      const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`);
+      const response = await callAPI.get(`./combine/getCombineHomePageDetail/${user?.mobile_no}`);
       if (response.data) {
         setAppScrollNewsList(response.data || []);
       } else {

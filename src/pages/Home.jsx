@@ -41,7 +41,7 @@ const Home = () => {
             interceptor();
 
             const response = await callAPI.get(
-                `./combine/getCombineHomePageDetail/${user?.sch_short_nm}/${user?.mobile_no}`
+                `./combine/getCombineHomePageDetail/${user?.mobile_no}`
             );
 
             if (response.data) {
