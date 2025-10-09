@@ -16,7 +16,7 @@ const Support = () => {
         setErrorMessage("");
 
         const raw = JSON.stringify({
-            parent_id: user.parents_id,
+            parent_id: user.mobile_no,
             description: description,
             status: 1,
             remark: "",
