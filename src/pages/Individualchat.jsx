@@ -647,7 +647,7 @@ const Individualchat = () => {
                                                         <li
                                                             key={student_main_id}
                                                             className="list-group-item list-group-item-action"
-                                                            onClick={() => handleSelectUser(user.student_name, user.student_main_id)}
+                                                            onClick={() => handleSelectUser(user.student_name, user.student_number)}
                                                             style={{ cursor: "pointer" }}
                                                         >
                                                             {user?.student_name}-{user?.student_number}
