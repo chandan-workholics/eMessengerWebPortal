@@ -526,7 +526,7 @@ const Individualchat = () => {
                                                     <div className="message-content">
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}
+                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}-{chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_number : ''}
                                                             </p>
                                                         )}
                                                         <p

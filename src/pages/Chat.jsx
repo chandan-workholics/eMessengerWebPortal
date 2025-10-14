@@ -6,12 +6,12 @@ import { useParams, useLocation } from "react-router-dom";
 import callAPI from "../Common_Method/api";
 import { format } from "date-fns";
 
-import io  from "socket.io-client";
+import io from "socket.io-client";
 
 const socket = io("https://apps.actindore.com", {
-  withCredentials: true,
-  transports: ["websocket", "polling"], // prioritize websocket
-  
+    withCredentials: true,
+    transports: ["websocket", "polling"], // prioritize websocket
+
 });
 
 
@@ -53,7 +53,7 @@ const Chat = () => {
                 setDetail(response.data.data);
                 setFivemember(response.data.five_numbers_Details);
             } else {
-               
+
                 setDetail([]);
             }
         } catch (error) {
@@ -66,7 +66,7 @@ const Chat = () => {
 
 
     const handleSendMessage = async () => {
-       
+
         let msgType = "TEXT";
         let link = null;
 
@@ -131,19 +131,19 @@ const Chat = () => {
 
 
     useEffect(() => {
-       
+
         socket.emit("join_group", msg_id);  // Emit join_group event
-      
+
 
         socket.on("receive_message", (newMessage) => {
-          
+
             setDetail((prevDetails) => [...prevDetails, newMessage]);
             scrollToBottom();
             // handleScroll();
         });
 
         return () => {
-            
+
             socket.off("receive_message");
         };
     }, [msg_id, detail]);
@@ -174,7 +174,7 @@ const Chat = () => {
         setIsScrolling(!isAtTop);
     };
 
-   
+
 
     useEffect(() => {
         if (!isScrolling && chatBoxRef.current) {
@@ -334,16 +334,16 @@ const Chat = () => {
                                                         } mb-1`}
                                                 >
                                                     {!isUserMessage && (
-                                                      
+
                                                         <span className="me-2 pt-3">
                                                             <i className="fa-solid fa-circle-user fs-2 bg-white rounded-circle" style={{ color: JSON.parse(chat.sender_detail)?.color }}></i>
                                                         </span>
                                                     )}
                                                     <div className="message-content">
-                                                       
+
                                                         {!isUserMessage && (
                                                             <p className="mb-0 text-010A48 info">
-                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}
+                                                                {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_name : ''}- {chat.sender_detail ? JSON.parse(chat.sender_detail)?.student_number : ''}
                                                             </p>
                                                         )}
 
