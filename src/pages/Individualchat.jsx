@@ -181,7 +181,7 @@ const Individualchat = () => {
     const handleSelectUser = (student_name, student_main_id) => {
         const textBeforeCursor = message.substring(0, cursorPosition);
         const textAfterCursor = message.substring(cursorPosition);
-        const updatedMessage = `${textBeforeCursor}${student_name} ${textAfterCursor}`;
+        const updatedMessage = `${textBeforeCursor}${student_name} ${student_main_id} ${textAfterCursor}`;
 
         const studentMainId = student_main_id && !isNaN(student_main_id)
             ? `${textBeforeCursor}${Number(student_main_id)}${textAfterCursor}`
