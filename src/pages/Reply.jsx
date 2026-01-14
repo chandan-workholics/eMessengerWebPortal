@@ -528,13 +528,52 @@ const Reply = () => {
             );
         }
 
+        // ✅ PDF Display
+        if (msg_type?.startsWith("PDF")) {
+            return (
+                <>
+                    {data_text?.title && (
+                        <label className="fw-bolder">{data_text.title}</label>
+                    )}
+
+                    <div className="card p-3 shadow-sm border-0">
+                        <div className="d-flex align-items-center justify-content-between">
+                            <div>
+                                <i className="fa-solid fa-file-pdf text-danger fs-2 me-2"></i>
+                                <span className="fw-semibold">PDF Document</span>
+                            </div>
+
+                            <a
+                                href={data_text.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn btn-sm btn-primary"
+                            >
+                                View PDF
+                            </a>
+                        </div>
+
+                        <div className="mt-2">
+                            <iframe
+                                src={data_text.link}
+                                width="100%"
+                                height="350"
+                                style={{ border: "1px solid #ddd", borderRadius: "8px" }}
+                                title="PDF Preview"
+                            ></iframe>
+                        </div>
+                    </div>
+                </>
+            );
+        }
+
+
         return (
             <>
                 {data_text?.title && <label className="fw-bolder">{data_text.title}</label>}
                 {data_text?.text && <p dangerouslySetInnerHTML={{ __html: data_text.text }}></p>}
-                {data_text?.link && (
-                    <div className="">
-
+                {data_text?.link && !msg_type?.startsWith("PDF") && (
+                    <div>
                         <a
                             href={data_text.link}
                             target="_blank"
@@ -545,6 +584,7 @@ const Reply = () => {
                         </a>
                     </div>
                 )}
+
                 {data_text?.options && (
                     <div>
                         <label className="fw-bolder">{data_text.title}</label>
